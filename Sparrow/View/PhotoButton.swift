@@ -89,10 +89,10 @@ class PhotoButton: UIControl {
         addSubview(icon)
         addSubview(titleLabel)
         
-        icon.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        icon.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        icon.widthAnchor.constraint(equalToConstant: 26).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: 26).isActive = true
         icon.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
-        icon.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
+        icon.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         
         titleLabel.leftAnchor.constraint(equalTo: icon.rightAnchor, constant: 10).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true

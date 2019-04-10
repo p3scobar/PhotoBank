@@ -42,7 +42,7 @@ class NotificationsController: UITableViewController {
     
     let toggleNotifications: UISwitch = {
         let item = UISwitch()
-        item.onTintColor = Theme.red
+        item.onTintColor = Theme.green
         item.tintColor = Theme.gray
         item.addTarget(self, action: #selector(handleSwitchNotification), for: .valueChanged)
         return item
@@ -50,7 +50,7 @@ class NotificationsController: UITableViewController {
     
     let toggleSound: UISwitch = {
         let item = UISwitch()
-        item.onTintColor = Theme.red
+        item.onTintColor = Theme.green
         item.tintColor = Theme.gray
         item.addTarget(self, action: #selector(handleSwitchSound), for: .valueChanged)
         return item

@@ -32,12 +32,13 @@ class PendingController: UIViewController {
         print("AMOUNT: \(amount)")
         WalletManager.sendPayment(accountId: accountId, amount: amount) { (success) in
             if success {
-                self.presentAlert(title: "Success", message: "You sent \(amount) BNK to @\(username.lowercased())")
+                self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
             } else {
                 self.presentAlert(title: "Transaction Failed", message: "Something went wrong. Please try again.")
             }
         }
     }
+    
     
     func presentAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

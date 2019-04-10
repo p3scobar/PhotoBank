@@ -22,9 +22,7 @@ struct UserService {
             print(response)
             guard let json = response.result.value as? [String:Any],
                 let resp = json["response"] as? [String:Any] else { return }
-
             let following = resp["following"] as? Bool ?? false
-            print("Following on UserService.follow: \(following)")
             completion(following)
         }
     }

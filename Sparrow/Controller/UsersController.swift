@@ -1,5 +1,5 @@
 //
-//  ResultsController.swift
+//  UsersController.swift
 //  Sparrow
 //
 //  Created by Hackr on 8/2/18.
@@ -7,21 +7,27 @@
 //
 
 import UIKit
-import Firebase
 
-class ResultsController: UITableViewController, UISearchResultsUpdating, UISearchControllerDelegate {
+class UsersController: UITableViewController {
+    
+//    UISearchResultsUpdating, UISearchControllerDelegate
+    
+    var query: String? {
+        didSet {
+            fetchData(query!)
+        }
+    }
     
     let userCell = "userCell"
     
     var navController: UINavigationController?
-    var searchController: UISearchController!
+//    var searchController: UISearchController!
     
     var users: [User]? {
         didSet {
             reloadTable()
         }
     }
-    
     
     func reloadTable() {
         DispatchQueue.main.async {
@@ -39,12 +45,12 @@ class ResultsController: UITableViewController, UISearchResultsUpdating, UISearc
         tableView.register(UserCell.self, forCellReuseIdentifier: userCell)
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 88, 0, 0)
+        tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0)
     }
     
     
-    @objc func fetchData() {
-        guard let query = searchController.searchBar.text, query.count > 2 else { return }
+    @objc func fetchData(_ query: String) {
+//        guard let query = searchController.searchBar.text, query.count > 2 else { return }
         UserService.fetchUsers(username: query.lowercased()) { (users) in
             self.users = users
             self.refreshControl?.endRefreshing()

@@ -25,6 +25,7 @@ class ActivityCell: CommentCell {
             if let imageUrl = activity?.image {
                 let url = URL(string: imageUrl)
                 photoView.sd_setImage(with: url, completed: nil)
+                photoView.isHidden = false
             }
         }
     }
@@ -59,6 +60,7 @@ class ActivityCell: CommentCell {
         view.backgroundColor = Theme.lightBackground
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
+        view.isHidden = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

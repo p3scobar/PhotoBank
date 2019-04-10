@@ -24,6 +24,8 @@ extension Status {
     @NSManaged public var timestamp: Date?
     @NSManaged public var likes: Int16
     @NSManaged public var commentCount: Int16
+    @NSManaged public var height: Double
+    @NSManaged public var width: Double
 
     @NSManaged public var name: String?
     @NSManaged public var username: String?

@@ -10,24 +10,17 @@ import Foundation
 import Alamofire
 import CoreData
 import FirebaseStorage
-//
-//internal func prefetchImage(imageUrl: String) {
-//    if let url = URL(string:imageUrl) {
-//        
-//        let prefetcher = ImagePrefetcher(urls: [url])
-//        prefetcher.start()
-//    }
-//}
 
 struct NewsService {
     
-    static func discover(cursor: Int, completion: @escaping ([Status]) -> Void) {
+    static func discover(cursor: Int, query: String?, completion: @escaping ([Status]) -> Void) {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/discover"
             let url = URL(string: urlString)!
             let token = Model.shared.token
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-            let params: Parameters = ["cursor":cursor]
+            let query = query ?? ""
+            let params: Parameters = ["cursor":cursor, "query": query]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                 var feed = [Status]()
                 guard let json = response.result.value as? [String:Any],
@@ -68,31 +61,6 @@ struct NewsService {
         }
     }
 
-//    static func fetchTimeline(completion: @escaping ([Status]) -> Void) {
-//        DispatchQueue.global(qos: .background).async {
-//            let urlString = "\(getUrl)post"
-//            let url = URL(string: urlString)!
-////            let token = Model.shared.token
-////            let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//            let headers: HTTPHeaders = [:]
-//            let params: Parameters = ["sort_field":"timestamp","descending":true]
-//            Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-//                print(response.request?.url?.absoluteString)
-//                    return
-//                print(response)
-//                var feed = [Status]()
-//                guard let json = response.result.value as? [String:Any],
-//                    let resp = json["response"] as? [String:Any],
-//                    let results = resp["results"] as? [[String:Any]] else { return }
-//                results.forEach({ (result) in
-//                    let id = result["_id"] as? String ?? ""
-//                    let status = Status.findOrCreateStatus(id: id, data: result, in: PersistenceService.context)
-//                    feed.append(status)
-//                })
-//                completion(feed)
-//            }
-//        }
-//    }
     
     static func fetchPosts(forUser userId: String, completion: @escaping ([Status]) -> Void) {
         let urlString = "\(baseUrl)/posts"
@@ -132,12 +100,14 @@ struct NewsService {
     static func postPhoto(text: String, image: UIImage) {
         let urlString = "\(baseUrl)/newpost"
         let imageLarge = image.resized(toWidth: 1280)
+        let height = imageLarge.size.height
+        let width = imageLarge.size.width
         let imageThumb = image.resized(toWidth: 480)
         let url = URL(string: urlString)!
         let uuid = Model.shared.uuid
         let token = Model.shared.token
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        var params: [String:Any] = ["userId":uuid,"text":text]
+        var params: [String:Any] = ["userId":uuid,"text":text, "height":height, "width":width]
         uploadImageToStorage(image: imageLarge) { (photoUrl) in
             uploadImageToStorage(image: imageThumb, completion: { (thumbnailUrl) in
                 params["image"] = photoUrl

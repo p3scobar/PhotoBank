@@ -16,7 +16,7 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     private let session = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "session queue")
-    private var isSessionRunning = false
+//    private var isSessionRunning = false
     
     private enum SessionSetupResult {
         case success
@@ -32,12 +32,13 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
         view.backgroundColor = .black
         sessionQueue.async {
             self.setupCamera()
         }
     }
-
+    
 
     func setupCamera() {
 
@@ -92,6 +93,7 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         closeDrawer()
         scans = 0
     }
@@ -113,12 +115,12 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
     
     func startCamera() {
         guard isRunning == false else { return }
-        sessionQueue.async { [unowned self] in
-            if !self.isSessionRunning {
+        sessionQueue.async {
+            if !self.isRunning {
                 if let connection = self.previewLayer?.connection {
                     connection.isEnabled = true
                     self.session.startRunning()
-                    self.isSessionRunning = self.session.isRunning
+//                    self.isSessionRunning = self.session.isRunning
                     self.isRunning = true
                 }
             }
@@ -127,12 +129,12 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     func stopCamera() {
         guard isRunning == true else { return }
-        sessionQueue.async { [unowned self] in
-            if self.isSessionRunning {
+        sessionQueue.async {
+            if self.isRunning {
                 if let connection = self.previewLayer?.connection {
                     connection.isEnabled = false
                     self.session.stopRunning()
-                    self.isSessionRunning = self.session.isRunning
+//                    self.isSessionRunning = self.session.isRunning
                     self.isRunning = false
                 }
             }
@@ -190,9 +192,7 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
             if drawer.drawerPosition == PulleyPosition.open {
                 self.stopCamera()
                 self.removeCameraLayer()
-                print("drawer open")
             } else {
-                print("drawer closed")
                 self.startCamera()
                 self.addCameraLayer()
             }

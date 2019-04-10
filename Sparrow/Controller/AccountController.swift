@@ -31,6 +31,7 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         tableView.tableHeaderView = header
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: standardCell)
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Theme.lightBackground
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(pushProfile))
         header.addGestureRecognizer(tap)
@@ -256,8 +257,8 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         var selectedImageFromPicker: UIImage?
-        if let originalImage = info["UIImagePickerControllerOriginalImage"] {
-            selectedImageFromPicker = originalImage as? UIImage
+        if let editedImage = info["UIImagePickerControllerEditedImage"] {
+            selectedImageFromPicker = editedImage as? UIImage
         }
         if let selectedImage = selectedImageFromPicker {
             UserService.updateProfilePic(image: selectedImage) { (imageUrl) in

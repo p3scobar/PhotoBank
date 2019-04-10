@@ -58,8 +58,12 @@ extension Theme {
         return UIColor(30, 30, 30)
     }
     
+    public static var blue: UIColor {
+        return UIColor(23, 78, 161)
+    }
+    
     public static var lightBackground: UIColor {
-        return UIColor(235, 235, 241)
+        return UIColor(218, 218, 224)
     }
     
     public static var red: UIColor {

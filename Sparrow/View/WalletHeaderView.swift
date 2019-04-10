@@ -66,7 +66,7 @@ class WalletHeaderView: UIView {
     lazy var currencyCodeLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.text = "BNK"
+        label.text = "PBK"
         label.font = Theme.medium(18)
         label.textColor = Theme.gray
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +76,7 @@ class WalletHeaderView: UIView {
     lazy var container: UIView = {
         let view = UIView()
         view.backgroundColor = Theme.black
-        view.layer.cornerRadius = 32
+        view.layer.cornerRadius = 18
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         view.layer.borderColor = UIColor.black.cgColor
@@ -90,10 +90,10 @@ class WalletHeaderView: UIView {
         view.layer.cornerRadius = container.layer.cornerRadius
         view.backgroundColor = .white
         view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowRadius = 12
+        view.layer.shadowColor = UIColor.darkGray.cgColor
+        view.layer.shadowRadius = 20
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowOffset = CGSize(width: 0, height: 16)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -120,7 +120,7 @@ class WalletHeaderView: UIView {
     }
     
     func setupView() {
-        addSubview(tab)
+//        addSubview(tab)
         addSubview(shadow)
         addSubview(container)
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleQRTap))
@@ -133,8 +133,8 @@ class WalletHeaderView: UIView {
         shadow.heightAnchor.constraint(equalToConstant: 220).isActive = true
         shadow.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
         
-        container.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
-        container.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
+        container.leftAnchor.constraint(equalTo: leftAnchor, constant: 12).isActive = true
+        container.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
         container.heightAnchor.constraint(equalToConstant: 220).isActive = true
         container.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
         

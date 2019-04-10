@@ -15,8 +15,9 @@ import SDWebImage
 import Pulley
 
 
-class TimelineController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate, StatusCellDelegate, UITabBarControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSourcePrefetching {
+class TimelineController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate, UITabBarControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSourcePrefetching {
     
+    private var searchController: UISearchController!
     
     private let statusCell = "newsCell"
     private let refresh = UIRefreshControl()
@@ -50,6 +51,18 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         tableView.allowsSelection = false
         navigationItem.title = "Today"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        self.definesPresentationContext = true
+        let vc = SwipeController()
+        searchController = UISearchController(searchResultsController: vc)
+        searchController.delegate = self
+        searchController.searchResultsUpdater = vc
+        vc.navController = self.navigationController
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.dimsBackgroundDuringPresentation = true
+        searchController.searchBar.tintColor = Theme.gray
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
 
         let plusIcon = UIImage(named: "photo")?.withRenderingMode(.alwaysTemplate)
         let plus = UIBarButtonItem(image: plusIcon, style: .done, target: self, action: #selector(presentImagePicker))
@@ -203,12 +216,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height: CGFloat = 540
-        if let text = timeline[indexPath.row].text {
-            let textHeight = estimateFrameForText(text: text, fontSize: 18).height
-            height += textHeight+20
-        }
-        return height
+        return timeline[indexPath.row].cellHeight(view.frame.width)
     }
     
     func handleLike(post: Status) {
@@ -228,22 +236,36 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         self.hidesBottomBarWhenPushed = false
     }
     
-    func handleUserTap(userId: String) {
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return timeline[indexPath.row].cellHeight(view.frame.width)
+    }
+    
+
+    
+    
+}
+
+
+extension TimelineController: StatusCellDelegate {
+    
+    func handleUsernameTap(_ username: String) {
+        let vc = UserController(username)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func handleUserTap(_ userId: String) {
         let layout = UICollectionViewFlowLayout()
         let user = UserController(collectionViewLayout: layout)
         user.userId = userId
         self.navigationController?.pushViewController(user, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 540
+    func handleHashtagTap(_ tag: String) {
+        let vc = TagsController()
+        vc.query = tag
+        vc.navController = self.navigationController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = StatusController(style: .plain)
-//        vc.status = timeline[indexPath.row]
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-    
 }
-

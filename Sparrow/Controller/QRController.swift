@@ -38,9 +38,9 @@ class QRController: UIViewController {
     
     
     lazy var container: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: 48, width: self.view.frame.width-24, height: 520))
+        let view = UIView(frame: CGRect(x: 20, y: 48, width: self.view.frame.width-40, height: 520))
         view.backgroundColor = .white
-        view.layer.cornerRadius = 28
+        view.layer.cornerRadius = 12
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
         view.layer.masksToBounds = false

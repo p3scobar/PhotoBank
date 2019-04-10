@@ -124,3 +124,25 @@ extension UIButton {
         )
     }
 }
+
+
+extension Status {
+    
+    func imageHeight(_ viewWidth: CGFloat) -> CGFloat {
+        guard self.width != 0, self.height != 0 else { return 400 }
+        let ratio = CGFloat(self.height/self.width)
+        return ratio * viewWidth
+    }
+    
+    func cellHeight(_ viewWidth: CGFloat) -> CGFloat {
+        guard self.width != 0, self.height != 0 else { return 540 }
+        let ratio = CGFloat(self.height/self.width)
+        var cellHeight = ratio * viewWidth + 140
+        if let text = self.text {
+            let textHeight = estimateFrameForText(text: text, fontSize: 18).height
+            cellHeight += textHeight+20
+        }
+        return cellHeight
+    }
+    
+}

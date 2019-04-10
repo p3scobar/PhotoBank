@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import SafariServices
-import DeckTransition
 
 class UserController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserHeaderDelegate {
     
@@ -47,6 +46,17 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 self.collectionView?.reloadData()
                 self.refresh.endRefreshing()
             }
+        }
+    }
+    
+    convenience init(_ username: String) {
+        let layout = UICollectionViewFlowLayout()
+        self.init(collectionViewLayout: layout)
+        UserService.fetchUsers(username: username) { (users) in
+            guard let user = users.first else { return }
+            self.userId = user.id
+            self.user = user
+            self.fetchData()
         }
     }
     
@@ -173,10 +183,8 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         let vc = AmountController(publicKey: pk)
         vc.username = user?.username
-        //vc.edgesForExtendedLayout = []
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true, completion: nil)
-//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func presentRecoveryController() {
@@ -193,13 +201,6 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         config.barCollapsingEnabled = true
         let vc = SFSafariViewController(url: url, configuration: config)
         present(vc, animated: true, completion: nil)
-        //        let vc = UIViewController()
-//        let nav = UINavigationController(rootViewController: vc)
-//        let transitionDelegate = DeckTransitioningDelegate()
-//
-//        nav.transitioningDelegate = transitionDelegate
-//        nav.modalPresentationStyle = .custom
-//        present(nav, animated: true, completion: nil)
     }
     
 }

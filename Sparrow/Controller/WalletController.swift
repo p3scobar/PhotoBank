@@ -9,26 +9,8 @@
 
 import UIKit
 import Foundation
-import Pulley
 
-class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataSource, UITableViewDelegate, PulleyDrawerViewControllerDelegate {
-    
-    lazy var scrollView: UIScrollView = {
-        let view = UIScrollView(frame: self.view.frame)
-        view.alwaysBounceHorizontal = false
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 36
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    lazy var tableView: UITableView = {
-        let frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: self.view.frame.height-40)
-        let view = UITableView(frame: frame)
-        view.layer.cornerRadius = 28
-//        view.clipsToBounds = true
-        return view
-    }()
+class WalletController: UITableViewController {
     
     var paymentCell = "paymentCell"
     
@@ -37,6 +19,7 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.setupEmptyView()
+                self.refresh.endRefreshing()
             }
         }
     }
@@ -50,21 +33,21 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
         print(payments.count)
     }
     
-    lazy var cardView: WalletHeaderView = {
-        let view = WalletHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 240))
+    lazy var header: WalletHeaderView = {
+        let view = WalletHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 280))
         return view
     }()
     
+    let refresh = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        cardView.delegate = self
-//        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 240))
-        view.addSubview(scrollView)
-        scrollView.addSubview(cardView)
-        scrollView.addSubview(tableView)
-        scrollView.sendSubview(toBack: tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.refreshControl = refresh
+        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        header.delegate = self
+        tableView.tableHeaderView = header
+        tableView.alwaysBounceVertical = true
+        
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 76, bottom: 0, right: 0)
         self.navigationItem.title = "Wallet"
         tableView.showsVerticalScrollIndicator = false
@@ -73,34 +56,35 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
         navigationController?.navigationBar.prefersLargeTitles = true
         NotificationCenter.default.addObserver(self, selector: #selector(handleQR(notification:)), name: NSNotification.Name(rawValue: "qrScan"), object: nil)
-        tableView.isScrollEnabled = false
-        tableView.contentInset.top = 220
-        tableView.contentInset.bottom = 80
+        
+        let qrIcon = UIImage(named: "qrcode")?.withRenderingMode(.alwaysTemplate)
+        let qrButton = UIBarButtonItem(image: qrIcon, style: .done, target: self, action: #selector(presentCamera))
+        self.navigationItem.rightBarButtonItem = qrButton
         payments = Payment.fetchAll(in: PersistenceService.context)
-        loadData()
-        if let pulley = self.parent as? PulleyViewController {
-            pulley.delegate = self
-            pulley.view.backgroundColor = .clear
-            pulley.drawerBackgroundVisualEffectView = nil
-            pulley.shadowOpacity = 0.0
-            pulley.backgroundDimmingOpacity = 0.0
-            pulley.initialDrawerPosition = .open
-            pulley.drawerTopInset = 20
-            pulley.drawerCornerRadius = 0
-        }
+    }
+    
+    @objc func presentCamera() {
+        let scan = ScanController()
+        let nav = UINavigationController(rootViewController: scan)
+        self.present(nav, animated: true, completion: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print(KeychainHelper.publicKey)
-        print(KeychainHelper.privateSeed)
+        super.viewDidAppear(animated)
+        print("PK: " + KeychainHelper.publicKey)
+        print("SK: " + KeychainHelper.privateSeed)
+        print("MNEMONIC: " + KeychainHelper.mnemonic)
         loadData()
     }
+ 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refresh.endRefreshing()
+    }
     
-    
-    
-    func fetchTransactions() {
-        WalletManager.fetchTransactions { [weak self] payments in
-            self?.payments = payments
+    @objc func fetchTransactions() {
+        WalletManager.fetchTransactions { payments in
+            self.payments = payments
         }
     }
     
@@ -120,10 +104,8 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
     
     func getAccountDetails() {
         WalletManager.getAccountDetails { (balance) in
-            DispatchQueue.main.async {
-                self.cardView.balance = balance
-                self.cardView.currencyCodeLabel.text = "BNK"
-            }
+            self.header.balance = balance
+            self.header.currencyCodeLabel.text = "PBK"
         }
     }
     
@@ -131,37 +113,38 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
         if KeychainHelper.publicKey != "" {
             getAccountDetails()
             fetchTransactions()
+            streamTransactions()
         } else {
-            cardView.balance = "0.000"
-            cardView.currencyCodeLabel.text = "Create an Account"
+            header.balance = "0.000"
+            header.currencyCodeLabel.text = "Create an Account"
             setupEmptyView()
         }
     }
     
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return payments.count
     }
     
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: paymentCell, for: indexPath) as! PaymentCell
         cell.payment = payments[indexPath.row]
         return cell
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let payment = payments[indexPath.row]
         presentReceiptController(payment)
@@ -206,37 +189,15 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
         present(nav, animated: true, completion: nil)
     }
     
-    
-    @objc func handleQR(notification: Notification) {
-        if let pk = notification.userInfo?["code"] as? String {
-            presentAmountController(pk)
-        }
-        if let drawer = self.parent as? PulleyViewController {
-            drawer.setDrawerPosition(position: .open, animated: true)
-        }
-    }
-    
+
     func presentAmountController(_ publicKey: String) {
         let vc = AmountController(publicKey: publicKey)
         let nav = UINavigationController(rootViewController: vc)
+        definesPresentationContext = true
+        modalTransitionStyle = .crossDissolve
         self.present(nav, animated: true, completion: nil)
     }
     
-    func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
-        DispatchQueue.main.async {
-            if drawer.drawerPosition == PulleyPosition.open {
-                print("Drawer open")
-                self.tableView.isScrollEnabled = true
-            } else {
-                print("Drawer not open")
-                self.tableView.isScrollEnabled = false
-            }
-        }
-    }
-    
-    func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
-        return 264
-    }
     
     lazy var emptyLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: self.view.frame.height/2, width: self.view.frame.width, height: 80))
@@ -249,3 +210,12 @@ class WalletController: UIViewController, WalletHeaderDelegate, UITableViewDataS
     
 }
 
+extension WalletController: WalletHeaderDelegate {
+    
+    @objc func handleQR(notification: Notification) {
+        if let pk = notification.userInfo?["code"] as? String {
+            presentAmountController(pk)
+        }
+    }
+    
+}

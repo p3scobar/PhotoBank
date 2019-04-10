@@ -9,12 +9,15 @@
 import Foundation
 import UIKit
 import SDWebImage
+import ActiveLabel
 
 protocol StatusCellDelegate: class {
     func handleComment(status: Status)
     func handleLike(post: Status)
     func handlePayTap()
-    func handleUserTap(userId: String)
+    func handleUserTap(_ id: String)
+    func handleUsernameTap(_ username: String)
+    func handleHashtagTap(_ tag: String)
 }
 
 class StatusCell: UITableViewCell {
@@ -37,9 +40,7 @@ class StatusCell: UITableViewCell {
             if like {
                 likeButton.isSelected = true
                 likeButton.icon.tintColor = Theme.red
-//                likeButton.icon.image = UIImage(named: "heartFilled")?.withRenderingMode(.alwaysTemplate)
             } else {
-//                likeButton.icon.image = UIImage(named: "heart")?.withRenderingMode(.alwaysTemplate)
                 likeButton.icon.tintColor = Theme.charcoal
             }
         }
@@ -55,6 +56,7 @@ class StatusCell: UITableViewCell {
             if let imageUrl = status?.image,
                 let url = URL(string: imageUrl) {
                 mainImageView.sd_setImage(with: url, completed: nil)
+                imageViewHeight.constant = status!.imageHeight(self.frame.width)
             }
             if let userImageUrl = status?.userImage,
                 let url = URL(string: userImageUrl) {
@@ -71,11 +73,19 @@ class StatusCell: UITableViewCell {
         }
     }
     
-    lazy var statusLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+    lazy var statusLabel: ActiveLabel = {
+        let label = ActiveLabel()
+        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.hashtagColor = Theme.blue
+        label.mentionColor = Theme.blue
+        label.handleHashtagTap { (hashtag) in
+           self.delegate?.handleHashtagTap(hashtag)
+        }
+        label.handleMentionTap { username in
+            self.delegate?.handleUsernameTap(username)
+        }
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -117,8 +127,6 @@ class StatusCell: UITableViewCell {
         let button = PhotoButton(imageName: "heartCircle", title: "0")
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
-        button.layer.borderColor = Theme.border.cgColor
-        button.layer.borderWidth = 0.5
         button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -129,8 +137,6 @@ class StatusCell: UITableViewCell {
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
         button.layer.borderColor = Theme.border.cgColor
-        button.layer.borderWidth = 0.5
-        button.layer.cornerRadius = 20
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -146,13 +152,12 @@ class StatusCell: UITableViewCell {
     @objc func handlePayTap() {
         delegate?.handlePayTap()
     }
-
     
     @objc func handleComment() {
         guard let status = status else { return }
         delegate?.handleComment(status: status)
         commentButton.isHighlighted = false
-        SoundKit.playSound(type: .like)
+        SoundKit.playSound(type: .button)
     }
     
     @objc func handleLike() {
@@ -172,16 +177,22 @@ class StatusCell: UITableViewCell {
         setupView()
         let userTap = UITapGestureRecognizer(target: self, action: #selector(handleUserTap))
         profileImageView.addGestureRecognizer(userTap)
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleLike))
+        doubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(doubleTap)
     }
     
     @objc func handleUserTap() {
         guard let id = status?.userId else { return }
-        delegate?.handleUserTap(userId: id)
+        delegate?.handleUserTap(id)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    var imageViewHeight: NSLayoutConstraint!
     
     func setupView() {
         addSubview(profileImageView)
@@ -201,7 +212,8 @@ class StatusCell: UITableViewCell {
         mainImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         mainImageView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         mainImageView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 12).isActive = true
-        mainImageView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        imageViewHeight = mainImageView.heightAnchor.constraint(equalToConstant: 0)
+        imageViewHeight.isActive = true
         
         nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 12).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor, constant: -2).isActive = true

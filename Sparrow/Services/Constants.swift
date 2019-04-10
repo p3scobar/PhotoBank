@@ -12,28 +12,27 @@ import Foundation
 
 let baseUrl = "https://expa.bubbleapps.io/version-test/api/1.1/wf"
 
-
-public struct HorizonServer {
-    static let production = ""
-    static let test = "https://horizon-testnet.stellar.org/"
-    static let url = HorizonServer.test
-}
-
 public struct Stellar {
     static let sdk = StellarSDK(withHorizonUrl: HorizonServer.url)
     static let network = Network.testnet
-    
+}
+
+public struct HorizonServer {
+    static let production = "https://horizon.stellar.org"
+    static let test = "https://horizon-testnet.stellar.org"
+    /// #if dev...
+    static let url = HorizonServer.test
 }
 
 
 enum Assets: Int {
     
-    case BNK
+    case PBK
     
     var issuerAccountID: String {
         switch self {
-        case .BNK:
-            return "GDA62UZZ2E3LVPVXLN3JQXB4KO3SGIQUHLVUPM7CY4EUSYY4EOMSCGQY"
+        case .PBK:
+            return "GBS6U6XQHH6FVVSEVVJGFT4IKUGO7I5CST3CIOI265R4CM22MPWML5JK"
         }
     }
 }

@@ -1,32 +1,43 @@
 //
-//  DiscoverController.swift
+//  TagsController.swift
 //  Sparrow
 //
-//  Created by Hackr on 8/1/18.
-//  Copyright © 2018 Sugar. All rights reserved.
+//  Created by Hackr on 3/9/19.
+//  Copyright © 2019 Sugar. All rights reserved.
 //
-
 
 import Foundation
 import UIKit
 import SDWebImage
 
-class DiscoverController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchControllerDelegate {
+class TagsController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchControllerDelegate {
     
-    private var searchController: UISearchController!
     private let photoCell = "photoCell"
+    var navController: UINavigationController?
     
-    private let refresh = UIRefreshControl()
-    
-    var user: User?
+    var query: String? {
+        didSet {
+            guard let query = query else { return }
+            fetchData(query)
+            self.navigationItem.title = "#\(query)"
+        }
+    }
     
     var timeline = [Status]() {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView?.reloadData()
-                self.refresh.endRefreshing()
             }
         }
+    }
+    
+    init() {
+        let layout = UICollectionViewFlowLayout()
+        super.init(collectionViewLayout: layout)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     var tabBarIndex: Int = 1
@@ -35,43 +46,18 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.prefetchDataSource = self
+//        collectionView?.prefetchDataSource = self
         collectionView?.dataSource = self
         collectionView?.delegate = self
         collectionView?.backgroundColor = .white
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
-        
-        self.definesPresentationContext = true
-        let vc = SwipeController()
-        searchController = UISearchController(searchResultsController: vc)
-        searchController.delegate = self
-        searchController.searchResultsUpdater = vc
-        vc.navController = self.navigationController
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.dimsBackgroundDuringPresentation = true
-        searchController.searchBar.tintColor = Theme.gray
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = true
-        navigationItem.title = "Discover"
-        fetchData()
-
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        collectionView?.refreshControl = refresh
-        refresh.tintColor = .black
-        refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
-        scrollEnabled = true
-    }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        scrollEnabled = false
-        self.refresh.endRefreshing()
-    }
-    
-    @objc func fetchData() {
+    @objc func fetchData(_ query: String) {
         allPostsLoaded = false
-        NewsService.discover(cursor: 0, query: nil) { [weak self] posts in
+
+        NewsService.discover(cursor: 0, query: query) { [weak self] posts in
             self?.timeline = posts
         }
     }
@@ -103,9 +89,8 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoCell, for: indexPath) as! PhotoCell
-        //cell.mainImageView.image = nil
         if timeline.count > indexPath.row {
-        cell.status = timeline[indexPath.row]   
+            cell.status = timeline[indexPath.row]
         }
         print("INDEX PATH: \(indexPath.row)")
         checkIfScrolledToBottom(indexPath)
@@ -143,7 +128,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.deselectItem(at: indexPath, animated: true)
         let vc = StatusController(style: .plain)
         vc.status = timeline[indexPath.row]
-        self.navigationController?.pushViewController(vc, animated: true)
+        navController?.pushViewController(vc, animated: true)
     }
     
     private let prefetcher = SDWebImagePrefetcher.shared()
@@ -151,12 +136,13 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
 }
 
 
-extension DiscoverController: UICollectionViewDataSourcePrefetching {
-
+extension TagsController: UICollectionViewDataSourcePrefetching {
+    
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let urls = timeline.compactMap { URL(string: $0.thumbnail ?? "") }
         prefetcher.maxConcurrentDownloads = 30
         prefetcher.prefetchURLs(urls)
     }
 }
+
 

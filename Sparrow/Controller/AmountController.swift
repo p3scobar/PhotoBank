@@ -110,7 +110,7 @@ class AmountController: UIViewController, UIScrollViewDelegate, UITextFieldDeleg
         view.adjustsFontSizeToFitWidth = true
         view.font = Theme.semibold(24)
         view.textColor = Theme.lightGray
-        view.text = "BNK"
+        view.text = "PBK"
         view.adjustsFontForContentSizeCategory = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

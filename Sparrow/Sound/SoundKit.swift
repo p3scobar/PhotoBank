@@ -12,12 +12,11 @@ import AudioToolbox
 struct SoundKit {
     
     enum SoundType: String {
-        case tab = "tab03"
-        case like = "tab02"
+        case tab = "tab01"
+        case button = "tab02"
         case pay
         case select = "select01"
         case thud
-        case paymentSend
         case menuButton
     }
     

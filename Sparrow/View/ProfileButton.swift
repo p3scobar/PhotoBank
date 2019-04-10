@@ -75,7 +75,9 @@ class ProfileButton: UIControl {
         icon.tintColor = Theme.charcoal
         titleLabel.textColor = Theme.charcoal
         sendActions(for: .touchDown)
-        SoundKit.playSound(type: .select)
+        if Model.shared.soundsEnabled == true {
+            SoundKit.playSound(type: .button)
+        }
     }
     
     override func touchesCancelled(_: Set<UITouch>, with _: UIEvent?) {

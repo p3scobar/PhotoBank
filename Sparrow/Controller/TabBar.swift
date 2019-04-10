@@ -30,14 +30,15 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
         let walletVC = WalletController()
-        let scan = ScanController()
-        let pulley = PulleyViewController(contentViewController: scan, drawerViewController: walletVC)
-//        pulley.initialDrawerPosition = .open
-//        pulley.drawerTopInset = 20
-//        pulley.tabBarItem.image = UIImage(named: "qrcode")
-//        pulley.drawerCornerRadius = 0
-        pulley.tabBarItem.image = UIImage(named: "qrcode")
-        pulley.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
+//        let scan = ScanController()
+//        let wallet = PulleyViewController(contentViewController: scan, drawerViewController: walletVC)
+//        let wallet = UINavigationController(rootViewController: walletVC)
+//        wallet.initialDrawerPosition = .open
+//        wallet.drawerTopInset = 20
+//        wallet.drawerCornerRadius = 0
+        let wallet = UINavigationController(rootViewController: walletVC)
+        wallet.tabBarItem.image = UIImage(named: "qrcode")
+        wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
         let activityVC = ActivityController(style: .plain)
         let activity = UINavigationController(rootViewController: activityVC)
@@ -49,7 +50,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         account.tabBarItem.image = UIImage(named: "user")
         account.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
-        viewControllers = [timeline, discover, pulley, activity, account]
+        viewControllers = [timeline, discover, wallet, activity, account]
         
         picker?.allowsEditing = true
         picker?.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
@@ -79,7 +80,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let items = tabBar.items else { return }
-        if item != items[selectedIndex] {
+        if item != items[selectedIndex], Model.shared.soundsEnabled == true {
             SoundKit.playSound(type: .tab)
         }
         if item == items[0] {

@@ -11,7 +11,7 @@ import UIKit
 import SafariServices
 import CoreData
 
-class StatusController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate, StatusHeaderDelegate, StatusCellDelegate, UIGestureRecognizerDelegate {
+class StatusController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate, StatusHeaderDelegate, UIGestureRecognizerDelegate {
 
     private let statusCell = "newsCell"
     
@@ -70,12 +70,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        var height: CGFloat = 540
-        if let text = status?.text {
-            let textHeight = estimateFrameForText(text: text, fontSize: 18).height
-            height += textHeight+20
-        }
-        return height
+        return status?.cellHeight(view.frame.width) ?? 0.0
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -130,17 +125,36 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
     }
-    
-    func handleUserTap(userId: String) {
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = status?.userId
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+
     
     func handlePayTap() {
         let vc = AmountController(publicKey: nil)
         let nav = UINavigationController(rootViewController: vc)
         self.present(nav, animated: true, completion: nil)
     }
+}
+
+
+extension StatusController: StatusCellDelegate {
+    
+    func handleUsernameTap(_ username: String) {
+        let vc = UserController(username)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func handleUserTap(_ userId: String) {
+        let layout = UICollectionViewFlowLayout()
+        let vc = UserController(collectionViewLayout: layout)
+        vc.userId = status?.userId
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    func handleHashtagTap(_ tag: String) {
+        let vc = TagsController()
+        vc.query = tag
+        vc.navController = self.navigationController
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
