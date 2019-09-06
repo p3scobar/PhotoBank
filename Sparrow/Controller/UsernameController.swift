@@ -40,13 +40,11 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func handleSave() {
-        guard let text = inputField.text else { return }
-        let id = Model.shared.uuid
-        guard text != Model.shared.username else {
-            dismissController()
-            return
-        }
-        UserService.updateUsername(userId: id, username: text) { (success) in
+        guard available == true && username != "" else { return }
+        Model.shared.username = username
+        
+        let data = ["username":username]
+        UserService.updateUserInfo(values: data) { (success) in
             if success == true {
                 self.dismissController()
             } else {
@@ -54,6 +52,8 @@ class UsernameController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
+    
     
     func dismissController() {
         if self.isModal {
@@ -129,25 +129,26 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     }
     
     
+    func usernameAvailable(_ username: String) {
+        UserService.usernameAvailable(username) { (available) in
+            if !available || username.count < 4 {
+                self.available = false
+                if self.username == Model.shared.username {
+                    self.resultsLabel.text = "Hello @\(self.username)!"
+                }
+            } else {
+                self.resultsLabel.text = "👍"
+                self.available = true
+            }
+        }
+    }
+    
     @objc func textFieldDidChange() {
         available = false
         guard let text = inputField.text else { return }
         username = text
-
-//        UserManager.usernameAvailable(username: text) { (available) in
-//            if !available || text.count < 4 {
-//                self.resultsLabel.text = "Unavailable"
-//                self.saveButton.isEnabled = false
-//                self.available = false
-//                if self.username == Model.shared.username {
-//                    self.resultsLabel.text = "Hello @\(self.username)!"
-//                }
-//            } else {
-//                self.resultsLabel.text = "👍"
-//                self.available = true
-//                self.saveButton.isEnabled = true
-//            }
-//        }
+        usernameAvailable(text)
+       
     }
     
     

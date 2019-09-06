@@ -12,6 +12,7 @@ class UsersController: UITableViewController {
     
 //    UISearchResultsUpdating, UISearchControllerDelegate
     
+    
     var query: String? {
         didSet {
             fetchData(query!)
@@ -42,16 +43,18 @@ class UsersController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "Users"
         tableView.register(UserCell.self, forCellReuseIdentifier: userCell)
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0)
+        
     }
     
     
     @objc func fetchData(_ query: String) {
 //        guard let query = searchController.searchBar.text, query.count > 2 else { return }
-        UserService.fetchUsers(username: query.lowercased()) { (users) in
+        UserService.fetchUsers(query: query.lowercased()) { (users) in
             self.users = users
             self.refreshControl?.endRefreshing()
         }
@@ -108,10 +111,8 @@ class UsersController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let user = self.users?[indexPath.row]
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = user?.id
+        guard let user = self.users?[indexPath.row] else { return }
+        let vc = UserController(user)
         self.navController?.pushViewController(vc, animated: true)
     }
     

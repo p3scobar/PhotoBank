@@ -38,7 +38,7 @@ class LoginController: UITableViewController, InputTextCellDelegate {
     
     @objc func handleSubmit() {
         UserService.login(email: email, password: password) { (success) in
-            if success {
+            if success == true {
                 self.dismiss(animated: true, completion: nil)
                 
             } else {

@@ -8,7 +8,7 @@
 
 
 protocol ComposeDelegate: class {
-    func handleSend()
+    func handleSubmit()
 }
 
 import UIKit
@@ -34,7 +34,7 @@ class ComposeToolbar: UIToolbar {
     }()
     
     @objc func handleSend() {
-        inputDelegate?.handleSend()
+        inputDelegate?.handleSubmit()
     }
     
     

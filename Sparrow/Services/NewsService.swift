@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import CoreData
 import FirebaseStorage
+import FirebaseAuth
 
 struct NewsService {
     
@@ -17,8 +18,9 @@ struct NewsService {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/discover"
             let url = URL(string: urlString)!
-            let token = Model.shared.token
+            let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//            let headers: HTTPHeaders = [:]
             let query = query ?? ""
             let params: Parameters = ["cursor":cursor, "query": query]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -37,25 +39,39 @@ struct NewsService {
     }
 
     
-    static func fetchTimeline(cursor: Int, completion: @escaping ([Status]) -> Void) {
+    static func fetchTimeline(cursor: Int, completion: @escaping (_ feed: [Status], _ ads: [Ad]) -> Void) {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/timeline"
             let url = URL(string: urlString)!
-            let token = Model.shared.token
+            let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-            let params: Parameters = ["cursor":cursor]
+            let adSet = cursor/8
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            let params: Parameters = ["cursor":cursor, "adSet":adSet, "userId": userId]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+                print(response)
                 var feed = [Status]()
+                var ads = [Ad]()
                 guard let json = response.result.value as? [String:Any],
                     let resp = json["response"] as? [String:Any],
                     let results = resp["posts"] as? [[String:Any]],
-                    let unread = resp["unread"] as? Int else { return }
+                    let unread = resp["unread"] as? Int else {
+                        completion([], [])
+                        return }
+                let adsJson = resp["ads"] as? [[String:Any]] ?? []
+                
                 results.forEach({ (result) in
                     let id = result["_id"] as? String ?? ""
                     let status = Status.findOrCreateStatus(id: id, data: result, in: PersistenceService.context)
                     feed.append(status)
                 })
-                completion(feed)
+                adsJson.forEach({ (ad) in
+                    print(ad)
+                    let id = ad["_id"] as? String ?? ""
+                    let status = Ad.findOrCreateAd(id: id, data: ad, in: PersistenceService.context)
+                    ads.append(status)
+                })
+                completion(feed, ads)
                 NotificationCenter.default.post(name: Notification.Name("unread"), object: nil, userInfo: ["count":unread])
             }
         }
@@ -65,9 +81,12 @@ struct NewsService {
     static func fetchPosts(forUser userId: String, completion: @escaping ([Status]) -> Void) {
         let urlString = "\(baseUrl)/posts"
         let url = URL(string: urlString)!
+        let token = bubbleAPIKey
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: [String:Any] = ["userId":userId]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             var feed = [Status]()
+            print(response)
             guard let json = response.result.value as? [String:Any],
                 let resp = json["response"] as? [String:Any],
                 let results = resp["posts"] as? [[String:Any]] else { return }
@@ -83,7 +102,7 @@ struct NewsService {
     static func fetchPost(postId: String, completion: @escaping (Status) -> Void) {
         let urlString = "\(baseUrl)/post"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: Parameters = ["postId":postId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -103,11 +122,24 @@ struct NewsService {
         let height = imageLarge.size.height
         let width = imageLarge.size.width
         let imageThumb = image.resized(toWidth: 480)
+        let name = Model.shared.name
+        let image = Model.shared.image
+        let username = Model.shared.username
+        let userImage = Model.shared.image
+        let publicKey = KeychainHelper.publicKey
         let url = URL(string: urlString)!
-        let uuid = Model.shared.uuid
-        let token = Model.shared.token
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        var params: [String:Any] = ["userId":uuid,"text":text, "height":height, "width":width]
+        var params: [String:Any] = ["userId":uid,
+                                    "text":text,
+                                    "height":height,
+                                    "width":width,
+                                    "name": name,
+                                    "userImage":userImage,
+                                    "username":username,
+                                    "image":image,
+                                    "publicKey":publicKey]
         uploadImageToStorage(image: imageLarge) { (photoUrl) in
             uploadImageToStorage(image: imageThumb, completion: { (thumbnailUrl) in
                 params["image"] = photoUrl
@@ -129,7 +161,7 @@ struct NewsService {
     static func deletePost(postId: String) {
         let urlString = "\(baseUrl)/delete"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: Parameters = ["postId":postId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -147,7 +179,7 @@ struct NewsService {
     static func fetchComments(photoId: String, completion: @escaping ([Comment]) -> Void) {
         let urlString = "\(baseUrl)/comments"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: [String:Any] = ["id":photoId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -168,7 +200,7 @@ struct NewsService {
     static func deleteComment(id: String, post: Status, completion: @escaping (Bool) -> Void) {
         let urlString = "\(baseUrl)/deletecomment"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: [String:Any] = ["id":id]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -181,9 +213,9 @@ struct NewsService {
     static func postComment(post: Status, text: String, completion: @escaping (Comment) -> Void) {
         let urlString = "\(baseUrl)/comment"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
-        guard let postId = post.id else { return }
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        guard let postId = post.id else { return }
         let params: [String:Any] = ["postId":postId, "text":text]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             guard let json = response.result.value as? [String:Any],
@@ -206,7 +238,7 @@ struct NewsService {
         }
         let urlString = "\(baseUrl)/like"
         let url = URL(string: urlString)!
-        let token = Model.shared.token
+        let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: Parameters = ["postId":id, "like":like.description]
         Model.shared.favorites[id] = like
@@ -218,7 +250,7 @@ struct NewsService {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/likes"
             let url = URL(string: urlString)!
-            let token = Model.shared.token
+            let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
             let params: [String:Any] = [:]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in

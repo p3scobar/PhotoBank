@@ -22,14 +22,10 @@ class Model {
     
     static let shared: Model = Model()
     
-    var token: String {
-        get { return UserDefaults.standard.string(forKey: "token") ?? "" }
-        set (token) { UserDefaults.standard.setValue(token, forKey: "token") }
-    }
     
-    var uuid: String {
-        get { return UserDefaults.standard.string(forKey: "userId") ?? "" }
-        set (uid) { UserDefaults.standard.setValue(uid, forKey: "userId") }
+    var uid: String {
+        get { return UserDefaults.standard.string(forKey: "uid") ?? "" }
+        set (uid) { UserDefaults.standard.setValue(uid, forKey: "uid") }
     }
     
     var email: String {
@@ -47,9 +43,9 @@ class Model {
         set (param) { UserDefaults.standard.setValue(param, forKey: "username") }
     }
     
-    var profileImage: String {
-        get { return UserDefaults.standard.string(forKey: "profileImage") ?? "" }
-        set (param) { UserDefaults.standard.setValue(param, forKey: "profileImage") }
+    var image: String {
+        get { return UserDefaults.standard.string(forKey: "image") ?? "" }
+        set (param) { UserDefaults.standard.setValue(param, forKey: "image") }
     }
     
     var bio: String {

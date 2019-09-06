@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A35BA57BF5D0A7753F8136EB /* Pods_Sparrow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFE15EF792814E73B96F9FB2 /* Pods_Sparrow.framework */; };
 		CE024EA2211372AD00E51F37 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EA1211372AD00E51F37 /* UserService.swift */; };
 		CE024EA42113768F00E51F37 /* WalletController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EA32113768F00E51F37 /* WalletController.swift */; };
 		CE024EA6211376A600E51F37 /* WalletHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EA5211376A600E51F37 /* WalletHeaderView.swift */; };
@@ -53,6 +54,10 @@
 		CE2E629821AA691C00BF46B8 /* tab02.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629221AA691C00BF46B8 /* tab02.m4a */; };
 		CE2E629921AA691C00BF46B8 /* select01.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629321AA691C00BF46B8 /* select01.m4a */; };
 		CE2E62A521B266C300BF46B8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2E62A421B266C300BF46B8 /* WebViewController.swift */; };
+		CE4A9575231321E200EFC617 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A9574231321E200EFC617 /* AdService.swift */; };
+		CE4A957823133A9400EFC617 /* Ad+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */; };
+		CE4A957923133A9400EFC617 /* Ad+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */; };
+		CE4A957B23133DE400EFC617 /* AdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957A23133DE400EFC617 /* AdCell.swift */; };
 		CE75AE252133CB1B00A54F42 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE242133CB1B00A54F42 /* ActivityCell.swift */; };
 		CE75AE272133E95900A54F42 /* ReceiptController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE262133E95900A54F42 /* ReceiptController.swift */; };
 		CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */; };
@@ -69,11 +74,18 @@
 		CE961F00210D713600025D0D /* ComposeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961EFF210D713600025D0D /* ComposeController.swift */; };
 		CE961F02210D752C00025D0D /* ComposeToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F01210D752C00025D0D /* ComposeToolbar.swift */; };
 		CE961F24210EE29000025D0D /* Status+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F1E210EE29000025D0D /* Status+CoreDataClass.swift */; };
-		CE961F25210EE29000025D0D /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F1F210EE29000025D0D /* User+CoreDataProperties.swift */; };
 		CE961F26210EE29000025D0D /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F20210EE29000025D0D /* User+CoreDataClass.swift */; };
 		CE961F27210EE29000025D0D /* Activity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F21210EE29000025D0D /* Activity+CoreDataClass.swift */; };
 		CE961F28210EE29000025D0D /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE961F22210EE29000025D0D /* Status+CoreDataProperties.swift */; };
 		CEB4800021B6866600DFFB57 /* SwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB47FFF21B6866600DFFB57 /* SwipeController.swift */; };
+		CEC4F32222FFD33200CCE1AC /* PayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32122FFD33200CCE1AC /* PayController.swift */; };
+		CEC4F32622FFE04800CCE1AC /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32522FFE04800CCE1AC /* Token.swift */; };
+		CEC4F32822FFE0B000CCE1AC /* InputCurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32722FFE0B000CCE1AC /* InputCurrencyCell.swift */; };
+		CEC4F32A22FFE0D900CCE1AC /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32922FFE0D900CCE1AC /* TransactionType.swift */; };
+		CEC4F32C22FFE17100CCE1AC /* InputNumberCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32B22FFE17100CCE1AC /* InputNumberCellDelegate.swift */; };
+		CEC4F32E22FFE3CD00CCE1AC /* OrderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32D22FFE3CD00CCE1AC /* OrderService.swift */; };
+		CEC4F33022FFE3FF00CCE1AC /* ExchangeOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32F22FFE3FF00CCE1AC /* ExchangeOrder.swift */; };
+		CEC4F3322300A90400CCE1AC /* TableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F3312300A90400CCE1AC /* TableFooterView.swift */; };
 		CECC03FA211647B800AD8390 /* Comment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */; };
 		CECC03FB211647B800AD8390 /* Comment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03F9211647B800AD8390 /* Comment+CoreDataProperties.swift */; };
 		CECC03FD21165AF700AD8390 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03FC21165AF700AD8390 /* EditProfileController.swift */; };
@@ -93,12 +105,19 @@
 		CEFA04142195709F00F1103A /* ErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA04132195709F00F1103A /* ErrorPresenter.swift */; };
 		CEFA041B21992C6B00F1103A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEFA041A21992C6A00F1103A /* GoogleService-Info.plist */; };
 		CEFA041D219A182B00F1103A /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA041C219A182B00F1103A /* CurrencyField.swift */; };
-		FF744F7CE2B53EF13F75D014 /* Pods_Sparrow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCF8A87D31C6771047604EB7 /* Pods_Sparrow.framework */; };
+		CEFAA6B92321B49400D123D7 /* WalletLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6B82321B49400D123D7 /* WalletLoginController.swift */; };
+		CEFAA6BB2321F98F00D123D7 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6BA2321F98F00D123D7 /* MessagesController.swift */; };
+		CEFAA6BD2321FCC900D123D7 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6BC2321FCC900D123D7 /* ChatController.swift */; };
+		CEFAA6BF2321FD9C00D123D7 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6BE2321FD9C00D123D7 /* Chat.swift */; };
+		CEFAA6C12321FDC300D123D7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6C02321FDC300D123D7 /* Message.swift */; };
+		CEFAA6C32321FF6000D123D7 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6C22321FF6000D123D7 /* ChatService.swift */; };
+		CEFAA6C52322008800D123D7 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6C42322008800D123D7 /* MessageCell.swift */; };
+		CEFAA6C7232200A600D123D7 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6C6232200A600D123D7 /* ChatInputView.swift */; };
+		CEFAA6C92322156E00D123D7 /* NewChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA6C82322156E00D123D7 /* NewChatController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BCF8A87D31C6771047604EB7 /* Pods_Sparrow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sparrow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9F3057797371541BA736382 /* Pods-Sparrow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sparrow.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sparrow/Pods-Sparrow.debug.xcconfig"; sourceTree = "<group>"; };
+		3D9B963B2F9ACCEBA9941D51 /* Pods-Sparrow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sparrow.debug.xcconfig"; path = "Target Support Files/Pods-Sparrow/Pods-Sparrow.debug.xcconfig"; sourceTree = "<group>"; };
 		CE024EA1211372AD00E51F37 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		CE024EA32113768F00E51F37 /* WalletController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletController.swift; sourceTree = "<group>"; };
 		CE024EA5211376A600E51F37 /* WalletHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderView.swift; sourceTree = "<group>"; };
@@ -145,6 +164,10 @@
 		CE2E629221AA691C00BF46B8 /* tab02.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tab02.m4a; sourceTree = "<group>"; };
 		CE2E629321AA691C00BF46B8 /* select01.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = select01.m4a; sourceTree = "<group>"; };
 		CE2E62A421B266C300BF46B8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		CE4A9574231321E200EFC617 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
+		CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		CE4A957A23133DE400EFC617 /* AdCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCell.swift; sourceTree = "<group>"; };
 		CE75AE242133CB1B00A54F42 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		CE75AE262133E95900A54F42 /* ReceiptController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptController.swift; sourceTree = "<group>"; };
 		CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Payment+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -161,11 +184,18 @@
 		CE961EFF210D713600025D0D /* ComposeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeController.swift; sourceTree = "<group>"; };
 		CE961F01210D752C00025D0D /* ComposeToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeToolbar.swift; sourceTree = "<group>"; };
 		CE961F1E210EE29000025D0D /* Status+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Status+CoreDataClass.swift"; sourceTree = "<group>"; };
-		CE961F1F210EE29000025D0D /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CE961F20210EE29000025D0D /* User+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE961F21210EE29000025D0D /* Activity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE961F22210EE29000025D0D /* Status+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Status+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CEB47FFF21B6866600DFFB57 /* SwipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeController.swift; sourceTree = "<group>"; };
+		CEC4F32122FFD33200CCE1AC /* PayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayController.swift; sourceTree = "<group>"; };
+		CEC4F32522FFE04800CCE1AC /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		CEC4F32722FFE0B000CCE1AC /* InputCurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputCurrencyCell.swift; sourceTree = "<group>"; };
+		CEC4F32922FFE0D900CCE1AC /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
+		CEC4F32B22FFE17100CCE1AC /* InputNumberCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputNumberCellDelegate.swift; sourceTree = "<group>"; };
+		CEC4F32D22FFE3CD00CCE1AC /* OrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderService.swift; sourceTree = "<group>"; };
+		CEC4F32F22FFE3FF00CCE1AC /* ExchangeOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeOrder.swift; sourceTree = "<group>"; };
+		CEC4F3312300A90400CCE1AC /* TableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableFooterView.swift; sourceTree = "<group>"; };
 		CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Comment+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Comment+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		CECC03F9211647B800AD8390 /* Comment+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Comment+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Comment+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		CECC03FC21165AF700AD8390 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
@@ -187,7 +217,17 @@
 		CEFA04132195709F00F1103A /* ErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ErrorPresenter.swift; path = Sparrow/Controller/ErrorPresenter.swift; sourceTree = SOURCE_ROOT; };
 		CEFA041A21992C6A00F1103A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CEFA041C219A182B00F1103A /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
-		D2868CB62F695E288684EE6A /* Pods-Sparrow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sparrow.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sparrow/Pods-Sparrow.release.xcconfig"; sourceTree = "<group>"; };
+		CEFAA6B82321B49400D123D7 /* WalletLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLoginController.swift; sourceTree = "<group>"; };
+		CEFAA6BA2321F98F00D123D7 /* MessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
+		CEFAA6BC2321FCC900D123D7 /* ChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
+		CEFAA6BE2321FD9C00D123D7 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		CEFAA6C02321FDC300D123D7 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		CEFAA6C22321FF6000D123D7 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		CEFAA6C42322008800D123D7 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		CEFAA6C6232200A600D123D7 /* ChatInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
+		CEFAA6C82322156E00D123D7 /* NewChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatController.swift; sourceTree = "<group>"; };
+		DFE15EF792814E73B96F9FB2 /* Pods_Sparrow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sparrow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBF5EF327F560E11EC8628C7 /* Pods-Sparrow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sparrow.release.xcconfig"; path = "Target Support Files/Pods-Sparrow/Pods-Sparrow.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,26 +235,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF744F7CE2B53EF13F75D014 /* Pods_Sparrow.framework in Frameworks */,
+				A35BA57BF5D0A7753F8136EB /* Pods_Sparrow.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		30D0B8A01FCE81833A74B181 /* Pods */ = {
+		1DAED0D90C7520ECA142169C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C9F3057797371541BA736382 /* Pods-Sparrow.debug.xcconfig */,
-				D2868CB62F695E288684EE6A /* Pods-Sparrow.release.xcconfig */,
+				3D9B963B2F9ACCEBA9941D51 /* Pods-Sparrow.debug.xcconfig */,
+				EBF5EF327F560E11EC8628C7 /* Pods-Sparrow.release.xcconfig */,
 			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
-		C28BF12FEBD2E49435FF3FD8 /* Frameworks */ = {
+		1EBC845725CB4944CE679719 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BCF8A87D31C6771047604EB7 /* Pods_Sparrow.framework */,
+				DFE15EF792814E73B96F9FB2 /* Pods_Sparrow.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -236,6 +276,8 @@
 		CE961EE0210D257D00025D0D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */,
+				CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */,
 				CE961F21210EE29000025D0D /* Activity+CoreDataClass.swift */,
 				CECC040021176C2300AD8390 /* Activity+CoreDataProperties.swift */,
 				CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */,
@@ -247,9 +289,13 @@
 				CE961F1E210EE29000025D0D /* Status+CoreDataClass.swift */,
 				CE961F22210EE29000025D0D /* Status+CoreDataProperties.swift */,
 				CE961F20210EE29000025D0D /* User+CoreDataClass.swift */,
-				CE961F1F210EE29000025D0D /* User+CoreDataProperties.swift */,
 				CE961EFD210D6D2000025D0D /* Theme.swift */,
 				CE024EB321139D0300E51F37 /* Model.swift */,
+				CEC4F32522FFE04800CCE1AC /* Token.swift */,
+				CEC4F32922FFE0D900CCE1AC /* TransactionType.swift */,
+				CEC4F32F22FFE3FF00CCE1AC /* ExchangeOrder.swift */,
+				CEFAA6BE2321FD9C00D123D7 /* Chat.swift */,
+				CEFAA6C02321FDC300D123D7 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -257,6 +303,7 @@
 		CE961EE1210D258400025D0D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CE4A957A23133DE400EFC617 /* AdCell.swift */,
 				CE961EFB210D6C8A00025D0D /* AccountHeader.swift */,
 				CE75AE242133CB1B00A54F42 /* ActivityCell.swift */,
 				CE024EAD2113886100E51F37 /* CommentCell.swift */,
@@ -275,6 +322,11 @@
 				CE961EF5210D2FBB00025D0D /* UserHeader.swift */,
 				CE024EA5211376A600E51F37 /* WalletHeaderView.swift */,
 				CE218CF62118CE1700AD1EF2 /* PaymentCell.swift */,
+				CEC4F32722FFE0B000CCE1AC /* InputCurrencyCell.swift */,
+				CEC4F32B22FFE17100CCE1AC /* InputNumberCellDelegate.swift */,
+				CEC4F3312300A90400CCE1AC /* TableFooterView.swift */,
+				CEFAA6C42322008800D123D7 /* MessageCell.swift */,
+				CEFAA6C6232200A600D123D7 /* ChatInputView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -288,13 +340,16 @@
 				CE218CEE2118C30C00AD1EF2 /* BlockedUsersController.swift */,
 				CE961EFF210D713600025D0D /* ComposeController.swift */,
 				CE024EAB2113883B00E51F37 /* CommentsController.swift */,
+				CEFAA6BC2321FCC900D123D7 /* ChatController.swift */,
 				CE218CE62118266000AD1EF2 /* ConfirmPaymentController.swift */,
 				CEDA042E2112C02500F57E15 /* DiscoverController.swift */,
 				CE218CEA2118C27700AD1EF2 /* EmailController.swift */,
 				CECC03FC21165AF700AD8390 /* EditProfileController.swift */,
 				CE024EBB2113A8D500E51F37 /* HomeController.swift */,
 				CE024EB72113A04C00E51F37 /* LoginController.swift */,
+				CEFAA6BA2321F98F00D123D7 /* MessagesController.swift */,
 				CE218CE02117CA1D00AD1EF2 /* MnemonicController.swift */,
+				CEFAA6C82322156E00D123D7 /* NewChatController.swift */,
 				CE218CF22118C63400AD1EF2 /* NotificationsController.swift */,
 				CE218CEC2118C2DF00AD1EF2 /* PasswordController.swift */,
 				CE024EA92113783F00E51F37 /* QRController.swift */,
@@ -307,13 +362,15 @@
 				CEEBB94A210BF8B2007E87EE /* TimelineController.swift */,
 				CEEBB935210BF827007E87EE /* UserController.swift */,
 				CE024EBF2113AA5F00E51F37 /* UsernameController.swift */,
-				CE024EA32113768F00E51F37 /* WalletController.swift */,
+				CE024EB121138BE600E51F37 /* UsersController.swift */,
 				CE16B161211E85900047E903 /* PendingController.swift */,
 				CE75AE262133E95900A54F42 /* ReceiptController.swift */,
 				CE2E62A421B266C300BF46B8 /* WebViewController.swift */,
-				CE024EB121138BE600E51F37 /* UsersController.swift */,
 				CEB47FFF21B6866600DFFB57 /* SwipeController.swift */,
 				CE0629B02234C69E002C5AB0 /* TagsController.swift */,
+				CEC4F32122FFD33200CCE1AC /* PayController.swift */,
+				CE024EA32113768F00E51F37 /* WalletController.swift */,
+				CEFAA6B82321B49400D123D7 /* WalletLoginController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -322,12 +379,14 @@
 			isa = PBXGroup;
 			children = (
 				CECC040221176F2500AD8390 /* ActivityService.swift */,
+				CE4A9574231321E200EFC617 /* AdService.swift */,
+				CEFAA6C22321FF6000D123D7 /* ChatService.swift */,
 				CE961ED6210BFD6900025D0D /* NewsService.swift */,
 				CE024EA1211372AD00E51F37 /* UserService.swift */,
 				CE024EA72113779800E51F37 /* KeychainHelper.swift */,
 				CE218CD82117BCEA00AD1EF2 /* WalletService.swift */,
-				CE218CDA2117BDF100AD1EF2 /* Constants.swift */,
 				CE218CE421181BAE00AD1EF2 /* Tools.swift */,
+				CEC4F32D22FFE3CD00CCE1AC /* OrderService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -337,8 +396,8 @@
 			children = (
 				CEEBB932210BF827007E87EE /* Sparrow */,
 				CEEBB931210BF827007E87EE /* Products */,
-				30D0B8A01FCE81833A74B181 /* Pods */,
-				C28BF12FEBD2E49435FF3FD8 /* Frameworks */,
+				1DAED0D90C7520ECA142169C /* Pods */,
+				1EBC845725CB4944CE679719 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -375,6 +434,7 @@
 			children = (
 				CEFA04132195709F00F1103A /* ErrorPresenter.swift */,
 				CEFA041C219A182B00F1103A /* CurrencyField.swift */,
+				CE218CDA2117BDF100AD1EF2 /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -386,11 +446,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CEEBB945210BF829007E87EE /* Build configuration list for PBXNativeTarget "Sparrow" */;
 			buildPhases = (
-				D6C458D583761F7A27C2CB02 /* [CP] Check Pods Manifest.lock */,
+				6D607D61AC3F1CF516C4BA6C /* [CP] Check Pods Manifest.lock */,
 				CEEBB92C210BF827007E87EE /* Sources */,
 				CEEBB92D210BF827007E87EE /* Frameworks */,
 				CEEBB92E210BF827007E87EE /* Resources */,
-				618505DAF4A2BCEFE017A61A /* [CP] Embed Pods Frameworks */,
+				1F28CC346ECBC4E80CCB4327 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -454,58 +514,37 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		618505DAF4A2BCEFE017A61A /* [CP] Embed Pods Frameworks */ = {
+		1F28CC346ECBC4E80CCB4327 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Sparrow/Pods-Sparrow-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ActiveLabel/ActiveLabel.framework",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/MaterialActivityIndicator/MaterialActivityIndicator.framework",
-				"${BUILT_PRODUCTS_DIR}/NextGrowingTextView/NextGrowingTextView.framework",
-				"${BUILT_PRODUCTS_DIR}/Pulley/Pulley.framework",
-				"${BUILT_PRODUCTS_DIR}/QRCode/QRCode.framework",
-				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/SwipeMenuViewController/SwipeMenuViewController.framework",
-				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
-				"${BUILT_PRODUCTS_DIR}/stellar-ios-mac-sdk/stellarsdk.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sparrow/Pods-Sparrow-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ActiveLabel.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialActivityIndicator.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NextGrowingTextView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulley.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QRCode.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeMenuViewController.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/stellarsdk.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sparrow/Pods-Sparrow-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sparrow/Pods-Sparrow-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sparrow/Pods-Sparrow-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D6C458D583761F7A27C2CB02 /* [CP] Check Pods Manifest.lock */ = {
+		6D607D61AC3F1CF516C4BA6C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Sparrow-checkManifestLockResult.txt",
 			);
@@ -521,12 +560,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEFAA6B92321B49400D123D7 /* WalletLoginController.swift in Sources */,
 				CE75AE272133E95900A54F42 /* ReceiptController.swift in Sources */,
 				CE024EAA2113783F00E51F37 /* QRController.swift in Sources */,
+				CEFAA6BB2321F98F00D123D7 /* MessagesController.swift in Sources */,
+				CE4A957923133A9400EFC617 /* Ad+CoreDataClass.swift in Sources */,
+				CEFAA6C7232200A600D123D7 /* ChatInputView.swift in Sources */,
 				CE218CF52118CB6500AD1EF2 /* ScanController.swift in Sources */,
 				CEEBB936210BF827007E87EE /* UserController.swift in Sources */,
 				CE218CEB2118C27700AD1EF2 /* EmailController.swift in Sources */,
 				CE024EA6211376A600E51F37 /* WalletHeaderView.swift in Sources */,
+				CE4A957B23133DE400EFC617 /* AdCell.swift in Sources */,
 				CE024EC42113D4A500E51F37 /* PhotoButton.swift in Sources */,
 				CEDA042D2112AF1E00F57E15 /* PhotoCell.swift in Sources */,
 				CE024EBC2113A8D500E51F37 /* HomeController.swift in Sources */,
@@ -534,21 +578,25 @@
 				CE961F27210EE29000025D0D /* Activity+CoreDataClass.swift in Sources */,
 				CE16B164211F60010047E903 /* ProfileButton.swift in Sources */,
 				CE2E61AB21A1099B00BF46B8 /* Like+CoreDataClass.swift in Sources */,
+				CEFAA6C52322008800D123D7 /* MessageCell.swift in Sources */,
 				CE2E62A521B266C300BF46B8 /* WebViewController.swift in Sources */,
 				CE218CF72118CE1700AD1EF2 /* PaymentCell.swift in Sources */,
 				CE2E628D21AA68DF00BF46B8 /* SoundKit.swift in Sources */,
 				CE024EB221138BE600E51F37 /* UsersController.swift in Sources */,
 				CECC03FA211647B800AD8390 /* Comment+CoreDataClass.swift in Sources */,
 				CE024EBE2113A9EC00E51F37 /* SignupController.swift in Sources */,
+				CEC4F32622FFE04800CCE1AC /* Token.swift in Sources */,
 				CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */,
 				CEEBB934210BF827007E87EE /* AppDelegate.swift in Sources */,
 				CEEBB94B210BF8B2007E87EE /* TimelineController.swift in Sources */,
+				CEC4F3322300A90400CCE1AC /* TableFooterView.swift in Sources */,
 				CE961EDF210CDF2100025D0D /* PersistenceService.swift in Sources */,
 				CECC03FD21165AF700AD8390 /* EditProfileController.swift in Sources */,
 				CEFA041D219A182B00F1103A /* CurrencyField.swift in Sources */,
 				CE218CF32118C63400AD1EF2 /* NotificationsController.swift in Sources */,
 				CE218CED2118C2DF00AD1EF2 /* PasswordController.swift in Sources */,
 				CE961EF4210D279700025D0D /* StatusHeader.swift in Sources */,
+				CEC4F32822FFE0B000CCE1AC /* InputCurrencyCell.swift in Sources */,
 				CE961F24210EE29000025D0D /* Status+CoreDataClass.swift in Sources */,
 				CE961EDD210C517200025D0D /* StatusController.swift in Sources */,
 				CE961ED7210BFD6900025D0D /* NewsService.swift in Sources */,
@@ -556,6 +604,7 @@
 				CE024EBA2113A76400E51F37 /* InputTextCell.swift in Sources */,
 				CE024EAE2113886100E51F37 /* CommentCell.swift in Sources */,
 				CE218CF92118EA4F00AD1EF2 /* RecoveryController.swift in Sources */,
+				CE4A9575231321E200EFC617 /* AdService.swift in Sources */,
 				CE024EA82113779800E51F37 /* KeychainHelper.swift in Sources */,
 				CE961F26210EE29000025D0D /* User+CoreDataClass.swift in Sources */,
 				CE961F00210D713600025D0D /* ComposeController.swift in Sources */,
@@ -567,11 +616,18 @@
 				CECC040321176F2500AD8390 /* ActivityService.swift in Sources */,
 				CE961EFC210D6C8A00025D0D /* AccountHeader.swift in Sources */,
 				CEB4800021B6866600DFFB57 /* SwipeController.swift in Sources */,
+				CE4A957823133A9400EFC617 /* Ad+CoreDataProperties.swift in Sources */,
+				CEFAA6BD2321FCC900D123D7 /* ChatController.swift in Sources */,
 				CE024EB62113A02E00E51F37 /* LoginToolbar.swift in Sources */,
 				CE961EFE210D6D2000025D0D /* Theme.swift in Sources */,
 				CE024EA42113768F00E51F37 /* WalletController.swift in Sources */,
 				CEEBB93C210BF827007E87EE /* Sparrow.xcdatamodeld in Sources */,
+				CEC4F32222FFD33200CCE1AC /* PayController.swift in Sources */,
+				CEFAA6BF2321FD9C00D123D7 /* Chat.swift in Sources */,
 				CECC03FF21165D6E00AD8390 /* InputTextViewCell.swift in Sources */,
+				CEFAA6C32321FF6000D123D7 /* ChatService.swift in Sources */,
+				CEFAA6C92322156E00D123D7 /* NewChatController.swift in Sources */,
+				CEC4F32E22FFE3CD00CCE1AC /* OrderService.swift in Sources */,
 				CE16B162211E85900047E903 /* PendingController.swift in Sources */,
 				CE218CDB2117BDF100AD1EF2 /* Constants.swift in Sources */,
 				CE8E2DC5211C066100B45DB2 /* Payment+CoreDataProperties.swift in Sources */,
@@ -582,11 +638,11 @@
 				CECC03FB211647B800AD8390 /* Comment+CoreDataProperties.swift in Sources */,
 				CE218CEF2118C30C00AD1EF2 /* BlockedUsersController.swift in Sources */,
 				CE024EB421139D0300E51F37 /* Model.swift in Sources */,
+				CEC4F32A22FFE0D900CCE1AC /* TransactionType.swift in Sources */,
 				CEEBB94D210BF8C9007E87EE /* StatusCell.swift in Sources */,
 				CEEBB949210BF896007E87EE /* TabBar.swift in Sources */,
 				CEFA04142195709F00F1103A /* ErrorPresenter.swift in Sources */,
 				CE024EC02113AA5F00E51F37 /* UsernameController.swift in Sources */,
-				CE961F25210EE29000025D0D /* User+CoreDataProperties.swift in Sources */,
 				CE2E61AC21A1099B00BF46B8 /* Like+CoreDataProperties.swift in Sources */,
 				CE75AE252133CB1B00A54F42 /* ActivityCell.swift in Sources */,
 				CE218CE72118266000AD1EF2 /* ConfirmPaymentController.swift in Sources */,
@@ -596,6 +652,9 @@
 				CE024EC22113AD3900E51F37 /* PixelView.swift in Sources */,
 				CE218CF12118C33600AD1EF2 /* UserCell.swift in Sources */,
 				CE024EAC2113883B00E51F37 /* CommentsController.swift in Sources */,
+				CEC4F32C22FFE17100CCE1AC /* InputNumberCellDelegate.swift in Sources */,
+				CEC4F33022FFE3FF00CCE1AC /* ExchangeOrder.swift in Sources */,
+				CEFAA6C12321FDC300D123D7 /* Message.swift in Sources */,
 				CE218CE92118C24B00AD1EF2 /* SecurityController.swift in Sources */,
 				CE961EF6210D2FBB00025D0D /* UserHeader.swift in Sources */,
 			);
@@ -672,6 +731,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -725,19 +785,23 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		CEEBB946210BF829007E87EE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C9F3057797371541BA736382 /* Pods-Sparrow.debug.xcconfig */;
+			baseConfigurationReference = 3D9B963B2F9ACCEBA9941D51 /* Pods-Sparrow.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CKRM3BRD2H;
 				INFOPLIST_FILE = Sparrow/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.Sparrow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -747,13 +811,16 @@
 		};
 		CEEBB947210BF829007E87EE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D2868CB62F695E288684EE6A /* Pods-Sparrow.release.xcconfig */;
+			baseConfigurationReference = EBF5EF327F560E11EC8628C7 /* Pods-Sparrow.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CKRM3BRD2H;
 				INFOPLIST_FILE = Sparrow/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.Sparrow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

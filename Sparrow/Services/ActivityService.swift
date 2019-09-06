@@ -15,7 +15,7 @@ struct ActivityService {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/activity"
             let url = URL(string: urlString)!
-            let token = Model.shared.token
+            let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
             let params: Parameters = [:]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in

@@ -122,9 +122,7 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     
     
     func handleUserTap(userId: String) {
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = userId
+        let vc = UserController(userId)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

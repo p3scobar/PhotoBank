@@ -41,6 +41,17 @@ extension String {
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
         return ceil(boundingBox.height)
     }
+    
+    func rounded(_ decimals: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.generatesDecimalNumbers = true
+        formatter.usesGroupingSeparator = true
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = decimals
+        formatter.maximumFractionDigits = decimals
+        let number = NSDecimalNumber(string: self)
+        return formatter.string(from: number) ?? ""
+    }
 }
 
 internal func isFavorited(id: String) -> Bool {
@@ -71,6 +82,15 @@ extension UIDevice {
 }
 
 extension Date {
+    
+    func short() -> String {
+        let formatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM dd"
+            return formatter
+        }()
+        return formatter.string(from: self)
+    }
     
     func asString() -> String {
         let formatter: DateFormatter = {
@@ -129,20 +149,46 @@ extension UIButton {
 extension Status {
     
     func imageHeight(_ viewWidth: CGFloat) -> CGFloat {
-        guard self.width != 0, self.height != 0 else { return 400 }
-        let ratio = CGFloat(self.height/self.width)
-        return ratio * viewWidth
+        return viewWidth + 160
     }
     
     func cellHeight(_ viewWidth: CGFloat) -> CGFloat {
-        guard self.width != 0, self.height != 0 else { return 540 }
-        let ratio = CGFloat(self.height/self.width)
-        var cellHeight = ratio * viewWidth + 140
+        var cellHeight = imageHeight(viewWidth) + 20
+        if let text = self.text {
+            let textHeight = estimateFrameForText(text: text, fontSize: 18).height
+            cellHeight += textHeight
+        }
+        return cellHeight
+    }
+    
+}
+
+
+extension Ad {
+    
+    func imageHeight(_ viewWidth: CGFloat) -> CGFloat {
+        return viewWidth + 120
+    }
+    
+    func cellHeight(_ viewWidth: CGFloat) -> CGFloat {
+        var cellHeight = imageHeight(viewWidth) + 80
         if let text = self.text {
             let textHeight = estimateFrameForText(text: text, fontSize: 18).height
             cellHeight += textHeight+20
         }
         return cellHeight
     }
+}
+
+
+internal func generateChatId(ids:[String]) -> String {
+    return ids.sorted(by:>).joined().sha256()
     
+}
+
+
+internal func estimateChatBubbleSize(text: String, fontSize: CGFloat) -> CGSize {
+    let size = CGSize(width: 240, height: 600)
+    let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: Theme.medium(fontSize)], context: nil).size
 }

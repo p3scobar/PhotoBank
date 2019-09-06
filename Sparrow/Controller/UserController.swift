@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 import SafariServices
+import Firebase
 
-class UserController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserHeaderDelegate {
+class UserController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     private let photoCell = "photoCell"
     private let header = "header"
@@ -33,12 +34,30 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var user: User? {
         didSet {
+            self.headerView.user = user
             collectionView?.reloadData()
+            buttonsEnabled = true
         }
     }
     
-    // delete user ID.. Just using for testing
-    var userId: String?
+    var buttonsEnabled: Bool = false {
+        didSet {
+            headerView.followButton.isEnabled = buttonsEnabled
+            headerView.payButton.isEnabled = buttonsEnabled
+            headerView.messageButton.isEnabled = buttonsEnabled
+        }
+    }
+    
+    
+    func fetchUser(_ id: String?) {
+        guard let id = id, id != "" else {
+            print(" NO USER ID")
+            return
+        }
+        UserService.getUser(id) { (user) in
+            self.user = user
+        }
+    }
     
     var timeline = [Status]() {
         didSet {
@@ -49,32 +68,35 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
-    convenience init(_ username: String) {
+    
+    convenience init(_ user: User) {
         let layout = UICollectionViewFlowLayout()
         self.init(collectionViewLayout: layout)
-        UserService.fetchUsers(username: username) { (users) in
-            guard let user = users.first else { return }
-            self.userId = user.id
-            self.user = user
-            self.fetchData()
-        }
+        self.user = user
+        getData()
     }
     
+    convenience init(_ id: String) {
+        let layout = UICollectionViewFlowLayout()
+        self.init(collectionViewLayout: layout)
+        fetchUser(id)
+        getData()
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = Theme.lightBackground
+        collectionView?.backgroundColor = .white
         collectionView?.register(UserHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: header)
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         navigationItem.title = "User"
         collectionView?.refreshControl = refresh
         refresh.tintColor = .black
-        refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(getData), for: .valueChanged)
 
-        fetchData()
     }
     
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
@@ -86,15 +108,10 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     
-    @objc func fetchData() {
-        guard let uuid = userId else { return }
-        NewsService.fetchPosts(forUser: uuid) { (feed) in
-            self.timeline = feed
-        }
-        UserService.fetchUser(uuid: uuid) { (user, following)  in
-            self.user = user
-            self.following = following
-            self.headerView.user = user
+    @objc func getData() {
+        guard let uid = user?.id else { return }
+        NewsService.fetchPosts(forUser: uid) { [weak self] (feed) in
+            self?.timeline = feed
         }
     }
     
@@ -151,13 +168,6 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return CGSize(width: self.view.frame.width, height: height)
     }
     
-    
-    func handleFollow() {
-        guard let id = userId else { return }
-        UserService.follow(userId: id, follow: !following) { (following) in
-            self.following = following
-        }
-    }
 
     func handleMore() {
         let action = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -174,6 +184,48 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
 
+    func presentRecoveryController() {
+        let vc = RecoveryController()
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true, completion: nil)
+    }
+    
+    
+}
+
+
+extension UserController: UserHeaderDelegate {
+    
+    
+    func handleFollow() {
+        guard let id = user?.id else { return }
+        UserService.follow(userId: id, follow: !following) { (following) in
+            self.following = following
+        }
+    }
+
+    
+    func handleURLTap() {
+        guard let urlString = user?.url,
+            let url = URL(string: urlString) else { return }
+        let config = SFSafariViewController.Configuration()
+        config.barCollapsingEnabled = true
+        let vc = SFSafariViewController(url: url, configuration: config)
+        present(vc, animated: true, completion: nil)
+    }
+    
+    
+    func handleMessage() {
+        guard let fromId = Auth.auth().currentUser?.uid,
+        let toId = user?.id else { return }
+        let chatId = generateChatId(ids: [fromId,toId])
+        let title = user?.name ?? ""
+        let image = user?.image ?? ""
+        let vc = ChatController(chatId: chatId, toId: toId, title: title, image: image)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
     
     func handlePay() {
         guard let pk = user?.publicKey else { return }
@@ -187,20 +239,5 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         present(nav, animated: true, completion: nil)
     }
     
-    func presentRecoveryController() {
-        let vc = RecoveryController()
-        let nav = UINavigationController(rootViewController: vc)
-        self.present(nav, animated: true, completion: nil)
-    }
-    
-    
-    func handleURLTap() {
-        guard let urlString = user?.url,
-            let url = URL(string: urlString) else { return }
-        let config = SFSafariViewController.Configuration()
-        config.barCollapsingEnabled = true
-        let vc = SFSafariViewController(url: url, configuration: config)
-        present(vc, animated: true, completion: nil)
-    }
     
 }

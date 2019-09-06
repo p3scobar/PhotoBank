@@ -43,12 +43,13 @@ public class Payment: NSManagedObject {
         payment.toName = data["to_name"] as? String
         payment.toUsername = data["to_username"] as? String
         payment.amount = data["amount"] as? String ?? "0.000"
-        let rawDate = data["timestamp"] as? Int ?? 0
-        if let double = Double(exactly: rawDate/1000) {
-            let date = Date(timeIntervalSince1970: double)
-            payment.timestamp = date
-        }
-        payment.isReceived = Model.shared.uuid == payment.to
+        payment.timestamp = data["date"] as? Date ?? Date()
+//        let rawDate = data["timestamp"] as? Int ?? 0
+//        if let double = Double(exactly: rawDate/1000) {
+//            let date = Date(timeIntervalSince1970: double)
+//            payment.timestamp = date
+//        }
+        payment.isReceived = Model.shared.uid == payment.to
         return payment
     }
     
@@ -65,6 +66,17 @@ public class Payment: NSManagedObject {
             print(error.localizedDescription)
         }
         return payments
+    }
+    
+    static func deleteAll() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Payment")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let container = PersistenceService.persistentContainer
+        do {
+            try container.viewContext.execute(deleteRequest)
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
     
     

@@ -34,28 +34,31 @@ extension Theme {
     }
 
     public static var border: UIColor {
-        return UIColor(200, 200, 200)
+        return UIColor(180, 180, 180)
     }
     
     public static var gray: UIColor {
-        return UIColor(100, 100, 100)
+        return UIColor(120, 120, 120)
     }
     
     
     public static var highlight: UIColor {
-        return UIColor(100, 100, 100)
+        //return UIColor(100, 100, 100)
+
+//        return UIColor(22, 113, 217)
+        return UIColor(0, 158, 28)
     }
     
     public static var unfilled: UIColor {
         return UIColor(140, 140, 140)
     }
     
-    public static var charcoal: UIColor {
-        return UIColor(40, 40, 40)
+    public static var tint: UIColor {
+        return UIColor(20, 20, 20)
     }
     
     public static var black: UIColor {
-        return UIColor(30, 30, 30)
+        return UIColor(14, 14, 14)
     }
     
     public static var blue: UIColor {
@@ -72,6 +75,18 @@ extension Theme {
     
     public static var green: UIColor {
         return UIColor(19, 221, 80)
+    }
+    
+    public static var incoming: UIColor {
+        return UIColor(0, 199, 36)
+    }
+    
+    public static var outgoing: UIColor {
+        return UIColor(0, 199, 36)
+    }
+    
+    public static var card: UIColor {
+        return UIColor(220, 220, 220).withAlphaComponent(0.2)
     }
     
 }

@@ -30,7 +30,6 @@ class WalletController: UITableViewController {
         } else {
             self.tableView.backgroundView = nil
         }
-        print(payments.count)
     }
     
     lazy var header: WalletHeaderView = {
@@ -42,39 +41,38 @@ class WalletController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.refreshControl = refresh
-        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         header.delegate = self
         tableView.tableHeaderView = header
         tableView.alwaysBounceVertical = true
-        
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 76, bottom: 0, right: 0)
+        tableView.separatorColor = Theme.border
         self.navigationItem.title = "Wallet"
         tableView.showsVerticalScrollIndicator = false
-
+        tableView.backgroundColor = .white
+        
         tableView.tableFooterView = UIView()
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
-        navigationController?.navigationBar.prefersLargeTitles = true
-        NotificationCenter.default.addObserver(self, selector: #selector(handleQR(notification:)), name: NSNotification.Name(rawValue: "qrScan"), object: nil)
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleQR(notification:)), name: NSNotification.Name(rawValue: "qrScan"), object: nil)
         
         let qrIcon = UIImage(named: "qrcode")?.withRenderingMode(.alwaysTemplate)
         let qrButton = UIBarButtonItem(image: qrIcon, style: .done, target: self, action: #selector(presentCamera))
         self.navigationItem.rightBarButtonItem = qrButton
         payments = Payment.fetchAll(in: PersistenceService.context)
+        pullToRefresh()
     }
     
     @objc func presentCamera() {
         let scan = ScanController()
+        scan.scanDelegate = self
         let nav = UINavigationController(rootViewController: scan)
+        nav.modalTransitionStyle = .crossDissolve
         self.present(nav, animated: true, completion: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("PK: " + KeychainHelper.publicKey)
-        print("SK: " + KeychainHelper.privateSeed)
-        print("MNEMONIC: " + KeychainHelper.mnemonic)
-        loadData()
+        tableView.refreshControl = refresh
+        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
     }
  
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,7 +80,7 @@ class WalletController: UITableViewController {
         refresh.endRefreshing()
     }
     
-    @objc func fetchTransactions() {
+    @objc func getTransactions() {
         WalletManager.fetchTransactions { payments in
             self.payments = payments
         }
@@ -95,28 +93,29 @@ class WalletController: UITableViewController {
     }
     
     @objc func pullToRefresh() {
-        if KeychainHelper.publicKey != "" {
-            getAccountDetails()
-            fetchTransactions()
+        guard KeychainHelper.publicKey != "" else {
+            refresh.endRefreshing()
+            return
         }
+        getAccountDetails()
+        getTransactions()
     }
     
     
     func getAccountDetails() {
-        WalletManager.getAccountDetails { (balance) in
-            self.header.balance = balance
-            self.header.currencyCodeLabel.text = "PBK"
+        WalletManager.getAccountDetails { (asset) in
+            self.header.token = asset
         }
     }
     
     @objc func loadData() {
         if KeychainHelper.publicKey != "" {
             getAccountDetails()
-            fetchTransactions()
+            getTransactions()
             streamTransactions()
         } else {
-            header.balance = "0.000"
-            header.currencyCodeLabel.text = "Create an Account"
+//            header.balance = "0.000"
+//            header.currencyCodeLabel.text = "Create an Account"
             setupEmptyView()
         }
     }
@@ -174,6 +173,7 @@ class WalletController: UITableViewController {
     
     func presentQRController() {
         let vc = QRController()
+        vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true, completion: nil)
     }
 
@@ -208,14 +208,43 @@ class WalletController: UITableViewController {
         return label
     }()
     
+
 }
 
 extension WalletController: WalletHeaderDelegate {
-    
-    @objc func handleQR(notification: Notification) {
-        if let pk = notification.userInfo?["code"] as? String {
-            presentAmountController(pk)
-        }
+    func handleBuy() {
+        
     }
+    
+    func handleSell() {
+        
+    }
+    
+    func handleCardTap() {
+        guard KeychainHelper.publicKey != "" else {
+            presentPassphraseController()
+            return
+        }
+        presentQRController()
+    }
+    
+    func presentPassphraseController() {
+        let vc = MnemonicController()
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true)
+    }
+}
+
+extension WalletController: QRScanDelegate {
+    func handleQRScan(_ code: String) {
+        presentAmountController(code)
+    }
+    
+    
+//    @objc func handleQR(notification: Notification) {
+//        if let pk = notification.userInfo?["code"] as? String {
+    
+//        }
+//    }
     
 }

@@ -113,7 +113,6 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func checkIfScrolledToBottom(_ indexPath: IndexPath) {
-        guard Model.shared.uuid != "" else { return }
         if indexPath.row == timeline.count-9 {
             print("BOTTOM OF TABLE VIEW")
             loadMorePosts()
@@ -123,7 +122,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
     var allPostsLoaded: Bool = false
     
     func loadMorePosts() {
-        guard allPostsLoaded == false else { return }
+//        guard allPostsLoaded == false else { return }
         NewsService.discover(cursor: timeline.count+1, query: nil) { [weak self] posts in
             guard posts.count > 0 else {
                 print("NO MORE POSTS TO LOAD")

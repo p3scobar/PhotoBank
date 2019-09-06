@@ -67,14 +67,13 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     
     
     @objc func pushProfile() {
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = Model.shared.uuid
+        let id = Model.shared.uid
+        let vc = UserController(id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,10 +81,8 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         case 0:
             return 2
         case 1:
-            return 1
-        case 2:
             return 2
-        case 3:
+        case 2:
             return 1
         default:
             return 0
@@ -102,12 +99,10 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         case (0, 1):
             cell.textLabel?.text = "Invite Friends"
         case (1, 0):
-            cell.textLabel?.text = "Switch to Business Account"
-        case (2, 0):
             cell.textLabel?.text = "Passphrase"
-        case (2, 1):
+        case (1, 1):
             cell.textLabel?.text = "Security"
-        case (3, 0):
+        case (2, 0):
             cell.textLabel?.text = "Sign out"
         default:
             break
@@ -135,12 +130,10 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         case (0, 1):
             presentInviteController()
         case (1, 0):
-            presentAccountTypeController()
-        case (2, 0):
             presentPassphrase()
-        case (2,1):
+        case (1,1):
             pushSecurityController()
-        case (3,0):
+        case (2,0):
             confirmLogout()
         default:
             return
@@ -209,14 +202,15 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
             let nav = UINavigationController(rootViewController: vc)
             self.present(nav, animated: true)
             self.tabBarController?.selectedIndex = 0
-            let id = Model.shared.uuid
-            print("User ID: \(id)")
+            let id = Model.shared.uid
+            
         }
     }
     
     
     func pushProfileController() {
-        let vc = UserController()
+        let username = Model.shared.username
+        let vc = UserController(username)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -260,17 +254,17 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         if let editedImage = info["UIImagePickerControllerEditedImage"] {
             selectedImageFromPicker = editedImage as? UIImage
         }
-        if let selectedImage = selectedImageFromPicker {
-            UserService.updateProfilePic(image: selectedImage) { (imageUrl) in
-                print(imageUrl)
-                Model.shared.profileImage = imageUrl
-                self.header.profileImage.image = selectedImage
+        if let image = selectedImageFromPicker {
+            UserService.updateProfilePic(image: image) { (imageUrl) in
+                Model.shared.image = imageUrl
+                self.header.profileImage.image = image
                 self.tableView.reloadData()
             }
         }
         self.dismiss(animated: true, completion: nil)
     }
     
+
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true, completion: nil)
     }

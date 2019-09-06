@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import Pulley
+import Firebase
 
 class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITabBarControllerDelegate {
     
@@ -30,27 +30,27 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
         let walletVC = WalletController()
-//        let scan = ScanController()
-//        let wallet = PulleyViewController(contentViewController: scan, drawerViewController: walletVC)
-//        let wallet = UINavigationController(rootViewController: walletVC)
-//        wallet.initialDrawerPosition = .open
-//        wallet.drawerTopInset = 20
-//        wallet.drawerCornerRadius = 0
         let wallet = UINavigationController(rootViewController: walletVC)
-        wallet.tabBarItem.image = UIImage(named: "qrcode")
+        wallet.tabBarItem.image = UIImage(named: "coin")
         wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
-        let activityVC = ActivityController(style: .plain)
-        let activity = UINavigationController(rootViewController: activityVC)
-        activity.tabBarItem.image = UIImage(named: "bell")
-        activity.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
+//        let activityVC = ActivityController(style: .plain)
+//        let activity = UINavigationController(rootViewController: activityVC)
+//        activity.tabBarItem.image = UIImage(named: "bell")
+//        activity.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
+
+        let messagesVC = MessagesController(style: .plain)
+        let messages = UINavigationController(rootViewController: messagesVC)
+        messages.tabBarItem.image = UIImage(named: "message")
+        messages.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
         let accountVC = AccountController(style: .grouped)
         let account = UINavigationController(rootViewController: accountVC)
         account.tabBarItem.image = UIImage(named: "user")
         account.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
-        viewControllers = [timeline, discover, wallet, activity, account]
+        viewControllers = [timeline, discover, messages, wallet]
+        
         
         picker?.allowsEditing = true
         picker?.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
@@ -58,7 +58,9 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         
         delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(handleUnread(notification:)), name: Notification.Name("unread"), object: nil)
+        auth()
     }
+    
     
     @objc func handleUnread(notification: Notification) {
         guard let count = notification.userInfo?["count"] as? Int else { return }
@@ -115,5 +117,25 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     }
     
     
+    func auth() {
+        let id = Model.shared.uid
+        guard id != "" else {
+            let vc = HomeController()
+            let nav = UINavigationController(rootViewController: vc)
+            self.tabBarController?.present(nav, animated: true, completion: nil)
+            return
+        }
+        UserService.getUser(id) { (user) in
+            Model.shared.uid = user?.id ?? ""
+            Model.shared.name = user?.name ?? ""
+            Model.shared.username = user?.bio ?? ""
+            Model.shared.image = user?.image ?? ""
+            Model.shared.url = user?.url ?? ""
+            Model.shared.image = user?.image ?? ""
+        }
+    }
+    
+    
 }
+
 

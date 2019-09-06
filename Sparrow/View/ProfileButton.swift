@@ -15,8 +15,8 @@ class ProfileButton: UIControl {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                icon.tintColor = Theme.charcoal
-                titleLabel.textColor = Theme.charcoal
+                icon.tintColor = Theme.tint
+                titleLabel.textColor = Theme.tint
             } else {
                 icon.tintColor = Theme.gray
                 titleLabel.textColor = Theme.gray
@@ -72,8 +72,8 @@ class ProfileButton: UIControl {
         previousImageTintColor = Theme.gray
         previousLabelTintColor = Theme.gray
         
-        icon.tintColor = Theme.charcoal
-        titleLabel.textColor = Theme.charcoal
+        icon.tintColor = Theme.tint
+        titleLabel.textColor = Theme.tint
         sendActions(for: .touchDown)
         if Model.shared.soundsEnabled == true {
             SoundKit.playSound(type: .button)

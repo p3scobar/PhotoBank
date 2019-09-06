@@ -153,7 +153,7 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
     
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard Model.shared.uuid == comments[indexPath.row].userId else {
+        guard Model.shared.uid == comments[indexPath.row].userId else {
             return false
         }
         return true
@@ -173,11 +173,8 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
     }
     
     func handleUserTap(userId: String) {
-        print(userId)
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = userId
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = UserController(userId)
+    self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func handlePhotoTap(_ statusId: String) {}

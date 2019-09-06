@@ -27,6 +27,7 @@ extension Status {
     @NSManaged public var height: Double
     @NSManaged public var width: Double
 
+    @NSManaged public var publicKey: String?
     @NSManaged public var name: String?
     @NSManaged public var username: String?
     @NSManaged public var userImage: String?

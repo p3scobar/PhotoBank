@@ -40,7 +40,8 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
     
     
     @objc func handleSave() {
-        UserService.updateUser(name: name, bio: bio, website: url) { (success) in
+        let data = ["name":name,"bio":bio,"url":url]
+        UserService.updateUserInfo(values: data) { (success) in
             Model.shared.name = self.name
             Model.shared.bio = self.bio
             Model.shared.url = self.url

@@ -11,31 +11,37 @@ import UIKit
 
 class ReceiptController: UIViewController {
     
+    
     var payment: Payment? {
             didSet {
                 guard let amount = payment?.amount else { return }
-                amountLabel.text = amount
-                
-                self.titleLabel.text = payment!.fetchOtherName()
-                
-                let imageUrl = payment!.fetchOtherImage()
-                let url = URL(string: imageUrl)
-                profileImageView.sd_setImage(with: url, completed: nil)
-                
+                amountLabel.text = amount.rounded(2)
                 let formattedDate = payment!.timestamp?.asString() ?? ""
-                
-                if payment!.isReceived {
-                    subtitleLabel.text = "You received \(amount) from @\(payment!.fetchOtherUsername()) on \(formattedDate)"
-                } else {
-                    subtitleLabel.text = "You sent \(amount) to @\(payment!.fetchOtherUsername()) on \(formattedDate)"
-                }
-                
+                self.subtitleLabel.text = formattedDate
             }
     }
     
-    init(payment: Payment) {
+    func fetchUser() {
+        let publicKey = otherUserID()
+        UserService.getUserWithPublicKey(publicKey) { (user) in
+            guard let user = user else { return }
+            self.titleLabel.text = "@\(user.username ?? "")"
+            let url = URL(string: user.image ?? "")
+            self.profileImageView.sd_setImage(with: url, completed: nil)
+        }
+    }
+    
+    init(payment: Payment?) {
         self.payment = payment
         super.init(nibName: nil, bundle: nil)
+        fetchUser()
+    }
+    
+    func otherUserID() -> String {
+        let pk = KeychainHelper.publicKey
+        guard let from = payment?.from,
+        let to = payment?.to else { return "" }
+        return from != pk ? from : to
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -166,7 +172,7 @@ class ReceiptController: UIViewController {
     
     lazy var amountLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = Theme.charcoal
+        label.backgroundColor = Theme.tint
         label.font = Theme.bold(24)
         label.textColor = .white
         label.layer.cornerRadius = 32

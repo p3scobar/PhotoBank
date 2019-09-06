@@ -24,7 +24,7 @@ class QRController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.black
         setupView()
         setQRCode()
     }
@@ -38,20 +38,13 @@ class QRController: UIViewController {
     
     
     lazy var container: UIView = {
-        let view = UIView(frame: CGRect(x: 20, y: 48, width: self.view.frame.width-40, height: 520))
+        let view = UIView(frame: CGRect(x: 0, y: 80, width: self.view.frame.width-40, height: 480))
         view.backgroundColor = .white
-        view.layer.cornerRadius = 12
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.5
-        view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowRadius = 16
-        view.layer.shadowOpacity = 0.2
-        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.cornerRadius = 16
+        view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view
     }()
-    
     
     lazy var qrView: UIImageView = {
         let view = UIImageView()
@@ -63,7 +56,7 @@ class QRController: UIViewController {
         let button = UIButton()
         button.setTitle("Done", for: .normal)
         button.titleLabel?.font = Theme.semibold(20)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(Theme.black, for: .normal)
         button.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -89,7 +82,7 @@ class QRController: UIViewController {
         let button = UIButton()
         button.setTitle("Copy", for: .normal)
         button.titleLabel?.font = Theme.bold(20)
-        button.setTitleColor(.darkGray, for: .normal)
+        button.setTitleColor(Theme.black, for: .normal)
         button.addTarget(self, action: #selector(handleCopy), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -102,6 +95,11 @@ class QRController: UIViewController {
         return view
     }()
     
+    
+    @objc func handleScanButtonTap() {
+        let vc = ScanController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     @objc func handleCancel() {
         self.dismiss(animated: true, completion: nil)

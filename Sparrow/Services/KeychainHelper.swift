@@ -9,11 +9,12 @@
 
 import KeychainSwift
 import Foundation
+import stellarsdk
 
 class KeychainHelper: NSObject {
     
     static var mnemonic: String {
-        get { return KeychainSwift().get("mnemonic") ?? ""}
+        get { return KeychainSwift().get("mnemonic") ?? newMnemonic() }
         set (key) { KeychainSwift().set(key, forKey: "mnemonic")
             print("Saving mnemonic: \(mnemonic)")
         }
@@ -34,5 +35,10 @@ class KeychainHelper: NSObject {
         }
     }
     
+    static func newMnemonic() -> String {
+        let passphrase = Wallet.generate12WordMnemonic()
+        mnemonic = passphrase
+        return passphrase
+    }
 }
 

@@ -32,7 +32,7 @@ class AccountHeader: UIView {
     func setupNameAndProfileImage() {
         nameLabel.text = Model.shared.name
         usernameLabel.text = "@\(Model.shared.username)"
-        let url = URL(string: Model.shared.profileImage)
+        let url = URL(string: Model.shared.image)
         profileImage.sd_setImage(with: url, completed: nil)
     }
     

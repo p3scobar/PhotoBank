@@ -35,7 +35,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.allowsSelection = false
-        tableView.backgroundColor = Theme.lightBackground
+        tableView.backgroundColor = .white
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -70,7 +70,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return status?.cellHeight(view.frame.width) ?? 0.0
+        return 640
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,8 +78,8 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     func presentUserController() {
-        let vc = UserController()
-        vc.userId = status?.userId
+        guard let id = status?.userId else { return }
+        let vc = UserController(id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -95,7 +95,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     @objc func handleMore() {
-        if status?.userId == Model.shared.uuid {
+        if status?.userId == Model.shared.uid {
             presentDeleteMenu()
         } else {
             presentPublicMenu()
@@ -143,9 +143,7 @@ extension StatusController: StatusCellDelegate {
     }
     
     func handleUserTap(_ userId: String) {
-        let layout = UICollectionViewFlowLayout()
-        let vc = UserController(collectionViewLayout: layout)
-        vc.userId = status?.userId
+        let vc = UserController(userId)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -155,6 +153,10 @@ extension StatusController: StatusCellDelegate {
         vc.query = tag
         vc.navController = self.navigationController
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func handleDoubleTap(publicKey: String, username: String) {
+        
     }
     
 }

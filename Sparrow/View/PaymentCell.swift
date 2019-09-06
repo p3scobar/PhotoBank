@@ -15,33 +15,21 @@ class PaymentCell: UITableViewCell {
     
     weak var payment: Payment? {
         didSet {
-            self.nameLabel.text = payment!.fetchOtherName()
+            self.nameLabel.text = payment!.timestamp?.short()
             
-            let imageUrl = payment!.fetchOtherImage()
-            let url = URL(string: imageUrl)
-            profileImage.sd_setImage(with: url, completed: nil)
-            
-            amountLabel.text = payment!.amount
+            let amount = payment?.amount?.rounded(2) ?? "0.00"
+            if payment?.isReceived ?? false {
+                amountLabel.text = "+\(amount)"
+            } else {
+                amountLabel.text = "-\(amount)"
+            }
         }
     }
 
-    
-    let profileImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.layer.cornerRadius = 24
-        imageView.backgroundColor = Theme.lightGray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 0.5
-        imageView.layer.borderColor = Theme.border.cgColor
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
-    
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.semibold(18)
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -51,7 +39,7 @@ class PaymentCell: UITableViewCell {
         let label = UILabel()
         label.font = Theme.semibold(18)
         label.textAlignment = .right
-        label.textColor = Theme.charcoal
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -60,23 +48,19 @@ class PaymentCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        addSubview(profileImage)
+        backgroundColor = .white
+        
         addSubview(nameLabel)
         addSubview(amountLabel)
-        
-        profileImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 12).isActive = true
-        profileImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 16).isActive = true
-        profileImage.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        profileImage.widthAnchor.constraint(equalToConstant: 48).isActive = true
-        
-        nameLabel.leftAnchor.constraint(equalTo: profileImage.rightAnchor, constant: 16).isActive = true
+     
+        nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        amountLabel.leftAnchor.constraint(equalTo: profileImage.rightAnchor, constant: 20).isActive = true
+        amountLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
         amountLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        amountLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -24).isActive = true
+        amountLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -24).isActive = true
         amountLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
 
     }

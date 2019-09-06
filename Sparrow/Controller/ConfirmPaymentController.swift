@@ -48,7 +48,7 @@ class ConfirmPaymentController: UITableViewController {
         button.titleLabel?.font = Theme.semibold(18)
         button.layer.cornerRadius = 8
         button.clipsToBounds = true
-        button.backgroundColor = Theme.charcoal
+        button.backgroundColor = Theme.tint
         button.addTarget(self, action: #selector(submitPayment), for: .touchUpInside)
         return button
     }()

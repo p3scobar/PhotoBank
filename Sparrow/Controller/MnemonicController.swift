@@ -24,7 +24,7 @@ class MnemonicController: UITableViewController {
         var instructionsLabel: UITextView = {
             let view = UITextView(frame: frame)
             view.textContainerInset = UIEdgeInsetsMake(30, 16, 10, 16)
-            view.backgroundColor = Theme.lightBackground
+            view.backgroundColor = .white
             view.font = UIFont.boldSystemFont(ofSize: 18)
             view.text = "Please write down this secret phrase. It is the only way to recover your wallet. Do not share it with anyone."
             return view

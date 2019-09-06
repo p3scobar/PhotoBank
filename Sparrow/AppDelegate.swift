@@ -24,11 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = tabBar
 
         UINavigationBar.appearance().tintColor = .black
-        UINavigationBar.appearance().barTintColor = .white
         UINavigationBar.appearance().prefersLargeTitles = true
         UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = Theme.black
-        UITabBar.appearance().unselectedItemTintColor = Theme.charcoal
+        UITabBar.appearance().tintColor = .black
+        UITabBar.appearance().unselectedItemTintColor = Theme.gray
         
         return true
     }

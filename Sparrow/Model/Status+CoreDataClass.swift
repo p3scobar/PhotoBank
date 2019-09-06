@@ -43,12 +43,13 @@ public class Status: NSManagedObject {
         status.text = data["text"] as? String
         status.image = data["image"] as? String
         status.thumbnail = data["thumbnail"] as? String
-        status.height = data["height"] as? Double ?? 0
-        status.width = data["width"] as? Double ?? 0
+        status.height = data["height"] as? Double ?? 800
+        status.width = data["width"] as? Double ?? 600
         status.userId = data["userId"] as? String
         status.name = data["name"] as? String
         status.username = data["username"] as? String
         status.userImage = data["userImage"] as? String
+        status.publicKey = data["publicKey"] as? String
         let rawDate = data["timestamp"] as? Int ?? 0
         if let double = Double(exactly: rawDate) {
             let date = Date(timeIntervalSince1970: double)

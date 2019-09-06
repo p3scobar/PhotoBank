@@ -26,9 +26,9 @@ class SignupController: UITableViewController, InputTextCellDelegate {
     }
     
     func setupDefaultaAvatar() {
-        //let pixelView = PixelView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
+//        let pixelView = PixelView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
 //        let image = UIImage.imageWithView(pixelView)
-        //UserManager.updateProfilePic(image: image)
+//        UserManager.updateProfilePic(image: image)
     }
     
     @objc func handleSubmit() {

@@ -7,49 +7,29 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(User)
-public class User: NSManagedObject {
+class User: NSObject {
+    
+    public var id: String?
+    public var bio: String?
+    public var image: String?
+    public var name: String?
+    public var publicKey: String?
+    public var url: String?
+    public var username: String?
+    public var followersCount: Int16
+    
 
-    static func findOrCreateUser(id: String, data: [String:Any], in context: NSManagedObjectContext) -> User {
-        let request: NSFetchRequest<User> = User.fetchRequest()
-        if let id = data["_id"] as? String {
-            request.predicate = NSPredicate(format: "id = %@", id)
-        }
-        do {
-            let matches = try context.fetch(request)
-            if matches.count > 0 {
-                assert(matches.count == 1, "User.findOrCreateStatus -- Database inconsistency")
-                let fetched = matches[0]
-                fetched.bio = data["bio"] as? String
-                fetched.image = data["image"] as? String
-                fetched.name = data["name"] as? String
-                fetched.username = data["username"] as? String
-                fetched.publicKey = data["publicKey"] as? String
-                fetched.url = data["url"] as? String
-                let count = data["followersCount"] as? Double ?? 0
-                let followers = Int16(exactly: count) ?? 0
-                fetched.followersCount = followers
-                return fetched
-            }
-        } catch {
-            let error = error
-            print(error.localizedDescription)
-        }
-        let user = User(context: context)
-        user.id = id
-        user.bio = data["bio"] as? String
-        user.image = data["image"] as? String
-        user.name = data["name"] as? String
-        user.username = data["username"] as? String
-        user.publicKey = data["publicKey"] as? String
-        user.url = data["url"] as? String
-        let count = data["followersCount"] as? Double ?? 0
-        let followers = Int16(exactly: count) ?? 0
-        user.followersCount = followers
-        PersistenceService.saveContext()
-        return user
+    init(data: [String:Any]) {
+        self.id = data["id"] as? String ?? ""
+        self.bio = data["bio"] as? String ?? ""
+        self.image = data["image"] as? String ?? ""
+        self.name = data["name"] as? String ?? ""
+        self.publicKey = data["publicKey"] as? String ?? ""
+        self.url = data["url"] as? String ?? ""
+        self.username = data["username"] as? String ?? ""
+        self.followersCount = data["followersCount"] as? Int16 ?? 0
     }
     
 }
+

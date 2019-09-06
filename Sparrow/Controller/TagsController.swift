@@ -98,7 +98,7 @@ class TagsController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func checkIfScrolledToBottom(_ indexPath: IndexPath) {
-        guard Model.shared.uuid != "" else { return }
+        guard Model.shared.uid != "" else { return }
         if indexPath.row == timeline.count-9 {
             print("BOTTOM OF TABLE VIEW")
             loadMorePosts()

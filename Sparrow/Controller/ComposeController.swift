@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 import UITextView_Placeholder
 import Photos
+import SPStorkController
 
-class ComposeController: UIViewController, ComposeDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +58,7 @@ class ComposeController: UIViewController, ComposeDelegate, UIImagePickerControl
         view.placeholder = "What's happening?"
         view.placeholderColor = .lightGray
         view.font = Theme.semibold(18)
+        view.keyboardType = .twitter
         view.textContainerInset = UIEdgeInsetsMake(20, 10, 0, 10)
         return view
     }()
@@ -165,7 +167,26 @@ class ComposeController: UIViewController, ComposeDelegate, UIImagePickerControl
 //    }
     
     
-    func handleSend() {
+//    func handleSend() {
+//        let publicKey = ""
+//        let vc = PayController(publicKey: publicKey)
+//        vc.publicKey = publicKey
+//        let nav = UINavigationController(rootViewController: vc)
+//
+//        let transitionDelegate = SPStorkTransitioningDelegate()
+//        nav.transitioningDelegate = transitionDelegate
+//        nav.modalPresentationCapturesStatusBarAppearance = true
+//        nav.modalPresentationStyle = .custom
+//        nav.modalTransitionStyle = .crossDissolve
+//        presentAsStork(nav, height: UIScreen.main.bounds.height*0.8)
+//    }
+
+}
+
+
+extension ComposeController: ComposeDelegate {
+    
+    func handleSubmit() {
         guard let text = inputTextView.text else { return }
         NewsService.postPhoto(text: text, image: image!)
         view.endEditing(true)

@@ -14,6 +14,7 @@ import SDWebImage
 protocol UserHeaderDelegate: class {
     func handleFollow()
     func handlePay()
+    func handleMessage()
     func handleMore()
     func handleURLTap()
 }
@@ -66,13 +67,13 @@ class UserHeader: UICollectionReusableView {
             }
             if user?.publicKey != nil { payButton.isEnabled = true }
             
-            if let uid = user?.id {
-                if uid == Model.shared.uuid {
-                    followButton.isEnabled = false
-                    payButton.isEnabled = false
-                    moreButton.isEnabled = false
-                }
+            guard let userId = user?.id, userId != "", userId != Model.shared.uid else {
+                followButton.isEnabled = false
+                payButton.isEnabled = false
+                messageButton.isEnabled = false
+                return
             }
+            
             
             if let followersCount = user?.followersCount {
                 followersLabel.text = "\(followersCount) Followers"
@@ -85,15 +86,13 @@ class UserHeader: UICollectionReusableView {
     }
     
     lazy var profileImageView: UIImageView = {
-        let view = UIImageView()
+        let frame = CGRect(x: 20, y: 30, width: 108, height: 108)
+        let view = UIImageView(frame: frame)
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 48
-        view.backgroundColor = .lightGray
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.cornerRadius = frame.width/2
+        view.backgroundColor = Theme.lightGray
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -101,6 +100,7 @@ class UserHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = Theme.bold(28)
         label.numberOfLines = 0
+        label.textColor = .black
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -126,6 +126,7 @@ class UserHeader: UICollectionReusableView {
     lazy var followButton: ProfileButton = {
         let button = ProfileButton(imageName: "plus", title: "Follow")
         button.layer.cornerRadius = 10
+        button.isEnabled = false
         button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -135,15 +136,17 @@ class UserHeader: UICollectionReusableView {
         let button = ProfileButton(imageName: "token", title: "Pay")
         button.layer.cornerRadius = 10
         button.isEnabled = false
+        button.isEnabled = false
         button.addTarget(self, action: #selector(handlePay), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    lazy var moreButton: ProfileButton = {
-        let button = ProfileButton(imageName: "more", title: "More")
+    lazy var messageButton: ProfileButton = {
+        let button = ProfileButton(imageName: "chat", title: "Message")
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(handleMore), for: .touchUpInside)
+        button.isEnabled = false
+        button.addTarget(self, action: #selector(message), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -186,6 +189,10 @@ class UserHeader: UICollectionReusableView {
         delegate?.handleMore()
     }
     
+    @objc func message() {
+        delegate?.handleMessage()
+    }
+    
 
     func setupView() {
         addSubview(profileImageView)
@@ -197,12 +204,12 @@ class UserHeader: UICollectionReusableView {
         addSubview(urlLabel)
         addSubview(bottomLine)
         addSubview(payButton)
-        addSubview(moreButton)
+        addSubview(messageButton)
         
-        profileImageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
-        profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 30).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 96).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 96).isActive = true
+//        profileImage.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
+//        profileImage.widthAnchor.constraint(equalToConstant: 108).isActive = true
+//        profileImage.heightAnchor.constraint(equalToConstant: 108).isActive = true
+//        profileImage.topAnchor.constraint(equalTo: topAnchor, constant: 30).isActive = true
         
         nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 16).isActive = true
         nameLabel.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 0).isActive = true
@@ -241,10 +248,10 @@ class UserHeader: UICollectionReusableView {
         payButton.bottomAnchor.constraint(equalTo: followButton.bottomAnchor).isActive = true
         payButton.heightAnchor.constraint(equalToConstant: 72).isActive = true
         
-        moreButton.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
-        moreButton.widthAnchor.constraint(equalToConstant: width).isActive = true
-        moreButton.bottomAnchor.constraint(equalTo: followButton.bottomAnchor).isActive = true
-        moreButton.heightAnchor.constraint(equalToConstant: 72).isActive = true
+        messageButton.rightAnchor.constraint(equalTo: rightAnchor, constant: 0).isActive = true
+        messageButton.widthAnchor.constraint(equalToConstant: width).isActive = true
+        messageButton.bottomAnchor.constraint(equalTo: followButton.bottomAnchor).isActive = true
+        messageButton.heightAnchor.constraint(equalToConstant: 72).isActive = true
         
         bottomLine.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         bottomLine.rightAnchor.constraint(equalTo: rightAnchor).isActive = true

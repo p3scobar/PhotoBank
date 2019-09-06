@@ -19,6 +19,10 @@ class HomeController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -34,7 +38,7 @@ class HomeController: UIViewController {
         let view = UILabel()
         view.text = "PhotoBank"
         view.font = UIFont(name: "Avenir-Black", size: 48)
-        view.textColor = Theme.charcoal
+        view.textColor = Theme.tint
         view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -59,7 +63,7 @@ class HomeController: UIViewController {
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = Theme.medium(18)
-        button.backgroundColor = Theme.charcoal
+        button.backgroundColor = Theme.tint
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

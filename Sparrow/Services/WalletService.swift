@@ -40,48 +40,34 @@ struct WalletManager {
         }
     }
     
+    private func authenticate() {
+        guard KeychainHelper.publicKey != "" else {
+            print("NO PUBLIC KEY!")
+            
+            return
+        }
+        
+        
+    }
     
-//    static func getAccountDetails(completion: @escaping (String) -> Swift.Void) {
-//        print("*********** ACCOUNT DETAILS ***********")
-//        let accountID = KeychainHelper.publicKey
-//        print("ACCOUNT ID: \(accountID)")
-//        Stellar.sdk.accounts.getAccountDetails(accountId: accountID) { (response) -> (Void) in
-//            print(response)
-//            switch response {
-//            case .success(let accountDetails):
-//                print(accountDetails.data)
-////                accountDetails.balances.forEach({ (balance) in
-////                    if balance.assetCode == "PBK" {
-////                        print("Issuer: \(balance.assetIssuer)")
-////                        print("Asset: \(balance.assetCode)")
-////                        print("Balance: \(balance.balance)")
-////                        completion(balance.balance)
-////                    }
-////                })
-//            case .failure(let error):
-//                completion("")
-//                print(error)
-//            }
-//        }
-//    }
-
-    
-    static func getAccountDetails(completion: @escaping (String) -> Swift.Void) {
+    static func getAccountDetails(completion: @escaping (Token?) -> Swift.Void) {
         DispatchQueue.global(qos: .background).async {
             let accountId = KeychainHelper.publicKey
             Stellar.sdk.accounts.getAccountDetails(accountId: accountId) { response -> (Void) in
                 switch response {
                 case .success(let accountDetails):
                     accountDetails.balances.forEach({ (asset) in
-                        if asset.assetCode == "PBK" {
+                        if asset.assetType == AssetTypeAsString.NATIVE {
+                            let token = Token(response: asset)
+                            reserveAsset = token
                             DispatchQueue.main.async {
-                                completion(asset.balance)
+                                completion(token)
                             }
                         }
                     })
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        completion("")
+                        completion(nil)
                     }
                     print(error.localizedDescription)
                 }
@@ -96,10 +82,10 @@ struct WalletManager {
             return
         }
         
-        let issuerAccountID = Assets.PBK.issuerAccountID
-        guard let issuerKeyPair = try? KeyPair(accountId: issuerAccountID) else {
-            completion(false)
-            return
+        guard let issuerAccountID = baseAsset.assetIssuer,
+            let issuerKeyPair = try? KeyPair(accountId: issuerAccountID) else {
+                completion(false)
+                return
         }
         
         guard let asset = Asset.init(type: AssetType.ASSET_TYPE_CREDIT_ALPHANUM4, code: "PBK", issuer: issuerKeyPair) else {
@@ -159,71 +145,79 @@ struct WalletManager {
     }
     
     
-    static func fetchTransactions(completion: @escaping ([Payment]) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            let urlString = "\(baseUrl)/payments"
-            let url = URL(string: urlString)!
-            let token = Model.shared.token
-            let headers: HTTPHeaders = ["Authorization":"Bearer \(token)"]
-            let params: Parameters = [:]
-            Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-
-                var payments = [Payment]()
-                guard let json = response.result.value as? [String:Any],
-                    let resp = json["response"] as? [String:Any],
-                    let results = resp["payments"] as? [[String:Any]] else { return }
-                results.forEach({ (data) in
-                    let id = data["_id"] as? String ?? ""
-                    let payment = Payment.findOrCreatePayment(id: id, data: data, in: PersistenceService.context)
-                    payments.append(payment)
-                })
-                completion(payments)
-            }
-        }
-    }
-    
-    
-//    static func fetchTransactions(completion: @escaping ([Payment]) -> Swift.Void) {
+//    static func fetchTransactions(completion: @escaping ([Payment]) -> Void) {
 //        DispatchQueue.global(qos: .background).async {
-//            let accountId = KeychainHelper.publicKey
-//            guard accountId != "" else { return }
-//            var payments = [Payment]()
-//            Stellar.sdk.payments.getPayments(forAccount: accountId, from: nil, order: Order.descending, limit: 50) { (response) -> (Void) in
-//                switch response {
-//                case .success(let details):
-//                    for payment in details.records {
-//                        if let paymentResponse = payment as? PaymentOperationResponse {
-//                            let isReceived = paymentResponse.from != accountId ? true : false
-//                            let date = paymentResponse.createdAt
-//                            let amount = paymentResponse.amount
-//                            let data = ["amount":amount,
-//                                        "id":paymentResponse.id,
-//                                        "date":date,
-//                                        "isReceived":isReceived] as [String : Any]
-//                            let payment = Payment.findOrCreatePayment(id: paymentResponse.id, data: data, in: PersistenceService.context)
-//                            payments.append(payment)
-//
-//                            print("$$ TRANSACTION FETCHED $$:")
-//                            print("Amount: \(paymentResponse.amount)")
-//                            print("ID: \(paymentResponse.id)")
-//                        }
-//                        completion(payments)
-//                    }
-//
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
+//            let urlString = "\(baseUrl)/payments"
+//            let url = URL(string: urlString)!
+//            let token = Model.shared.token
+//            let headers: HTTPHeaders = ["Authorization":"Bearer \(token)"]
+//            let params: Parameters = [:]
+//            Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+//print(response)
+//                var payments = [Payment]()
+//                guard let json = response.result.value as? [String:Any],
+//                    let resp = json["response"] as? [String:Any],
+//                    let results = resp["payments"] as? [[String:Any]] else { return }
+//                results.forEach({ (data) in
+//                    let id = data["_id"] as? String ?? ""
+//                    let payment = Payment.findOrCreatePayment(id: id, data: data, in: PersistenceService.context)
+//                    payments.append(payment)
+//                })
+//                completion(payments)
 //            }
 //        }
 //    }
     
     
+    static func fetchTransactions(completion: @escaping ([Payment]) -> Swift.Void) {
+        DispatchQueue.global(qos: .background).async {
+            let accountId = KeychainHelper.publicKey
+            guard accountId != "" else { return }
+            var payments = [Payment]()
+            Stellar.sdk.payments.getPayments(forAccount: accountId, from: nil, order: Order.descending, limit: 50) { (response) -> (Void) in
+                switch response {
+                case .success(let details):
+                    for payment in details.records {
+                        if let paymentResponse = payment as? PaymentOperationResponse {
+                            print(paymentResponse)
+                            let isReceived = paymentResponse.from != accountId ? true : false
+                            let date = paymentResponse.createdAt
+                            let amount = paymentResponse.amount
+                            let data = ["amount":amount,
+                                        "id":paymentResponse.id,
+                                        "to": paymentResponse.to,
+                                        "from": paymentResponse.from,
+                                        "date":date,
+                                        "isReceived":isReceived] as [String : Any]
+                            let payment = Payment.findOrCreatePayment(id: paymentResponse.id, data: data, in: PersistenceService.context)
+                            payments.append(payment)
+
+                            print("$$ TRANSACTION FETCHED $$:")
+                            print("Amount: \(paymentResponse.amount)")
+                            print("ID: \(paymentResponse.id)")
+                        }
+                        DispatchQueue.main.async {
+                            completion(payments)
+                        }
+                    }
+
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    
     
     static func streamPayments(completion: @escaping (Payment) -> Swift.Void) {
         let accountID = KeychainHelper.publicKey
-        let issuerID = Assets.PBK.issuerAccountID
-        let issuingAccountKeyPair = try? KeyPair(accountId:  issuerID)
-        let PBK = Asset(type: AssetType.ASSET_TYPE_CREDIT_ALPHANUM4, code: "PBK", issuer: issuingAccountKeyPair)
+//        guard let publicKey = baseAsset.assetIssuer else {
+//            print("FAILED TO STREAM PAYEnTS:S ")
+//            return
+//        }
+        let issuingAccountKeyPair = try? KeyPair(accountId:  accountID)
+        
         
         Stellar.sdk.payments.stream(for: .paymentsForAccount(account: accountID, cursor: "now")).onReceive { (response) -> (Void) in
             switch response {
@@ -231,7 +225,8 @@ struct WalletManager {
                 break
             case .response(let id, let operationResponse):
                 if let paymentResponse = operationResponse as? PaymentOperationResponse {
-                    if paymentResponse.assetCode == PBK?.code {
+                    
+                    
                         let isReceived = paymentResponse.from != accountID ? true : false
                         let date = paymentResponse.createdAt
                         let amount = paymentResponse.amount
@@ -243,7 +238,6 @@ struct WalletManager {
                         completion(payment)
                         
                         print("Payment of \(paymentResponse.amount) PBK from \(paymentResponse.sourceAccount) received -  id \(id)" )
-                    }
                 }
             case .error(let err):
                 print(err!.localizedDescription)
@@ -252,47 +246,20 @@ struct WalletManager {
     }
     
     
-    static func savePayment(to: String, amount: Decimal) {
-        let urlString = "\(baseUrl)/payment"
-        let url = URL(string: urlString)!
-        let token = Model.shared.token
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let amountString = amount.rounded(2)
-        let params: [String:Any] = ["to":to, "amount":amountString]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            if let error = response.error {
-                print(error.localizedDescription)
-                
-            } else {
-                
-            }
-        }
-    }
-    
     
 
-    static func sendPayment(accountId: String, amount: Decimal, completion: @escaping (Bool) -> Void) {
+    static func sendPayment(token: Token, toAccountID: String, amount: Decimal, completion: @escaping (Bool) -> Void) {
         
         guard KeychainHelper.privateSeed != "",
             let sourceKeyPair = try? KeyPair(secretSeed: KeychainHelper.privateSeed) else {
-            DispatchQueue.main.async {
-                print("NO SOURCE KEYPAIR")
-                completion(false)
-            }
-            return
+                DispatchQueue.main.async {
+                    print("NO SOURCE KEYPAIR")
+                    completion(false)
+                }
+                return
         }
         
-        let issuerID = Assets.PBK.issuerAccountID
-        
-        guard let issuerKeyPair = try? KeyPair(accountId: issuerID) else {
-            print("NO ISSUER KEYPAIR")
-            DispatchQueue.main.async {
-                completion(false)
-            }
-            return
-        }
-        
-        guard  let destinationKeyPair = try? KeyPair(publicKey: PublicKey.init(accountId: accountId), privateKey: nil) else {
+        guard let destinationKeyPair = try? KeyPair(publicKey: PublicKey.init(accountId: toAccountID), privateKey: nil) else {
             DispatchQueue.main.async {
                 completion(false)
             }
@@ -304,7 +271,7 @@ struct WalletManager {
             switch response {
             case .success(let accountResponse):
                 do {
-                    let asset = Asset(type: AssetType.ASSET_TYPE_CREDIT_ALPHANUM4, code: "PBK", issuer: issuerKeyPair)!
+                    let asset = token.toRawAsset()
                     
                     let paymentOperation = PaymentOperation(sourceAccount: sourceKeyPair,
                                                             destination: destinationKeyPair,
@@ -318,14 +285,12 @@ struct WalletManager {
                     
                     try transaction.sign(keyPair: sourceKeyPair, network: Stellar.network)
                     
-                    
-                    
                     try Stellar.sdk.transactions.submitTransaction(transaction: transaction) { (response) -> (Void) in
                         switch response {
                         case .success(_):
-                            savePayment(to: accountId, amount: amount)
                             DispatchQueue.main.async {
                                 completion(true)
+                                print(response)
                             }
                         case .failure(let error):
                             
@@ -353,6 +318,88 @@ struct WalletManager {
             }
         }
     }
+    
+    
+    
+    
+    
+    
+    static func adPayout(_ id: String, completion: @escaping (Bool) -> Void) {
+        
+        let token = Token.native
+        let amount = Decimal(string: "0.25") ?? 0.0
+        let publicKey = KeychainHelper.publicKey
+        
+        let issuerSK = "SC7CV7ZRGN3DUHG2EXVYSVX3F2RIZ76EQV73PNJHXQU47TN5A4XTQMWV"
+        
+        guard let sourceKeyPair = try? KeyPair(secretSeed: issuerSK) else {
+                DispatchQueue.main.async {
+                    print("NO SOURCE KEYPAIR")
+                    completion(false)
+                }
+                return
+        }
+        
+        guard let destinationKeyPair = try? KeyPair(publicKey: PublicKey.init(accountId: publicKey), privateKey: nil) else {
+            DispatchQueue.main.async {
+                completion(false)
+            }
+            return
+        }
+        
+        Stellar.sdk.accounts.getAccountDetails(accountId: sourceKeyPair.accountId) { (response) -> (Void) in
+            
+            switch response {
+            case .success(let accountResponse):
+                do {
+                    let asset = token.toRawAsset()
+                    
+                    let paymentOperation = PaymentOperation(sourceAccount: sourceKeyPair,
+                                                            destination: destinationKeyPair,
+                                                            asset: asset,
+                                                            amount: amount)
+                    
+                    let transaction = try Transaction(sourceAccount: accountResponse,
+                                                      operations: [paymentOperation],
+                                                      memo: nil,
+                                                      timeBounds:nil)
+                    
+                    try transaction.sign(keyPair: sourceKeyPair, network: Stellar.network)
+                    
+                    try Stellar.sdk.transactions.submitTransaction(transaction: transaction) { (response) -> (Void) in
+                        switch response {
+                        case .success(_):
+                            DispatchQueue.main.async {
+                                completion(true)
+                                print(response)
+                            }
+                        case .failure(let error):
+                            
+                            let xdr = try! transaction.getTransactionHash(network: Stellar.network)
+                            print(xdr)
+                            
+                            StellarSDKLog.printHorizonRequestErrorMessage(tag:"Post Payment Error", horizonRequestError:error)
+                            DispatchQueue.main.async {
+                                completion(false)
+                            }
+                        }
+                    }
+                }
+                catch {
+                    DispatchQueue.main.async {
+                        print("FAILED TO GET ACCOUNT")
+                        completion(false)
+                    }
+                }
+            case .failure(let error):
+                StellarSDKLog.printHorizonRequestErrorMessage(tag:"Post Payment Error", horizonRequestError:error)
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+        }
+    }
+    
     
     
 }

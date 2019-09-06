@@ -37,7 +37,7 @@ class PhotoButton: UIControl {
         let label = UILabel()
         label.font = Theme.semibold(16)
         label.textAlignment = .left
-        label.textColor = Theme.charcoal
+        label.textColor = Theme.tint
         label.text = "💬"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,7 +45,7 @@ class PhotoButton: UIControl {
     
     lazy var icon: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.tintColor = Theme.charcoal
+        view.tintColor = Theme.tint
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -63,8 +63,8 @@ class PhotoButton: UIControl {
         previousImageTintColor = Theme.gray
         previousLabelTintColor = Theme.gray
         
-        icon.tintColor = Theme.charcoal
-        titleLabel.textColor = Theme.charcoal
+        icon.tintColor = Theme.tint
+        titleLabel.textColor = Theme.tint
         sendActions(for: .touchDown)
     }
     

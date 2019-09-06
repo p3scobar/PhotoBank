@@ -35,7 +35,7 @@ class CommentInputView: UIView, UITextViewDelegate {
     let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
-        button.setTitleColor(Theme.charcoal, for: .normal)
+        button.setTitleColor(Theme.tint, for: .normal)
         button.titleLabel?.font = Theme.bold(18)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

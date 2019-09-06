@@ -30,7 +30,7 @@ class PendingController: UIViewController {
         print("DESTINATION: \(accountId)")
         print("USERNAME: \(username)")
         print("AMOUNT: \(amount)")
-        WalletManager.sendPayment(accountId: accountId, amount: amount) { (success) in
+        WalletManager.sendPayment(token: baseAsset, toAccountID: accountId, amount: amount) { (success) in
             if success {
                 self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
             } else {

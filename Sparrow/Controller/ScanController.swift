@@ -8,15 +8,18 @@
 
 import AVFoundation
 import UIKit
-import Pulley
 
-class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, PulleyPrimaryContentControllerDelegate {
+protocol QRScanDelegate {
+    func handleQRScan(_ code: String)
+}
+
+class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     private var scans: Int = 0
-
     private let session = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "session queue")
-//    private var isSessionRunning = false
+
+    var scanDelegate: QRScanDelegate?
     
     private enum SessionSetupResult {
         case success
@@ -32,7 +35,11 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
+        self.navigationController?.navigationBar.barStyle = .black
+        self.navigationController?.navigationBar.barTintColor = .black
+        let closeIcon = UIBarButtonItem(image: UIImage(named: "close"), style: .done, target: self, action: #selector(handleCancel))
+        closeIcon.tintColor = .white
+        self.navigationItem.leftBarButtonItem = closeIcon
         view.backgroundColor = .black
         sessionQueue.async {
             self.setupCamera()
@@ -94,53 +101,48 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.prefersLargeTitles = false
-        closeDrawer()
+
         scans = 0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.startCamera()
+        self.addCameraLayer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         scans = 0
-        closeDrawer()
+        self.stopCamera()
+        self.removeCameraLayer()
     }
     
     func closeDrawer() {
-        if let pulley = self.parent as? PulleyViewController {
-            pulley.setDrawerPosition(position: .open, animated: true)
-        }
+//        if let pulley = self.parent as? PulleyViewController {
+//            pulley.setDrawerPosition(position: .open, animated: true)
+//        }
     }
 
-    // this stops pulley delegate from calling start/stop multiple times
-    var isRunning = false
     
     func startCamera() {
-        guard isRunning == false else { return }
         sessionQueue.async {
-            if !self.isRunning {
-                if let connection = self.previewLayer?.connection {
-                    connection.isEnabled = true
-                    self.session.startRunning()
-//                    self.isSessionRunning = self.session.isRunning
-                    self.isRunning = true
-                }
+            if let connection = self.previewLayer?.connection {
+                connection.isEnabled = true
+                self.session.startRunning()
             }
         }
     }
-
+    
     func stopCamera() {
-        guard isRunning == true else { return }
         sessionQueue.async {
-            if self.isRunning {
-                if let connection = self.previewLayer?.connection {
-                    connection.isEnabled = false
-                    self.session.stopRunning()
-//                    self.isSessionRunning = self.session.isRunning
-                    self.isRunning = false
-                }
+            if let connection = self.previewLayer?.connection {
+                connection.isEnabled = false
+                self.session.stopRunning()
             }
         }
     }
-
+    
     func removeCameraLayer() {
         DispatchQueue.main.async {
             self.previewLayer?.removeFromSuperlayer()
@@ -169,8 +171,9 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
 
     func found(code: String) {
         UIDevice.vibrate()
-        stopCamera()
-        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "qrScan"),object: nil, userInfo: ["code":code]))
+        self.dismiss(animated: true) {
+            self.scanDelegate?.handleQRScan(code)
+        }
     }
 
 
@@ -178,27 +181,6 @@ class ScanController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
         return true
     }
 
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-
-    func drawerChangedDistanceFromBottom(drawer: PulleyViewController, distance: CGFloat, bottomSafeArea: CGFloat) {
-
-    }
-
-
-    func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
-        DispatchQueue.main.async {
-            if drawer.drawerPosition == PulleyPosition.open {
-                self.stopCamera()
-                self.removeCameraLayer()
-            } else {
-                self.startCamera()
-                self.addCameraLayer()
-            }
-        }
-    }
-    
     
 }
 
