@@ -93,7 +93,8 @@ class ConfirmPaymentController: UITableViewController {
         case 1:
             cell.titleLabel.text = "Amount"
             if let amount = data["amount"] as? Decimal {
-                cell.valueInput.text = amount.rounded(2) + " PBK"
+                let assetCode = baseAsset.assetCode ?? ""
+                cell.valueInput.text = amount.rounded(2) + assetCode
             }
         default:
             break

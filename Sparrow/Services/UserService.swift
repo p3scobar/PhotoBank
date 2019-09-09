@@ -165,6 +165,7 @@ struct UserService {
             CurrentUser.bio = ""
             KeychainHelper.publicKey = ""
             KeychainHelper.privateSeed = ""
+            KeychainHelper.mnemonic = ""
             Payment.deleteAll()
             completion(true)
         }
@@ -307,8 +308,8 @@ extension UserService {
                         completion(nil)
                         return
                     }
-//                    let user = User(snap)
-//                    completion(user)
+                    let user = User(data)
+                    completion(user)
                 }
             }
         }

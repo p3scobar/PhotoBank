@@ -28,6 +28,7 @@ class PaymentHeader: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        backgroundColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {

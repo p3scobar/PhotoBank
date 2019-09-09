@@ -28,6 +28,7 @@
 		CE024EC42113D4A500E51F37 /* PhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EC32113D4A500E51F37 /* PhotoButton.swift */; };
 		CE0629B12234C69E002C5AB0 /* TagsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0629B02234C69E002C5AB0 /* TagsController.swift */; };
 		CE06556C2325EC7400937A54 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE06556B2325EC7400937A54 /* ChatCell.swift */; };
+		CE06556E2326349600937A54 /* CashKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE06556D2326349600937A54 /* CashKeyboard.swift */; };
 		CE16B162211E85900047E903 /* PendingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16B161211E85900047E903 /* PendingController.swift */; };
 		CE16B164211F60010047E903 /* ProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16B163211F60010047E903 /* ProfileButton.swift */; };
 		CE218CD72117BC0600AD1EF2 /* AmountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE218CD62117BC0600AD1EF2 /* AmountController.swift */; };
@@ -55,6 +56,7 @@
 		CE2E629821AA691C00BF46B8 /* tab02.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629221AA691C00BF46B8 /* tab02.m4a */; };
 		CE2E629921AA691C00BF46B8 /* select01.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629321AA691C00BF46B8 /* select01.m4a */; };
 		CE2E62A521B266C300BF46B8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2E62A421B266C300BF46B8 /* WebViewController.swift */; };
+		CE2FE1A32326B7270094C633 /* MessageMoneyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2FE1A22326B7270094C633 /* MessageMoneyCell.swift */; };
 		CE4A9575231321E200EFC617 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A9574231321E200EFC617 /* AdService.swift */; };
 		CE4A957823133A9400EFC617 /* Ad+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */; };
 		CE4A957923133A9400EFC617 /* Ad+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */; };
@@ -141,6 +143,7 @@
 		CE024EC32113D4A500E51F37 /* PhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoButton.swift; sourceTree = "<group>"; };
 		CE0629B02234C69E002C5AB0 /* TagsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsController.swift; sourceTree = "<group>"; };
 		CE06556B2325EC7400937A54 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		CE06556D2326349600937A54 /* CashKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashKeyboard.swift; sourceTree = "<group>"; };
 		CE16B161211E85900047E903 /* PendingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingController.swift; sourceTree = "<group>"; };
 		CE16B163211F60010047E903 /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
 		CE218CD62117BC0600AD1EF2 /* AmountController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountController.swift; sourceTree = "<group>"; };
@@ -168,6 +171,7 @@
 		CE2E629221AA691C00BF46B8 /* tab02.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tab02.m4a; sourceTree = "<group>"; };
 		CE2E629321AA691C00BF46B8 /* select01.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = select01.m4a; sourceTree = "<group>"; };
 		CE2E62A421B266C300BF46B8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		CE2FE1A22326B7270094C633 /* MessageMoneyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMoneyCell.swift; sourceTree = "<group>"; };
 		CE4A9574231321E200EFC617 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
 		CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataClass.swift"; sourceTree = "<absolute>"; };
@@ -311,12 +315,18 @@
 				CE4A957A23133DE400EFC617 /* AdCell.swift */,
 				CE961EFB210D6C8A00025D0D /* AccountHeader.swift */,
 				CE75AE242133CB1B00A54F42 /* ActivityCell.swift */,
+				CE06556B2325EC7400937A54 /* ChatCell.swift */,
+				CEFAA6C6232200A600D123D7 /* ChatInputView.swift */,
 				CE024EAD2113886100E51F37 /* CommentCell.swift */,
 				CE024EAF211388B600E51F37 /* CommentInputView.swift */,
 				CE961F01210D752C00025D0D /* ComposeToolbar.swift */,
 				CE024EB92113A76400E51F37 /* InputTextCell.swift */,
 				CECC03FE21165D6E00AD8390 /* InputTextViewCell.swift */,
+				CEC4F32722FFE0B000CCE1AC /* InputCurrencyCell.swift */,
+				CEC4F32B22FFE17100CCE1AC /* InputNumberCellDelegate.swift */,
 				CE024EB52113A02E00E51F37 /* LoginToolbar.swift */,
+				CEFAA6C42322008800D123D7 /* MessageCell.swift */,
+				CE2FE1A22326B7270094C633 /* MessageMoneyCell.swift */,
 				CEDA042C2112AF1E00F57E15 /* PhotoCell.swift */,
 				CE024EC12113AD3900E51F37 /* PixelView.swift */,
 				CE024EC32113D4A500E51F37 /* PhotoButton.swift */,
@@ -325,15 +335,11 @@
 				CEEBB94C210BF8C9007E87EE /* StatusCell.swift */,
 				CE218CF02118C33600AD1EF2 /* UserCell.swift */,
 				CE961EF5210D2FBB00025D0D /* UserHeader.swift */,
-				CE024EA5211376A600E51F37 /* WalletHeaderView.swift */,
 				CE218CF62118CE1700AD1EF2 /* PaymentCell.swift */,
-				CEC4F32722FFE0B000CCE1AC /* InputCurrencyCell.swift */,
-				CEC4F32B22FFE17100CCE1AC /* InputNumberCellDelegate.swift */,
 				CEC4F3312300A90400CCE1AC /* TableFooterView.swift */,
-				CEFAA6C42322008800D123D7 /* MessageCell.swift */,
-				CEFAA6C6232200A600D123D7 /* ChatInputView.swift */,
 				CEF37E402325A8F70028DFE0 /* PaymentHeader.swift */,
-				CE06556B2325EC7400937A54 /* ChatCell.swift */,
+				CE06556D2326349600937A54 /* CashKeyboard.swift */,
+				CE024EA5211376A600E51F37 /* WalletHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -595,6 +601,7 @@
 				CECC03FA211647B800AD8390 /* Comment.swift in Sources */,
 				CE024EBE2113A9EC00E51F37 /* SignupController.swift in Sources */,
 				CEC4F32622FFE04800CCE1AC /* Token.swift in Sources */,
+				CE2FE1A32326B7270094C633 /* MessageMoneyCell.swift in Sources */,
 				CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */,
 				CEEBB934210BF827007E87EE /* AppDelegate.swift in Sources */,
 				CEEBB94B210BF8B2007E87EE /* TimelineController.swift in Sources */,
@@ -611,6 +618,7 @@
 				CE961EDD210C517200025D0D /* StatusController.swift in Sources */,
 				CE514D9D232416B00073C877 /* NavigationController.swift in Sources */,
 				CE961ED7210BFD6900025D0D /* NewsService.swift in Sources */,
+				CE06556E2326349600937A54 /* CashKeyboard.swift in Sources */,
 				CE961F28210EE29000025D0D /* Status+CoreDataProperties.swift in Sources */,
 				CE024EBA2113A76400E51F37 /* InputTextCell.swift in Sources */,
 				CE024EAE2113886100E51F37 /* CommentCell.swift in Sources */,

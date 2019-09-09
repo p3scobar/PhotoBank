@@ -9,6 +9,11 @@
 import UIKit
 import Firebase
 
+enum MessageType: String {
+    case Text = "text"
+    case Money = "money"
+}
+
 class Message: NSObject {
     
     var id: String?
@@ -23,12 +28,9 @@ class Message: NSObject {
     var url: String?
     var incoming: Bool
     var type: MessageType
-    
-    enum MessageType {
-        case Text
-        case Photo
-        case Transaction
-    }
+    var amount: String?
+    var assetCode: String?
+    var status: String?
     
     init?(snapshot: DataSnapshot) {
         guard let dict = snapshot.value as? [String:Any],
@@ -47,7 +49,12 @@ class Message: NSObject {
         self.imageUrl = dict["imageUrl"] as? String
         self.txId = dict["txId"] as? String
         self.url = dict["url"] as? String
+        self.status = dict["status"] as? String
+        self.amount = dict["amount"] as? String
+        self.assetCode = dict["assetCode"] as? String
         self.type = .Text
+        let messageType = dict["type"] as? String ?? "text"
+        self.type = MessageType(rawValue: messageType) ?? .Text
         self.incoming = CurrentUser.uid != userId
     }
     
@@ -64,12 +71,28 @@ extension Message {
             height += 28
             if isGroup && self.incoming { height += 20 }
             return height
-        case .Photo:
-            return 240
-        case .Transaction:
-            return 240
+        case .Money:
+            return 180
         }
     }
     
 }
 
+
+
+
+extension Message {
+        
+        func cellForMessageType(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
+            switch self.type {
+            case .Text:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "text", for: indexPath) as! MessageCell
+                return cell
+            case .Money:
+                 let cell = tableView.dequeueReusableCell(withIdentifier: "money", for: indexPath) as! MessageMoneyCell
+                return cell
+            }
+        }
+    
+    
+}

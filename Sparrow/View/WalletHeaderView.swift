@@ -35,7 +35,6 @@ class WalletHeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
         setupView()
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleCardTap(_:)))
         card.addGestureRecognizer(tap)
@@ -48,20 +47,20 @@ class WalletHeaderView: UIView {
     lazy var card: UIImageView = {
         let frame = CGRect(x: 12, y: 20, width: UIScreen.main.bounds.width-24, height: 220)
         let view = UIImageView(frame: frame)
-        view.image = UIImage(named: "lines")?.withRenderingMode(.alwaysOriginal)
-        view.backgroundColor = Theme.tint
-        view.layer.cornerRadius = 10
+        view.image = UIImage(named: "card")?.withRenderingMode(.alwaysOriginal)
+        view.layer.cornerRadius = 12
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
-        view.layer.borderColor = Theme.gray.cgColor
-        view.layer.borderWidth = 0.5
+        view.layer.borderColor = Theme.darkGray.withAlphaComponent(0.3).cgColor
+        view.layer.borderWidth = 3
         return view
     }()
     
     
     lazy var blurView: UIVisualEffectView = {
-        let view = UIVisualEffectView(frame: card.frame)
-        view.effect = UIBlurEffect(style: .light)
+        let frame = CGRect(x: 0, y: 0, width: card.frame.width, height: card.frame.height)
+        let view = UIVisualEffectView(frame: frame)
+        view.effect = UIBlurEffect(style: .regular)
         return view 
     }()
     
@@ -70,9 +69,9 @@ class WalletHeaderView: UIView {
         view.layer.cornerRadius = card.layer.cornerRadius
         view.backgroundColor = .white
         view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.darkGray.cgColor
+        view.layer.shadowColor = UIColor.gray.cgColor
         view.layer.shadowRadius = 10
-        view.layer.shadowOpacity = 0.8
+        view.layer.shadowOpacity = 0.4
         view.layer.shadowOffset = CGSize(width: 0, height: 10)
         return view
     }()
@@ -83,8 +82,12 @@ class WalletHeaderView: UIView {
         let label = UILabel(frame: frame)
         label.font = Theme.bold(24)
         label.numberOfLines = 1
-        label.textColor = .white
+        label.textColor = Theme.darkGray
         label.text = "ARIES"
+        label.layer.shadowColor = Theme.lightGray.withAlphaComponent(1.0).cgColor
+        label.layer.shadowOpacity = 1
+        label.layer.shadowRadius = 0
+        label.layer.shadowOffset = CGSize(width: 0, height: 1)
         return label
     }()
     
@@ -94,7 +97,11 @@ class WalletHeaderView: UIView {
         label.font = Theme.bold(24)
         label.textAlignment = .right
         label.numberOfLines = 1
-        label.textColor = .white
+        label.textColor = Theme.darkGray
+        label.layer.shadowColor = Theme.lightGray.withAlphaComponent(1.0).cgColor
+        label.layer.shadowOpacity = 1
+        label.layer.shadowRadius = 0
+        label.layer.shadowOffset = CGSize(width: 0, height: 1)
         return label
     }()
     
@@ -104,7 +111,11 @@ class WalletHeaderView: UIView {
         label.font = Theme.semibold(20)
         label.numberOfLines = 1
         label.textAlignment = .left
-        label.textColor = Theme.lightGray
+        label.layer.shadowColor = Theme.lightGray.withAlphaComponent(1.0).cgColor
+        label.layer.shadowOpacity = 1
+        label.layer.shadowRadius = 0
+        label.layer.shadowOffset = CGSize(width: 0, height: 1)
+        label.textColor = Theme.darkGray
         return label
     }()
     
@@ -113,7 +124,11 @@ class WalletHeaderView: UIView {
         let button = UIButton(frame: frame)
         let qrImage = UIImage(named: "qrcode")?.withRenderingMode(.alwaysTemplate)
         button.setImage(qrImage, for: .normal)
-        button.tintColor = .white
+        button.tintColor = Theme.darkGray
+        button.layer.shadowColor = Theme.lightGray.withAlphaComponent(1.0).cgColor
+        button.layer.shadowOpacity = 1
+        button.layer.shadowRadius = 0
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
         button.addTarget(self, action: #selector(handleQRTap), for: .touchUpInside)
         return button
     }()
@@ -162,9 +177,10 @@ class WalletHeaderView: UIView {
     
     
     func setupView() {
+        backgroundColor = Theme.lightBackground
         addSubview(shadow)
         addSubview(card)
-//        card.addSubview(blurView)
+        card.addSubview(blurView)
         card.addSubview(titleLabel)
         card.addSubview(balanceLabel)
         card.addSubview(currencyLabel)

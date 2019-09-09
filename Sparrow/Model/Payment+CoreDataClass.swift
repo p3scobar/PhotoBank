@@ -78,7 +78,10 @@ extension Payment {
     func otherUserKey() -> String? {
         let pk = KeychainHelper.publicKey
         guard let fromPK = from,
-            let toPK = to else { return nil }
+            let toPK = to else {
+                print("FUCKTOKEN")
+                return nil
+        }
         return fromPK != pk ? fromPK : toPK
     }
     

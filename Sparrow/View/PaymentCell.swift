@@ -28,26 +28,26 @@ class PaymentCell: UITableViewCell {
     
     var user: User? {
         didSet {
-            guard let userImage = user?.image,
-                let url = URL(string: userImage) else { return }
-            profileImage.sd_setImage(with: url, completed: nil)
-            self.titleLeftLabel.text = user?.name ?? ""
+//            guard let userImage = user?.image,
+//                let url = URL(string: userImage) else { return }
+//            profileImage.sd_setImage(with: url, completed: nil)
+//            self.titleLeftLabel.text = user?.name ?? ""
         }
     }
     
     
-    let profileImage: UIImageView = {
-        let frame = CGRect(x: 16, y: 12, width: 48, height: 48)
-        let imageView = UIImageView(frame: frame)
-        imageView.layer.cornerRadius = frame.width/2
-        imageView.backgroundColor = Theme.lightBackground
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
+//    let profileImage: UIImageView = {
+//        let frame = CGRect(x: 16, y: 12, width: 48, height: 48)
+//        let imageView = UIImageView(frame: frame)
+//        imageView.layer.cornerRadius = frame.width/2
+//        imageView.backgroundColor = Theme.lightBackground
+//        imageView.contentMode = .scaleAspectFill
+//        imageView.layer.masksToBounds = true
+//        return imageView
+//    }()
 
     lazy var titleLeftLabel: UILabel = {
-        let frame = CGRect(x: 88, y: 12, width: self.frame.width-100, height: 32)
+        let frame = CGRect(x: 12, y: 12, width: self.frame.width-24, height: 32)
         let label = UILabel(frame: frame)
         label.font = Theme.semibold(18)
         label.textColor = Theme.black
@@ -55,16 +55,16 @@ class PaymentCell: UITableViewCell {
     }()
     
     lazy var subtitleLeftLabel: UILabel = {
-        let frame = CGRect(x: 88, y: 32, width: self.frame.width-100, height: 32)
+        let frame = CGRect(x: 12, y: 24, width: self.frame.width-24, height: 32)
         let label = UILabel(frame: frame)
-        label.font = Theme.semibold(18)
-        label.textColor = Theme.gray
+        label.font = Theme.semibold(20)
+        label.textColor = Theme.black
         return label
     }()
     
     
     lazy var titleRightLabel: UILabel = {
-        let frame = CGRect(x: 88, y: 32, width: self.frame.width-60, height: 32)
+        let frame = CGRect(x: 12, y: 24, width: UIScreen.main.bounds.width-24, height: 32)
         let label = UILabel(frame: frame)
         label.font = Theme.semibold(20)
         label.textAlignment = .right
@@ -78,7 +78,7 @@ class PaymentCell: UITableViewCell {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         backgroundColor = .white
         
-        addSubview(profileImage)
+//        addSubview(profileImage)
         addSubview(titleLeftLabel)
         addSubview(subtitleLeftLabel)
         addSubview(titleRightLabel)

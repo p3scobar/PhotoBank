@@ -76,7 +76,7 @@ struct ChatService {
     }
     
     
-    static func sendMessage(chat: Chat, properties: [String: Any]) {
+    static func sendMessage(chat: Chat, properties: [String: Any], completion: @escaping (String) -> Void) {
         DispatchQueue.global(qos: .background).async {
         let userId = CurrentUser.uid
         let userImage = CurrentUser.image
@@ -105,6 +105,7 @@ struct ChatService {
                 print(error.localizedDescription)
             } else {
                 updateChat(chat: chat, values: chatValues)
+                completion(messageId)
             }
         }
         }
@@ -124,6 +125,14 @@ struct ChatService {
         }
     }
     
+    static func updateTransaction(chatID: String, messageID: String, txID: String, values:[String:Any]) {
+        DispatchQueue.global(qos: .background).async {
+            let data = ["status": "success", "txId":txID]
+            let messageRef = dbRealtime.child("messages").child(chatID).child(messageID)
+            messageRef.updateChildValues(data)
+        }
+    }
+        
     
 //    static func deleteChat(chatId: String) {
 //        guard chatId != "" else { return }

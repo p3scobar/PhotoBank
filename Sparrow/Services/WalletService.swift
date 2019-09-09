@@ -250,20 +250,21 @@ struct WalletManager {
     
     
 
-    static func sendPayment(token: Token, toAccountID: String, amount: Decimal, completion: @escaping (Bool) -> Void) {
+    static func sendPayment(token: Token, toAccountID: String, amount: Decimal, completion: @escaping (String?) -> Void) {
         
         guard KeychainHelper.privateSeed != "",
             let sourceKeyPair = try? KeyPair(secretSeed: KeychainHelper.privateSeed) else {
                 DispatchQueue.main.async {
                     print("NO SOURCE KEYPAIR")
-                    completion(false)
+                    completion(nil)
                 }
                 return
         }
         
         guard let destinationKeyPair = try? KeyPair(publicKey: PublicKey.init(accountId: toAccountID), privateKey: nil) else {
             DispatchQueue.main.async {
-                completion(false)
+                print(" NO DESTINATION KEYPAIR")
+                completion(nil)
             }
             return
         }
@@ -289,10 +290,10 @@ struct WalletManager {
                     
                     try Stellar.sdk.transactions.submitTransaction(transaction: transaction) { (response) -> (Void) in
                         switch response {
-                        case .success(_):
+                        case .success(let data):
                             DispatchQueue.main.async {
-                                completion(true)
-                                print(response)
+
+                                print(data)
                             }
                         case .failure(let error):
                             
@@ -301,7 +302,7 @@ struct WalletManager {
                             
                             StellarSDKLog.printHorizonRequestErrorMessage(tag:"Post Payment Error", horizonRequestError:error)
                             DispatchQueue.main.async {
-                                completion(false)
+                                completion(nil)
                             }
                         }
                     }
@@ -309,13 +310,13 @@ struct WalletManager {
                 catch {
                     DispatchQueue.main.async {
                         print("FAILED TO GET ACCOUNT")
-                        completion(false)
+                        completion(nil)
                     }
                 }
             case .failure(let error):
                 StellarSDKLog.printHorizonRequestErrorMessage(tag:"Post Payment Error", horizonRequestError:error)
                 DispatchQueue.main.async {
-                    completion(false)
+                    completion(nil)
                 }
             }
         }

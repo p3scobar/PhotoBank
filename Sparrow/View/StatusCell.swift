@@ -80,8 +80,8 @@ class StatusCell: UITableViewCell {
         label.font = Theme.medium(18)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.hashtagColor = Theme.highlight
-        label.mentionColor = Theme.highlight
+        label.hashtagColor = Theme.link
+        label.mentionColor = Theme.link
         label.textColor = Theme.black
         label.handleHashtagTap { (hashtag) in
            self.delegate?.handleHashtagTap(hashtag)

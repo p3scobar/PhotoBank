@@ -30,6 +30,10 @@ class ChatInputView: UIView, UITextViewDelegate {
         chatDelegate?.handleSend(text)
     }
     
+    @objc func handlePlusTap() {
+        inputMoney.becomeFirstResponder()
+    }
+    
     lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
@@ -42,9 +46,10 @@ class ChatInputView: UIView, UITextViewDelegate {
     
     let plusButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: "token")?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = Theme.gray
+        button.addTarget(self, action: #selector(handlePlusTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -68,6 +73,16 @@ class ChatInputView: UIView, UITextViewDelegate {
         inputTextField.inputView?.becomeFirstResponder()
     }
     
+    lazy var inputMoney: UITextView = {
+        let textField = UITextView()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.delegate = self
+        textField.backgroundColor = .clear
+        textField.showsVerticalScrollIndicator = false
+        textField.font = UIFont.systemFont(ofSize: 8)
+        return textField
+    }()
+    
     lazy var separator: UIView = {
         let view = UIView()
         view.backgroundColor = Theme.lightGray
@@ -81,7 +96,7 @@ class ChatInputView: UIView, UITextViewDelegate {
         view.textView.textContainer.lineBreakMode = .byWordWrapping
         view.textView.placeholder = "Aa"
         view.textView.placeholderColor = Theme.gray
-        view.textView.textContainerInset = UIEdgeInsetsMake(10, 14, 10, 14)
+        view.textView.textContainerInset = UIEdgeInsetsMake(10, 12, 10, 12)
         view.textView.textColor = Theme.black
         view.textView.font = Theme.semibold(18)
         view.backgroundColor = Theme.lightBackground
@@ -105,6 +120,8 @@ class ChatInputView: UIView, UITextViewDelegate {
     
     func setupView() {
         addSubview(container)
+        addSubview(plusButton)
+        addSubview(inputMoney)
         addSubview(sendButton)
         addSubview(inputTextField)
         addSubview(separator)
@@ -119,8 +136,14 @@ class ChatInputView: UIView, UITextViewDelegate {
         separator.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
+        plusButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
+         plusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        plusButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        plusButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        
         inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor, constant: 0).isActive = true
-        inputTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 12).isActive = true
+        inputTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 54).isActive = true
         inputTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
         
         
@@ -128,6 +151,7 @@ class ChatInputView: UIView, UITextViewDelegate {
         sendButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         sendButton.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        
         bringSubview(toFront: sendButton)
     }
     

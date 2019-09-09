@@ -56,8 +56,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
 //        button.tintColor = .white
 
         
-//        tableView.backgroundColor = Theme.black
-//        tableView.separatorColor = Theme.border
+        tableView.backgroundColor = Theme.lightBackground
         
         tableView.prefetchDataSource = self
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
@@ -373,20 +372,30 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if let ad = feed[indexPath.row] as? Ad {
-            guard var urlString = ad.url else { return }
-            if !urlString.hasPrefix("https://") {
-                urlString = "https://" + urlString
-            }
-            pushSafariVC(urlString)
+            pushSafariVC(ad)
+        } else if let status = feed[indexPath.row] as? Status {
+            pushStatus(status)
         }
     }
     
-    private func pushSafariVC(_ urlString: String) {
-            guard let url = URL(string: urlString) else { return }
-            let config = SFSafariViewController.Configuration()
-            config.barCollapsingEnabled = true
-            let vc = SFSafariViewController(url: url, configuration: config)
-            present(vc, animated: true, completion: nil)
+    
+    func pushStatus(_ status: Status) {
+        let vc = StatusController(style: .plain)
+        vc.status = status
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    private func pushSafariVC(_ ad: Ad) {
+        guard var urlString = ad.url, let url = URL(string: urlString) else { return }
+        if !urlString.hasPrefix("https://") {
+            urlString = "https://" + urlString
+        }
+        
+        let config = SFSafariViewController.Configuration()
+        config.barCollapsingEnabled = true
+        let vc = SFSafariViewController(url: url, configuration: config)
+        present(vc, animated: true, completion: nil)
     }
     
     

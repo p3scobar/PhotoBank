@@ -23,7 +23,7 @@ class PaymentController: UITableViewController {
     
     
     lazy var header: PaymentHeader = {
-        let view = PaymentHeader(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 240))
+        let view = PaymentHeader(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
         view.payment = payment
         return view
     }()
@@ -54,6 +54,7 @@ class PaymentController: UITableViewController {
         super.viewDidLoad()
         tableView.tableHeaderView = header
         tableView.separatorColor = Theme.border
+        tableView.backgroundColor = Theme.lightBackground
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self
@@ -78,13 +79,6 @@ class PaymentController: UITableViewController {
             cell.textLabel?.text = "Amount"
             cell.valueInput.text = payment.amount?.rounded(3) ?? ""
         case 2:
-            cell.textLabel?.text = "Native Amount"
-            let value = (Decimal(string: payment.amount ?? "") ?? 0.0)
-            cell.valueInput.text = value.rounded(2)
-        case 3:
-            cell.textLabel?.text = "Asset"
-            cell.valueInput.text = payment.assetCode ?? ""
-        case 4:
             cell.textLabel?.text = "Date"
             let date = payment.timestamp
             cell.valueInput.text = date?.asString()
@@ -101,7 +95,7 @@ class PaymentController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 3
     }
     
     

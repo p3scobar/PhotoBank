@@ -251,7 +251,7 @@ extension StatusController: ChatMenuDelegate {
         NewsService.postComment(status: status, text: text) { (comment) in
             guard let comment = comment else { return }
             self.comments.insert(comment, at: 0)
-            if self.comments.count > 0 {
+            if self.tableView.numberOfRows(inSection: 0) > 0 {
                 let path = IndexPath(item: 0, section: 1)
                 self.tableView.scrollToRow(at: path, at: .top, animated: true)
             }

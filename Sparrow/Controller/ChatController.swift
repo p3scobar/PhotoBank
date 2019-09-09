@@ -15,7 +15,8 @@ import SafariServices
 
 class ChatController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, SFSafariViewControllerDelegate, UIBarPositioningDelegate {
     
-    private let messageCellId = "messageCellId"
+    private let textCell = "text"
+    private let moneyCell = "money"
     
     var generator: UIImpactFeedbackGenerator?
     
@@ -104,12 +105,8 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         extendedLayoutIncludesOpaqueBars = true
         hidesBottomBarWhenPushed = false
         
-        chatView.register(MessageCell.self, forCellReuseIdentifier: "Message")
-        chatView.keyboardDismissMode = .interactive
-        
-//        menu.chatLogController = self
-        //        menu.becomeFirstResponder()
-        
+        chatView.register(MessageCell.self, forCellReuseIdentifier: textCell)
+        chatView.register(MessageMoneyCell.self, forCellReuseIdentifier: moneyCell)
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: avatar)
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleAvatarTap))
@@ -118,7 +115,19 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         avatar.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
         avatar.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
         
+        chatView.keyboardDismissMode = .interactive
+        menu.inputMoney.inputView = cashKeyboard
+        cashKeyboard.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 300)
+        cashKeyboard.delegate = self
+        menu.becomeFirstResponder()
     }
+    
+    let cashKeyboard: CashKeyboard = {
+        let keyboard = CashKeyboard()
+//        keyboard.translatesAutoresizingMasrkIntoConstraints = false
+        return keyboard
+    }()
+    
     
     deinit {
         removeObserver()
@@ -169,13 +178,16 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Message", for: indexPath) as! MessageCell
-        cell.isGroupMessage = chat?.isGroup ?? false
-        cell.message = messages[indexPath.row]
+        let message = messages[indexPath.row]
+        let cell = message.cellForMessageType(tableView: tableView, indexPath: indexPath) as! MessageCell
         cell.delegate = self
+        cell.message = message
         return cell
     }
     
+    @objc func coinButtonTap() {
+        menu.inputMoney.becomeFirstResponder()
+    }
     
     var menuBottomAnchor: NSLayoutConstraint?
     
@@ -254,11 +266,13 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         guard let chat = chat else {
             print("NO CHAT TO FETCH")
             return }
-        let properties = ["text": text]
-        ChatService.sendMessage(chat: chat, properties: properties)
+        let data = ["text": text, "type": "text"]
+        ChatService.sendMessage(chat: chat, properties: data) { _ in
+            self.scrollToBottom(animated: true)
+        }
         menu.inputTextField.textView.text = ""
 //        SoundKit.playSound(type: .send)
-        scrollToBottom(animated: true)
+        
     }
     
     
@@ -398,6 +412,39 @@ extension ChatController: ChatMenuDelegate {
 }
 
 extension ChatController: MessageCellDelegate {
+    
+}
+
+
+extension ChatController: CashKeyboarDelegate {
+    
+    func keyWasTapped(character: String) {
+        print(character)
+    }
+    
+    func sendMoney(amount: Decimal) {
+        let to = chat?.users.filter { $0.id != CurrentUser.uid }.first
+        guard let publicKey = to?.publicKey else {
+            print("NO PUBLIC KEY FOR OTHER USER")
+            return
+        }
+        let assetCode = reserveAsset?.assetCode ?? ""
+        let status = "pending"
+        guard let chat = chat else { return }
+        
+        let data: [String:Any] = ["amount": "\(amount)", "type": "money", "assetCode":assetCode, "status":status]
+        
+        
+        ChatService.sendMessage(chat: chat, properties: data) { (msgID) in
+            
+            WalletManager.sendPayment(token: baseAsset, toAccountID: publicKey, amount: amount, completion: { (success) in
+
+                let chatId = chat.id
+//                ChatService.updateTransaction(chatID: chatId, messageID: msgID, txID: , values: <#T##[String : Any]#>)
+            })
+        }
+    }
+    
     
 }
 

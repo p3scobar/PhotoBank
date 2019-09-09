@@ -189,7 +189,7 @@ internal func generateChatId(ids:[String]) -> String {
 
 
 internal func estimateChatBubbleSize(text: String, fontSize: CGFloat) -> CGSize {
-    let size = CGSize(width: 240, height: 600)
+    let size = CGSize(width: 240, height: 240)
     let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
     return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: Theme.medium(fontSize)], context: nil).size
 }

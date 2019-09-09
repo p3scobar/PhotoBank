@@ -40,8 +40,8 @@ class WalletController: UITableViewController {
         tableView.separatorColor = Theme.border
         self.navigationItem.title = "Wallet"
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = .white
-        
+        tableView.backgroundColor = Theme.lightBackground
+
         tableView.tableFooterView = UIView()
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
 //        navigationController?.navigationBar.prefersLargeTitles = true

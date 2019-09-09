@@ -36,9 +36,10 @@ class MessageCell: UITableViewCell {
     var isGroupMessage: Bool = false
     
     var bubbleView: UIView = {
-        let view = UIView()
+        let frame = CGRect(x: 0, y: 0, width: 240, height: 200)
+        let view = UIView(frame: frame)
         view.layer.cornerRadius = 20
-        view.backgroundColor = Theme.incoming
+        view.backgroundColor = .red
         view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -86,30 +87,33 @@ class MessageCell: UITableViewCell {
         addSubview(messageLabel)
         addSubview(usernameLabel)
         
-        contentRight = messageLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -28)
+        contentRight = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -18)
         contentRight?.isActive = false
         
-        
-        contentLeft = messageLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 28)
+        contentLeft = bubbleView.leftAnchor.constraint(equalTo: leftAnchor, constant: 18)
         contentLeft?.isActive = false
         
-        contentWidth = messageLabel.widthAnchor.constraint(equalToConstant: 240)
+        contentWidth = bubbleView.widthAnchor.constraint(equalToConstant: 240)
         contentWidth?.priority = UILayoutPriority.init(999.0)
         contentWidth?.isActive = false
         
-        contentHeight = messageLabel.heightAnchor.constraint(equalToConstant: 40)
+        contentHeight = bubbleView.heightAnchor.constraint(equalToConstant: 40)
         contentHeight?.isActive = true
+        
+        
+        
+        
         
         messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
         
-        bubbleView.leftAnchor.constraint(equalTo: messageLabel.leftAnchor, constant: -12).isActive = true
-        bubbleView.rightAnchor.constraint(equalTo: messageLabel.rightAnchor, constant: 12).isActive = true
-        bubbleView.topAnchor.constraint(equalTo: messageLabel.topAnchor).isActive = true
-        bubbleView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor).isActive = true
+        messageLabel.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant: 14).isActive = true
+        messageLabel.rightAnchor.constraint(equalTo: bubbleView.rightAnchor, constant: -14).isActive = true
+        messageLabel.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
+        messageLabel.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor).isActive = true
         
-        usernameLabel.leftAnchor.constraint(equalTo: messageLabel.leftAnchor).isActive = true
+        usernameLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         usernameLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        usernameLabel.bottomAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -4).isActive = true
+        usernameLabel.bottomAnchor.constraint(equalTo: bubbleView.topAnchor, constant: -4).isActive = true
         usernameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         let press = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
@@ -135,8 +139,6 @@ class MessageCell: UITableViewCell {
             contentRight?.isActive = false
             contentLeft?.isActive = true
             messageLabel.textAlignment = .left
-            messageLabel.textColor = .white
-            bubbleView.backgroundColor = Theme.incoming
             if isGroupMessage {
                 usernameLabel.isHidden = false
             } else {
@@ -146,22 +148,42 @@ class MessageCell: UITableViewCell {
             contentRight?.isActive = true
             contentLeft?.isActive = false
             messageLabel.textAlignment = .left
-            messageLabel.textColor = .white
-            bubbleView.backgroundColor = Theme.outgoing
             usernameLabel.isHidden = true
         }
         contentWidth?.isActive = true
         calculateFrame()
+        setupColors(msg)
+    }
+    
+    func setupColors(_ msg: Message) {
+        switch msg.type {
+            case .Text:
+                if msg.incoming {
+                    messageLabel.textColor = .white
+                    bubbleView.backgroundColor = Theme.incoming
+                } else {
+                    messageLabel.textColor = .white
+                    bubbleView.backgroundColor = Theme.outgoing
+            }
+            case .Money:
+                bubbleView.backgroundColor = Theme.black
+                
+            break
+        }
     }
     
     
     func calculateFrame() {
-        guard let text = message?.text else { return }
+        guard let text = message?.text else {
+            return
+        }
         let frame = estimateChatBubbleSize(text: text, fontSize: 18)
         var width = frame.width+2
-        width = width > 20 ? width : 20.0
-        contentWidth?.constant = width
+        width = width > 28 ? width : 28
+        contentWidth?.constant = width + 28
         contentHeight?.constant = frame.height+20
+        bubbleView.sizeToFit()
+        messageLabel.sizeToFit()
     }
     
     

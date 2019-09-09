@@ -31,11 +31,11 @@ class PendingController: UIViewController {
         print("USERNAME: \(username)")
         print("AMOUNT: \(amount)")
         WalletManager.sendPayment(token: baseAsset, toAccountID: accountId, amount: amount) { (success) in
-            if success {
-                self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
-            } else {
-                self.presentAlert(title: "Transaction Failed", message: "Something went wrong. Please try again.")
-            }
+//            if success {
+//                self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
+//            } else {
+//                self.presentAlert(title: "Transaction Failed", message: "Something went wrong. Please try again.")
+//            }
         }
     }
     

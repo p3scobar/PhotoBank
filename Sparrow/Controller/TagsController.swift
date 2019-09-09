@@ -49,7 +49,7 @@ class TagsController: UICollectionViewController, UICollectionViewDelegateFlowLa
 //        collectionView?.prefetchDataSource = self
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = .white
+        collectionView?.backgroundColor = Theme.lightBackground
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
     }
     
