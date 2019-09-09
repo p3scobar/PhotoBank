@@ -38,7 +38,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView?.prefetchDataSource = self
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = .white
+        collectionView?.backgroundColor = Theme.lightBackground
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         
         self.definesPresentationContext = true
@@ -51,7 +51,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
         searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.tintColor = Theme.gray
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.title = "Discover"
         fetchData()
 

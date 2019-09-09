@@ -12,7 +12,7 @@ import Firebase
 
 class EmailController: UITableViewController, InputTextCellDelegate {
     
-    var currentEmail = Model.shared.email
+    var currentEmail = CurrentUser.email
     var newEmail: String?
     var password: String?
     
@@ -28,7 +28,7 @@ class EmailController: UITableViewController, InputTextCellDelegate {
     
     
     @objc func handleSubmit() {
-        let email = Model.shared.email
+        let email = CurrentUser.email
         guard let new = newEmail,
             let password = password
             else {

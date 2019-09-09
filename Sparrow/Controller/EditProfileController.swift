@@ -15,9 +15,9 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
     var inputCell = "inputCell"
     var inputTextView = "inputTextView"
     
-    var name: String = Model.shared.name
-    var bio: String = Model.shared.bio
-    var url: String = Model.shared.url
+    var name: String = CurrentUser.name
+    var bio: String = CurrentUser.bio
+    var url: String = CurrentUser.url
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +30,8 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
         tableView.tableFooterView = UIView()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(handleSave))
         title = "Edit Profile"
-        self.name = Model.shared.name
-        self.bio = Model.shared.bio
+        self.name = CurrentUser.name
+        self.bio = CurrentUser.bio
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -42,9 +42,9 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
     @objc func handleSave() {
         let data = ["name":name,"bio":bio,"url":url]
         UserService.updateUserInfo(values: data) { (success) in
-            Model.shared.name = self.name
-            Model.shared.bio = self.bio
-            Model.shared.url = self.url
+            CurrentUser.name = self.name
+            CurrentUser.bio = self.bio
+            CurrentUser.url = self.url
             self.accountController.tableView.reloadData()
         }
         self.navigationController?.popViewController(animated: true)
@@ -72,7 +72,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
             let cell = tableView.dequeueReusableCell(withIdentifier: inputCell, for: indexPath) as! InputTextCell
             cell.valueInput.textAlignment = .left
             cell.delegate = self
-            cell.valueInput.text = Model.shared.name
+            cell.valueInput.text = CurrentUser.name
             cell.indexPath = indexPath
             return cell
         case 1:
@@ -80,7 +80,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
             cell.delegate = self
             cell.valueInput.textAlignment = .left
             cell.backgroundColor = .white
-            cell.valueInput.text = Model.shared.username
+            cell.valueInput.text = CurrentUser.username
             cell.valueInput.isEnabled = false
             cell.selectionStyle = .none
             cell.indexPath = indexPath
@@ -89,7 +89,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
             let cell = tableView.dequeueReusableCell(withIdentifier: inputCell, for: indexPath) as! InputTextCell
             cell.delegate = self
             cell.valueInput.textAlignment = .left
-            cell.valueInput.text = Model.shared.url
+            cell.valueInput.text = CurrentUser.url
             cell.selectionStyle = .none
             cell.indexPath = indexPath
             return cell
@@ -97,7 +97,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
             let cell = tableView.dequeueReusableCell(withIdentifier: inputTextView, for: indexPath) as! InputTextViewCell
             cell.delegate = self
             cell.textView.placeholder = "Write something about yourself..."
-            cell.textView.text = Model.shared.bio
+            cell.textView.text = CurrentUser.bio
             cell.indexPath = indexPath
             return cell
         default:

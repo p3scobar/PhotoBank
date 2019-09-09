@@ -26,27 +26,30 @@ class MessagesController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Messages"
         tableView.register(ChatCell.self, forCellReuseIdentifier: chatCell)
-        let composeIcon = UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate)
-        let compose = UIBarButtonItem(image: composeIcon, style: .done, target: self, action: #selector(handleCompose))
-        compose.tintColor = Theme.black
+//        let composeIcon = UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate)
+//        let compose = UIBarButtonItem(image: composeIcon, style: .done, target: self, action: #selector(handleCompose))
+//        compose.tintColor = Theme.black
+//        self.navigationItem.rightBarButtonItem = compose
+        
         tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 0)
-        self.navigationItem.rightBarButtonItem = compose
+        
         view.backgroundColor = Theme.lightBackground
         tableView.backgroundColor = Theme.lightBackground
         tableView.tableFooterView = UIView()
         
         
         self.definesPresentationContext = true
-        let vc = SwipeController()
+        let vc = NewMessageController()
+        vc.delegate = self
         searchController = UISearchController(searchResultsController: vc)
-        searchController.delegate = self
+        searchController.delegate = vc
         searchController.searchResultsUpdater = vc
-        vc.navController = self.navigationController
+//        vc.navController = self.navigationController
         searchController.hidesNavigationBarDuringPresentation = true
         searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.tintColor = Theme.gray
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         extendedLayoutIncludesOpaqueBars = true
         checkAuthentication()
@@ -78,18 +81,6 @@ class MessagesController: UITableViewController {
         }
     }
     
-    func handleNewChat(chatId: String, toId: String, title: String, image: String) {
-        let vc = ChatController(chatId: chatId, toId: toId, title: title, image: image)
-        vc.userId = toId
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func handleNewChannel(channelId: String) {
-        let vc = ChatController(channelId: channelId, title: channelId.capitalized, image: nil)
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated:true)
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -152,5 +143,24 @@ class MessagesController: UITableViewController {
 
 extension MessagesController: NewMessageDelegate {
     
+    func handleNewChat(chatId: String, toId: String, title: String, image: String) {
+        let vc = ChatController(chatId: chatId, toId: toId, title: title, image: image)
+        vc.userId = toId
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func handleNewChannel(channelId: String) {
+        let vc = ChatController(channelId: channelId, title: channelId.capitalized, image: nil)
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated:true)
+    }
+    
 }
+
+
+extension MessagesController: UISearchControllerDelegate {
+    
+}
+
 

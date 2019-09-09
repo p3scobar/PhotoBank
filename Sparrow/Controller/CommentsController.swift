@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-class CommentsController: UITableViewController, CommentInputDelegate, CommentCellDelegate {
+class CommentsController: UITableViewController, CommentInputDelegate {
     
     let commentCell = "commentCell"
     
@@ -65,7 +65,7 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
     }
     
     func fetchData(id: String) {
-        NewsService.fetchComments(photoId: id) { (comments) in
+        NewsService.getComments(statusID: id) { (comments) in
             self.comments = comments
         }
     }
@@ -80,7 +80,7 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: commentCell, for: indexPath) as! CommentCell
-        cell.delegate = self
+//        cell.delegate = self
         cell.comment = comments[indexPath.row]
         return cell
     }
@@ -116,7 +116,8 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
             let text = menu.inputTextField.textView.text,
             text.count > 0 else { return }
         scrollToComment()
-        NewsService.postComment(post: post, text: text) { (comment) in
+        NewsService.postComment(status: post, text: text) { (comment) in
+            guard let comment = comment else { return }
             self.comments.insert(comment, at: 0)
             self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .left)
         }
@@ -153,7 +154,7 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
     
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard Model.shared.uid == comments[indexPath.row].userId else {
+        guard CurrentUser.uid == comments[indexPath.row].userId else {
             return false
         }
         return true
@@ -166,9 +167,9 @@ class CommentsController: UITableViewController, CommentInputDelegate, CommentCe
                     print("no comment ID")
                     return
             }
-            NewsService.deleteComment(id: commentId, post: post, completion: { (success) in
-                self.comments.remove(at: indexPath.row)
-            })
+//            NewsService.deleteComment(id: commentId, post: post, completion: { (success) in
+//                self.comments.remove(at: indexPath.row)
+//            })
         }
     }
     

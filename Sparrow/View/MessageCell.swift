@@ -72,8 +72,15 @@ class MessageCell: UITableViewCell {
     var contentWidth: NSLayoutConstraint?
     var contentHeight: NSLayoutConstraint?
     
+    
+    var leftMargin: CGFloat = 20
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
+    }
+    
+    func setupView() {
         backgroundColor = .clear
         addSubview(bubbleView)
         addSubview(messageLabel)
@@ -81,6 +88,7 @@ class MessageCell: UITableViewCell {
         
         contentRight = messageLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -28)
         contentRight?.isActive = false
+        
         
         contentLeft = messageLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 28)
         contentLeft?.isActive = false
@@ -127,6 +135,7 @@ class MessageCell: UITableViewCell {
             contentRight?.isActive = false
             contentLeft?.isActive = true
             messageLabel.textAlignment = .left
+            messageLabel.textColor = .white
             bubbleView.backgroundColor = Theme.incoming
             if isGroupMessage {
                 usernameLabel.isHidden = false
@@ -137,6 +146,7 @@ class MessageCell: UITableViewCell {
             contentRight?.isActive = true
             contentLeft?.isActive = false
             messageLabel.textAlignment = .left
+            messageLabel.textColor = .white
             bubbleView.backgroundColor = Theme.outgoing
             usernameLabel.isHidden = true
         }

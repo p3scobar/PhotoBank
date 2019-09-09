@@ -183,11 +183,13 @@ struct WalletManager {
                             let isReceived = paymentResponse.from != accountId ? true : false
                             let date = paymentResponse.createdAt
                             let amount = paymentResponse.amount
+                            let assetCode = paymentResponse.assetCode ?? ""
                             let data = ["amount":amount,
                                         "id":paymentResponse.id,
                                         "to": paymentResponse.to,
                                         "from": paymentResponse.from,
-                                        "date":date,
+                                        "timestamp":date,
+                                        "assetCode":assetCode,
                                         "isReceived":isReceived] as [String : Any]
                             let payment = Payment.findOrCreatePayment(id: paymentResponse.id, data: data, in: PersistenceService.context)
                             payments.append(payment)

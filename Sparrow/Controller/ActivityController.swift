@@ -11,7 +11,7 @@ import UIKit
 import SafariServices
 import CoreData
 
-class ActivityController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate, CommentCellDelegate {
+class ActivityController: UITableViewController, UISearchControllerDelegate, UINavigationBarDelegate {
     
     private let activityCell = "activityCell"
     private let refresh = UIRefreshControl()
@@ -78,8 +78,8 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: activityCell, for: indexPath) as! ActivityCell
-        cell.activity = notifications[indexPath.row]
-        cell.delegate = self
+//        cell.activity = notifications[indexPath.row]
+//        cell.delegate = self
         return cell
     }
     

@@ -15,32 +15,60 @@ class PaymentCell: UITableViewCell {
     
     weak var payment: Payment? {
         didSet {
-            self.nameLabel.text = payment!.timestamp?.short()
-            
+            self.subtitleLeftLabel.text = payment!.timestamp?.short()
             let amount = payment?.amount?.rounded(2) ?? "0.00"
             if payment?.isReceived ?? false {
-                amountLabel.text = "+\(amount)"
+                titleRightLabel.text = "+\(amount)"
             } else {
-                amountLabel.text = "-\(amount)"
+                titleRightLabel.text = "-\(amount)"
             }
         }
     }
+    
+    
+    var user: User? {
+        didSet {
+            guard let userImage = user?.image,
+                let url = URL(string: userImage) else { return }
+            profileImage.sd_setImage(with: url, completed: nil)
+            self.titleLeftLabel.text = user?.name ?? ""
+        }
+    }
+    
+    
+    let profileImage: UIImageView = {
+        let frame = CGRect(x: 16, y: 12, width: 48, height: 48)
+        let imageView = UIImageView(frame: frame)
+        imageView.layer.cornerRadius = frame.width/2
+        imageView.backgroundColor = Theme.lightBackground
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
 
-    lazy var nameLabel: UILabel = {
-        let label = UILabel()
+    lazy var titleLeftLabel: UILabel = {
+        let frame = CGRect(x: 88, y: 12, width: self.frame.width-100, height: 32)
+        let label = UILabel(frame: frame)
         label.font = Theme.semibold(18)
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = Theme.black
+        return label
+    }()
+    
+    lazy var subtitleLeftLabel: UILabel = {
+        let frame = CGRect(x: 88, y: 32, width: self.frame.width-100, height: 32)
+        let label = UILabel(frame: frame)
+        label.font = Theme.semibold(18)
+        label.textColor = Theme.gray
         return label
     }()
     
     
-    lazy var amountLabel: UILabel = {
-        let label = UILabel()
-        label.font = Theme.semibold(18)
+    lazy var titleRightLabel: UILabel = {
+        let frame = CGRect(x: 88, y: 32, width: self.frame.width-60, height: 32)
+        let label = UILabel(frame: frame)
+        label.font = Theme.semibold(20)
         label.textAlignment = .right
-        label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = Theme.black
         return label
     }()
     
@@ -50,19 +78,12 @@ class PaymentCell: UITableViewCell {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         backgroundColor = .white
         
-        addSubview(nameLabel)
-        addSubview(amountLabel)
+        addSubview(profileImage)
+        addSubview(titleLeftLabel)
+        addSubview(subtitleLeftLabel)
+        addSubview(titleRightLabel)
      
-        nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16).isActive = true
-        nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10).isActive = true
-        nameLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        amountLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
-        amountLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        amountLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -24).isActive = true
-        amountLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
+       
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -107,7 +107,6 @@ class QRController: UIViewController {
     
     @objc func handleCopy() {
         UIPasteboard.general.string = KeychainHelper.publicKey
-        UIDevice.vibrate()
         self.dismiss(animated: true, completion: nil)
     }
     

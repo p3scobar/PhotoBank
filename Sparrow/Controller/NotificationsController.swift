@@ -14,7 +14,7 @@ class NotificationsController: UITableViewController {
     
     override init(style: UITableViewStyle) {
         super.init(style: style)
-        if Model.shared.soundsEnabled {
+        if CurrentUser.sounds {
             toggleSound.isOn = true
         }
     }
@@ -152,7 +152,7 @@ class NotificationsController: UITableViewController {
     }
     
     @objc func handleSwitchSound() {
-        Model.shared.soundsEnabled = toggleSound.isOn
+        CurrentUser.sounds = toggleSound.isOn
     }
     
     

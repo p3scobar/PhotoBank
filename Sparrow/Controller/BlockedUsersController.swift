@@ -52,14 +52,14 @@ class BlockedUsersController: UITableViewController {
     
     @objc func fetchData() {
         users.removeAll()
-        let blockedIds = Model.shared.blocked ?? [:]
-        for (key, value) in blockedIds {
-            if value == true {
-//                UserManager.fetchUser(userId: key, completion: { (user) in
-//                    self.users.append(user)
-//                })
-            }
-        }
+//        let blockedIds = Model.shared.blocked ?? [:]
+//        for (key, value) in blockedIds {
+//            if value == true {
+////                UserManager.fetchUser(userId: key, completion: { (user) in
+////                    self.users.append(user)
+////                })
+//            }
+//        }
         self.refreshControl?.endRefreshing()
     }
     

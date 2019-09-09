@@ -9,6 +9,7 @@
 import UIKit
 import MessageUI
 import Photos
+import Firebase
 
 class AccountController: UITableViewController, MFMailComposeViewControllerDelegate, UIImagePickerControllerDelegate, MFMessageComposeViewControllerDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
@@ -67,7 +68,7 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     
     
     @objc func pushProfile() {
-        let id = Model.shared.uid
+        guard let id = Auth.auth().currentUser?.uid else { return }
         let vc = UserController(id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -202,15 +203,15 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
             let nav = UINavigationController(rootViewController: vc)
             self.present(nav, animated: true)
             self.tabBarController?.selectedIndex = 0
-            let id = Model.shared.uid
+            let id = CurrentUser.uid
             
         }
     }
     
     
     func pushProfileController() {
-        let username = Model.shared.username
-        let vc = UserController(username)
+        guard let id = Auth.auth().currentUser?.uid else { return }
+        let vc = UserController(id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -256,7 +257,7 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         }
         if let image = selectedImageFromPicker {
             UserService.updateProfilePic(image: image) { (imageUrl) in
-                Model.shared.image = imageUrl
+                CurrentUser.image = imageUrl
                 self.header.profileImage.image = image
                 self.tableView.reloadData()
             }

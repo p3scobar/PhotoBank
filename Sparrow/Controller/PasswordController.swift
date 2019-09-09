@@ -12,7 +12,7 @@ import Firebase
 
 class PasswordController: UITableViewController, InputTextCellDelegate {
     
-    private var currentEmail = Model.shared.email
+    private var currentEmail = CurrentUser.email
     private var currentPassword: String?
     private var newPassword: String?
     private var confirmNewPassword: String?

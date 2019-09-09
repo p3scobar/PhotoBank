@@ -78,10 +78,10 @@ struct ChatService {
     
     static func sendMessage(chat: Chat, properties: [String: Any]) {
         DispatchQueue.global(qos: .background).async {
-        let userId = Model.shared.uid
-        let userImage = Model.shared.image
-        let name = Model.shared.name
-        let username = Model.shared.username
+        let userId = CurrentUser.uid
+        let userImage = CurrentUser.image
+        let name = CurrentUser.name
+        let username = CurrentUser.username
         let messageId: String = UUID.init().uuidString
         let messageRef = dbRealtime.child("messages").child(chat.id).child(messageId)
         let timestamp = ServerValue.timestamp()
@@ -117,7 +117,7 @@ struct ChatService {
         chatRef.child("users").setValue(chat.userIds)
         chat.userIds.forEach { (id) in
             dbRealtime.child("userChats").child(id).child(chat.id).setValue(true)
-            if !chat.isGroup, id != Model.shared.uid {
+            if !chat.isGroup, id != CurrentUser.uid {
 //                ActivityManager.pushNotification(toId: id, message: "Sent you a message.")
             }
         }
@@ -128,7 +128,7 @@ struct ChatService {
 //    static func deleteChat(chatId: String) {
 //        guard chatId != "" else { return }
 //        DispatchQueue.global(qos: .background).async {
-//        let userId = Model.shared.uid
+//        let userId = CurrentUser.uid
 //        let ref = dbRealtime.child("userChats").child(userId).child(chatId)
 //        ref.removeValue()
 //        chatsDictionary[chatId] = nil
@@ -136,7 +136,7 @@ struct ChatService {
 //    }
     
     static func deleteChat(chatId: String) {
-        let userId = Model.shared.uid
+        let userId = CurrentUser.uid
         guard userId != "" else { return }
         let ref = dbRealtime.child("userChats").child(userId).child(chatId)
         ref.removeValue()

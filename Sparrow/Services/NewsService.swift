@@ -11,6 +11,7 @@ import Alamofire
 import CoreData
 import FirebaseStorage
 import FirebaseAuth
+import Firebase
 
 struct NewsService {
     
@@ -20,7 +21,6 @@ struct NewsService {
             let url = URL(string: urlString)!
             let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//            let headers: HTTPHeaders = [:]
             let query = query ?? ""
             let params: Parameters = ["cursor":cursor, "query": query]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
@@ -49,7 +49,6 @@ struct NewsService {
             guard let userId = Auth.auth().currentUser?.uid else { return }
             let params: Parameters = ["cursor":cursor, "adSet":adSet, "userId": userId]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-                print(response)
                 var feed = [Status]()
                 var ads = [Ad]()
                 guard let json = response.result.value as? [String:Any],
@@ -86,7 +85,6 @@ struct NewsService {
         let params: [String:Any] = ["userId":userId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             var feed = [Status]()
-            print(response)
             guard let json = response.result.value as? [String:Any],
                 let resp = json["response"] as? [String:Any],
                 let results = resp["posts"] as? [[String:Any]] else { return }
@@ -122,10 +120,9 @@ struct NewsService {
         let height = imageLarge.size.height
         let width = imageLarge.size.width
         let imageThumb = image.resized(toWidth: 480)
-        let name = Model.shared.name
-        let image = Model.shared.image
-        let username = Model.shared.username
-        let userImage = Model.shared.image
+        let name = CurrentUser.name
+        let username = CurrentUser.username
+        let userImage = CurrentUser.image
         let publicKey = KeychainHelper.publicKey
         let url = URL(string: urlString)!
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -176,57 +173,123 @@ struct NewsService {
     }
     
     
-    static func fetchComments(photoId: String, completion: @escaping ([Comment]) -> Void) {
-        let urlString = "\(baseUrl)/comments"
-        let url = URL(string: urlString)!
-        let token = bubbleAPIKey
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["id":photoId]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            var comments = [Comment]()
-            guard let json = response.result.value as? [String:Any],
-                let resp = json["response"] as? [String:Any],
-                let results = resp["comments"] as? [[String:Any]] else { return }
-            results.forEach({ (result) in
-                let id = result["_id"] as? String ?? ""
-                let comment = Comment.findOrCreateComment(id: id, data: result, in: PersistenceService.context)
-                comments.append(comment)
-            })
-            completion(comments)
+//    static func fetchComments(photoId: String, completion: @escaping ([Comment]) -> Void) {
+//        let urlString = "\(baseUrl)/comments"
+//        let url = URL(string: urlString)!
+//        let token = bubbleAPIKey
+//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//        let params: [String:Any] = ["id":photoId]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+//            var comments = [Comment]()
+//            guard let json = response.result.value as? [String:Any],
+//                let resp = json["response"] as? [String:Any],
+//                let results = resp["comments"] as? [[String:Any]] else { return }
+//            results.forEach({ (result) in
+//                let id = result["_id"] as? String ?? ""
+//                let comment = Comment.findOrCreateComment(id: id, data: result, in: PersistenceService.context)
+//                comments.append(comment)
+//            })
+//            completion(comments)
+//        }
+//    }
+    
+    
+//    static func deleteComment(id: String, post: Status, completion: @escaping (Bool) -> Void) {
+//        let urlString = "\(baseUrl)/deletecomment"
+//        let url = URL(string: urlString)!
+//        let token = bubbleAPIKey
+//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//        let params: [String:Any] = ["id":id]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+//            print(response)
+//            post.commentCount -= Int16(exactly: 1)!
+//            completion(true)
+//        }
+//    }
+    
+//    static func postComment(post: Status, text: String, completion: @escaping (Comment) -> Void) {
+//        let urlString = "\(baseUrl)/comment"
+//        let url = URL(string: urlString)!
+//        let token = bubbleAPIKey
+//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//        guard let postId = post.id else { return }
+//        let params: [String:Any] = ["postId":postId, "text":text]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+//            guard let json = response.result.value as? [String:Any],
+//                let resp = json["response"] as? [String:Any],
+//                let data = resp["comment"] as? [String:Any] else { return }
+//            let id = data["_id"] as? String ?? ""
+//            let comment = Comment.findOrCreateComment(id: id, data: data, in: PersistenceService.context)
+//            post.commentCount += Int16(exactly: 1)!
+//            completion(comment)
+//        }
+//    }
+    
+    
+    
+    static func postComment(status: Status, text: String, completion: @escaping (Comment?) -> Void) {
+        
+        let id = UUID.init().uuidString
+        let userId = CurrentUser.uid
+        let name = CurrentUser.name
+        let username = CurrentUser.username
+        let userImage = CurrentUser.image
+        let timestamp = FieldValue.serverTimestamp()
+        let data: [String:Any] = ["id":id,
+                                  "userId":userId,
+                                  "name":name,
+                                  "username":username,
+                                  "userImage":userImage,
+                                  "timestamp":timestamp,
+                                  "text":text]
+        guard let statusId = status.id else { return }
+        let ref = db.collection("status").document(statusId).collection("comments").document(id)
+        ref.setData(data, merge: true) { err in
+            if let err = err {
+                print(err.localizedDescription)
+                completion(nil)
+            } else {
+                let comment = Comment(data)
+                completion(comment)
+                print("Comment Added")
+            }
+        }
+    }
+    
+    static func getComments(statusID: String, completion: @escaping ([Comment]) -> Void) {
+        let ref = db.collection("status").document(statusID).collection("comments").limit(to: 50).order(by: "timestamp", descending: true)
+        ref.getDocuments { (snap, error) in
+            if let err = error {
+                print(err.localizedDescription)
+                completion([])
+            } else {
+                print(snap.debugDescription)
+                var comments: [Comment] = []
+                snap?.documents.forEach({ (doc) in
+                    let data = doc.data()
+                    let comment = Comment(data)
+                    comments.append(comment)
+                })
+                completion(comments)
+            }
         }
     }
     
     
-    static func deleteComment(id: String, post: Status, completion: @escaping (Bool) -> Void) {
-        let urlString = "\(baseUrl)/deletecomment"
-        let url = URL(string: urlString)!
-        let token = bubbleAPIKey
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["id":id]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            print(response)
-            post.commentCount -= Int16(exactly: 1)!
-            completion(true)
-        }
-    }
     
-    static func postComment(post: Status, text: String, completion: @escaping (Comment) -> Void) {
-        let urlString = "\(baseUrl)/comment"
-        let url = URL(string: urlString)!
-        let token = bubbleAPIKey
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        guard let postId = post.id else { return }
-        let params: [String:Any] = ["postId":postId, "text":text]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            guard let json = response.result.value as? [String:Any],
-                let resp = json["response"] as? [String:Any],
-                let data = resp["comment"] as? [String:Any] else { return }
-            let id = data["_id"] as? String ?? ""
-            let comment = Comment.findOrCreateComment(id: id, data: data, in: PersistenceService.context)
-            post.commentCount += Int16(exactly: 1)!
-            completion(comment)
-        }
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     static func likePost(post: Status) {
         guard let id = post.id else { return }
@@ -241,7 +304,7 @@ struct NewsService {
         let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: Parameters = ["postId":id, "like":like.description]
-        Model.shared.favorites[id] = like
+//        Model.shared.favorites[id] = like
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
         }
     }
@@ -254,13 +317,13 @@ struct NewsService {
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
             let params: [String:Any] = [:]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-                print(response)
+
                 guard let json = response.result.value as? [String:Any],
                     let resp = json["response"] as? [String:Any],
                     let likes = resp["likes"] as? [String] else { return }
                 
                 likes.forEach({ (id) in
-                    Model.shared.favorites[id] = true
+//                    Model.shared.favorites[id] = true
                     
                 })
             }

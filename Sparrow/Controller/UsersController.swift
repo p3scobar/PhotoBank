@@ -7,28 +7,28 @@
 //
 
 import UIKit
+import Firebase
 
 class UsersController: UITableViewController {
     
-//    UISearchResultsUpdating, UISearchControllerDelegate
-    
-    
-    var query: String? {
-        didSet {
-            fetchData(query!)
-        }
-    }
-    
-    let userCell = "userCell"
-    
+    let userCell = "userCellSmall"
+    let statusCell = "statusCell"
+    let standardCell = "standardCell"
     var navController: UINavigationController?
-//    var searchController: UISearchController!
+    var searchController: UISearchController!
     
     var users: [User]? {
         didSet {
             reloadTable()
         }
     }
+    
+    var query: String = "" {
+        didSet {
+            fetchData(query: query)
+        }
+    }
+    
     
     func reloadTable() {
         DispatchQueue.main.async {
@@ -43,18 +43,19 @@ class UsersController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Users"
-        tableView.register(UserCell.self, forCellReuseIdentifier: userCell)
+        view.backgroundColor = Theme.lightBackground
+        tableView.register(UserCellSmall.self, forCellReuseIdentifier: userCell)
         navigationController?.navigationBar.prefersLargeTitles = true
-        tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0)
         
+        tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsetsMake(0, 72, 0, 0)
     }
     
     
-    @objc func fetchData(_ query: String) {
-//        guard let query = searchController.searchBar.text, query.count > 2 else { return }
-        UserService.fetchUsers(query: query.lowercased()) { (users) in
+    @objc func fetchData(query: String) {
+        guard query != "" else { return }
+        UserService.fetchUsers(query: query) { (users) in
+            self.users?.removeAll()
             self.users = users
             self.refreshControl?.endRefreshing()
         }
@@ -65,10 +66,10 @@ class UsersController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     func updateSearchResults(for searchController: UISearchController) {
-        NSObject.cancelPreviousPerformRequests(withTarget: self)
-        perform(#selector(fetchData), with: nil, afterDelay: 1.0)
+        guard let text = searchController.searchBar.text else { return }
+        query = text.lowercased()
+        
     }
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -92,7 +93,7 @@ class UsersController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: userCell, for: indexPath) as! UserCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: userCell, for: indexPath) as! UserCellSmall
         let user = users?[indexPath.row]
         cell.user = user
         return cell
@@ -100,7 +101,7 @@ class UsersController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 72
+        return 68
     }
     
     
@@ -113,6 +114,7 @@ class UsersController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let user = self.users?[indexPath.row] else { return }
         let vc = UserController(user)
+        vc.user = user
         self.navController?.pushViewController(vc, animated: true)
     }
     
@@ -121,5 +123,14 @@ class UsersController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+}
+
+extension UsersController: UISearchResultsUpdating {
+    
+}
+
+
+extension UsersController: UISearchControllerDelegate {
     
 }

@@ -10,7 +10,7 @@ import UIKit
 import NextGrowingTextView
 
 protocol ChatMenuDelegate: class {
-    func handleSend()
+    func handleSend(_ text: String)
 }
 
 class ChatInputView: UIView, UITextViewDelegate {
@@ -19,14 +19,15 @@ class ChatInputView: UIView, UITextViewDelegate {
     
     static let defaultHeight: CGFloat = 44
     
-    weak var chatLogController: ChatController? {
-        didSet {
-            sendButton.addTarget(chatLogController, action: #selector(chatLogController?.handleSend), for: .touchUpInside)
-        }
-    }
+//    weak var chatLogController: ChatController? {
+//        didSet {
+//            sendButton.addTarget(chatLogController, action: #selector(chatLogController?.handleSend), for: .touchUpInside)
+//        }
+//    }
     
     @objc func handleSendTap() {
-        chatDelegate?.handleSend()
+        guard let text = inputTextField.textView.text else { return }
+        chatDelegate?.handleSend(text)
     }
     
     lazy var sendButton: UIButton = {

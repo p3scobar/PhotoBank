@@ -17,16 +17,11 @@ extension Payment {
     }
 
     @NSManaged public var id: String?
+    @NSManaged public var assetCode: String?
     @NSManaged public var amount: String?
-    @NSManaged public var timestamp: Date?
+    @NSManaged public var issuer: String?
     @NSManaged public var from: String?
-    @NSManaged public var fromImage: String?
-    @NSManaged public var fromName: String?
-    @NSManaged public var fromUsername: String?
     @NSManaged public var to: String?
-    @NSManaged public var toImage: String?
-    @NSManaged public var toName: String?
-    @NSManaged public var toUsername: String?
+    @NSManaged public var timestamp: Date?
     @NSManaged public var isReceived: Bool
-
 }

@@ -18,7 +18,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var following: Bool = false {
         didSet {
-            self.headerView.following = following
+            self.headerView?.following = following
         }
     }
     
@@ -30,11 +30,11 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     private let refresh = UIRefreshControl()
     
-    var headerView: UserHeader!
+    var headerView: UserHeader? = UserHeader()
     
     var user: User? {
         didSet {
-            self.headerView.user = user
+            headerView?.user = user
             collectionView?.reloadData()
             buttonsEnabled = true
         }
@@ -42,9 +42,10 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var buttonsEnabled: Bool = false {
         didSet {
-            headerView.followButton.isEnabled = buttonsEnabled
-            headerView.payButton.isEnabled = buttonsEnabled
-            headerView.messageButton.isEnabled = buttonsEnabled
+            guard let id = user?.id, CurrentUser.uid != id else { return }
+            headerView?.followButton.isEnabled = buttonsEnabled
+            headerView?.payButton.isEnabled = buttonsEnabled
+            headerView?.messageButton.isEnabled = buttonsEnabled
         }
     }
     
@@ -56,6 +57,9 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         UserService.getUser(id) { (user) in
             self.user = user
+        }
+        UserService.following(userId: id) { (following) in
+            self.following = following
         }
     }
     
@@ -73,29 +77,31 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let layout = UICollectionViewFlowLayout()
         self.init(collectionViewLayout: layout)
         self.user = user
-        getData()
+        
+        guard let id = user.id else { return }
+        getData(id)
+
     }
     
     convenience init(_ id: String) {
         let layout = UICollectionViewFlowLayout()
         self.init(collectionViewLayout: layout)
         fetchUser(id)
-        getData()
+        getData(id)
     }
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = .white
+        collectionView?.backgroundColor = Theme.lightBackground
         collectionView?.register(UserHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: header)
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         navigationItem.title = "User"
         collectionView?.refreshControl = refresh
         refresh.tintColor = .black
-        refresh.addTarget(self, action: #selector(getData), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
 
     }
     
@@ -107,9 +113,13 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return 300
     }
     
-    
-    @objc func getData() {
+    @objc func handleRefresh(_ refresh: UIRefreshControl?) {
         guard let uid = user?.id else { return }
+        getData(uid)
+    }
+    
+    @objc func getData(_ uid: String) {
+        print("UID: \(uid)")
         NewsService.fetchPosts(forUser: uid) { [weak self] (feed) in
             self?.timeline = feed
         }
@@ -155,12 +165,13 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: self.header, for: indexPath) as? UserHeader
-        headerView.delegate = self
-        return headerView
+        headerView?.delegate = self
+        headerView?.user = user
+        return headerView ?? UserHeader()
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        var height: CGFloat = 280
+        var height: CGFloat = 240
         if let bio = user?.bio {
             let bioHeight = estimateFrameForTextWidth(width: self.view.frame.width-32, text: bio, fontSize: 18)
             height += bioHeight
@@ -190,8 +201,26 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         self.present(nav, animated: true, completion: nil)
     }
     
+    func presentPassphraseController() {
+        let vc = MnemonicController()
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true, completion: nil)
+    }
+    
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 extension UserController: UserHeaderDelegate {
@@ -227,8 +256,13 @@ extension UserController: UserHeaderDelegate {
     
     
     
+    
+    
     func handlePay() {
-        guard let pk = user?.publicKey else { return }
+        guard let pk = user?.publicKey else {
+            presentPassphraseController()
+            return
+        }
         guard KeychainHelper.privateSeed != "" else {
             presentRecoveryController()
             return

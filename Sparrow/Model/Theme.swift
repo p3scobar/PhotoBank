@@ -78,7 +78,7 @@ extension Theme {
     }
     
     public static var incoming: UIColor {
-        return UIColor(0, 199, 36)
+        return UIColor(72, 74, 74)
     }
     
     public static var outgoing: UIColor {

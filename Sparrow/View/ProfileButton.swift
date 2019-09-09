@@ -72,10 +72,10 @@ class ProfileButton: UIControl {
         previousImageTintColor = Theme.gray
         previousLabelTintColor = Theme.gray
         
-        icon.tintColor = Theme.tint
-        titleLabel.textColor = Theme.tint
+        icon.tintColor = Theme.highlight
+        titleLabel.textColor = Theme.highlight
         sendActions(for: .touchDown)
-        if Model.shared.soundsEnabled == true {
+        if CurrentUser.sounds == true {
             SoundKit.playSound(type: .button)
         }
     }

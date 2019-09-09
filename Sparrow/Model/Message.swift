@@ -48,7 +48,7 @@ class Message: NSObject {
         self.txId = dict["txId"] as? String
         self.url = dict["url"] as? String
         self.type = .Text
-        self.incoming = Model.shared.uid != userId
+        self.incoming = CurrentUser.uid != userId
     }
     
 }

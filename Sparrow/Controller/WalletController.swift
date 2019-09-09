@@ -24,13 +24,6 @@ class WalletController: UITableViewController {
         }
     }
     
-    func setupEmptyView() {
-        if payments.count == 0 {
-            self.tableView.backgroundView = emptyLabel
-        } else {
-            self.tableView.backgroundView = nil
-        }
-    }
     
     lazy var header: WalletHeaderView = {
         let view = WalletHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 280))
@@ -87,8 +80,8 @@ class WalletController: UITableViewController {
     }
     
     func streamTransactions() {
-        WalletManager.streamPayments { [weak self] payment in
-            self?.payments.insert(payment, at: 0)
+        WalletManager.streamPayments { payment in
+            self.payments.insert(payment, at: 0)
         }
     }
     
@@ -133,11 +126,22 @@ class WalletController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: paymentCell, for: indexPath) as! PaymentCell
-        cell.payment = payments[indexPath.row]
+        let payment = payments[indexPath.row]
+        cell.payment = payment
+        fetchUser(payment, cell)
         return cell
     }
     
-    
+    func fetchUser(_ payment: Payment, _ cell: PaymentCell) {
+        guard let id = payment.otherUserKey() else {
+            print("Wallet Controller – No public key to fetch user")
+            return
+        }
+        UserService.fetchUser(userId: id) { (user) in
+            cell.user = user
+        }
+    }
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
@@ -146,9 +150,9 @@ class WalletController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let payment = payments[indexPath.row]
-        presentReceiptController(payment)
-//        let vc = TransactionController(payment: payment)
-//        self.navigationController?.pushViewController(vc, animated: true)
+//        presentReceiptController(payment)
+        let vc = PaymentController(payment: payment)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -238,6 +242,15 @@ extension WalletController: WalletHeaderDelegate {
 extension WalletController: QRScanDelegate {
     func handleQRScan(_ code: String) {
         presentAmountController(code)
+    }
+    
+    
+    func setupEmptyView() {
+        if payments.count == 0 {
+            self.tableView.backgroundView = emptyLabel
+        } else {
+            self.tableView.backgroundView = nil
+        }
     }
     
     

@@ -53,9 +53,16 @@ class WalletHeaderView: UIView {
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
-        view.layer.borderColor = Theme.black.cgColor
-        view.layer.borderWidth = 8
+        view.layer.borderColor = Theme.gray.cgColor
+        view.layer.borderWidth = 0.5
         return view
+    }()
+    
+    
+    lazy var blurView: UIVisualEffectView = {
+        let view = UIVisualEffectView(frame: card.frame)
+        view.effect = UIBlurEffect(style: .light)
+        return view 
     }()
     
     lazy var shadow: UIView = {
@@ -157,8 +164,7 @@ class WalletHeaderView: UIView {
     func setupView() {
         addSubview(shadow)
         addSubview(card)
-        //        addSubview(buyButton)
-        //        addSubview(sellButton)
+//        card.addSubview(blurView)
         card.addSubview(titleLabel)
         card.addSubview(balanceLabel)
         card.addSubview(currencyLabel)

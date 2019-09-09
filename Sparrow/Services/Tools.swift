@@ -55,13 +55,14 @@ extension String {
 }
 
 internal func isFavorited(id: String) -> Bool {
-    if Model.shared.favorites[id] == true {
-//        print("LIKED POST ID: \(id)")
-        return true
-    } else {
-//        print("DISLIKE POST ID: \(id)")
-        return false
-    }
+////    if Model.shared.favorites[id] == true {
+////        print("LIKED POST ID: \(id)")
+//        return true
+//    } else {
+////        print("DISLIKE POST ID: \(id)")
+//        return false
+//    }
+    return false
 }
 
 

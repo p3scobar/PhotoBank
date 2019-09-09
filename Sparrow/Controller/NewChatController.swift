@@ -15,7 +15,7 @@ protocol NewMessageDelegate {
 }
 
 
-class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NewMessageController: UITableViewController {
     
     let cellId = "cellId"
     
@@ -48,12 +48,10 @@ class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
         title = "New Chat"
         tableView.frame = view.frame
-        view.addSubview(tableView)
         self.definesPresentationContext = true
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
         tableView.separatorInset = UIEdgeInsetsMake(0, 88, 0, 0)
-//        tableView.separatorColor = Theme.borderColor
-//        tableView.backgroundColor = Theme.darkBackground
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
@@ -70,20 +68,15 @@ class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     func fetchChannels() {
-        //        ChatService.fetchChannels { (channels) in
-        //            self.channels = channels
-        //        }
+ 
     }
     
     func fetchUsers(_ query: String?) {
-//        UserManager.fetchFavorites { (favs) in
-//            var favorites = favs ?? []
-//            favorites.sort{ $0.username ?? "" < $1.username ?? "" }
-//            self.users = favorites
-//        }
         let query = query ?? ""
+        
         UserService.fetchUsers(query: query) { (users) in
-            self.users = users
+            let filteredUsers = users.filter { $0.id != CurrentUser.uid }
+            self.users = filteredUsers
         }
     }
     
@@ -109,14 +102,7 @@ class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     
-    lazy var tableView: UITableView = {
-        let view = UITableView(frame: UIScreen.main.bounds, style: .grouped)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             pushGroupChatController(id: "general")
@@ -127,7 +113,7 @@ class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDa
     
     fileprivate func createNewChat(_ indexPath: IndexPath) {
         let user = self.users[indexPath.row]
-        let uid = Model.shared.uid
+        let uid = CurrentUser.uid
         guard let toId = user.id else { return }
         let ids = [uid, toId]
         let chatId = generateChatId(ids: ids)
@@ -143,41 +129,42 @@ class NewMessageController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return users.count
-        } else {
-            return 1
-        }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return users.count
     }
     
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
-            cell.textLabel?.text = "General"
-            cell.textLabel?.font = Theme.semibold(18)
-            cell.textLabel?.textColor = .white
-            let groupIcon = UIImage(named: "general")?.withRenderingMode(.alwaysTemplate)
-            cell.profileImage.image = groupIcon
-            return cell
-        } else {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
             cell.user = self.users[indexPath.row]
-            return cell
-        }
+        return cell
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        view.endEditing(true)
     }
     
     
 }
 
 
+extension NewMessageController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        query = text
+    }
+}
+
+
+extension NewMessageController: UISearchControllerDelegate {
+    
+}

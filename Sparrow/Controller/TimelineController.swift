@@ -98,7 +98,35 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         
         checkAuthentication()
         NotificationCenter.default.addObserver(self, selector: #selector(checkAuthentication), name: Notification.Name(rawValue: "login"), object: nil)
+        
+        
+//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(gesture:)))
+//        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+//        self.view.addGestureRecognizer(swipeLeft)
+        
     }
+    
+
+    
+    @objc func handleSwipe(gesture: UIGestureRecognizer) {
+        
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.right:
+                print("Swiped right")
+            case UISwipeGestureRecognizerDirection.down:
+                print("Swiped down")
+            case UISwipeGestureRecognizerDirection.left:
+                print("Swiped left")
+            case UISwipeGestureRecognizerDirection.up:
+                print("Swiped up")
+            default:
+                break
+            }
+        }
+    }
+    
     
     @objc func pushAccountController() {
         let vc = AccountController(style: .grouped)

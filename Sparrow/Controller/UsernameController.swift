@@ -18,14 +18,14 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        inputField.text = Model.shared.username
+        inputField.text = CurrentUser.username
         view.backgroundColor = .white
         setupView()
         self.title = "Username"
         saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(handleSave))
         self.navigationItem.rightBarButtonItem = saveButton
         inputField.delegate = self
-        self.inputField.text = Model.shared.username
+        self.inputField.text = CurrentUser.username
         inputField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
@@ -41,7 +41,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     
     @objc func handleSave() {
         guard available == true && username != "" else { return }
-        Model.shared.username = username
+        CurrentUser.username = username
         
         let data = ["username":username]
         UserService.updateUserInfo(values: data) { (success) in
@@ -133,7 +133,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
         UserService.usernameAvailable(username) { (available) in
             if !available || username.count < 4 {
                 self.available = false
-                if self.username == Model.shared.username {
+                if self.username == CurrentUser.username {
                     self.resultsLabel.text = "Hello @\(self.username)!"
                 }
             } else {

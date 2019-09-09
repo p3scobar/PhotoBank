@@ -56,13 +56,12 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     convenience init(chat: Chat, title: String?, image: String?) {
         self.init()
-//        self.chat = chat
-//        self.navigationItem.title = title ?? ""
-//        if image != nil {
-//            let url = URL(string: image!)
-//            avatar.kf.setImage(with: url)
-//        }
-//        userId = chat.partnerId
+        self.chat = chat
+        guard let title = title, let image = image else { return }
+        navigationItem.title = title
+        let url = URL(string: image)
+        avatar.sd_setImage(with: url, completed: nil)
+        userId = chat.partnerId
     }
     
     
@@ -87,7 +86,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let view = UITableView(frame: frame, style: .plain)
         view.backgroundColor = Theme.lightBackground
         view.separatorStyle = .none
-        view.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 100, right: 0)
+        view.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         view.layoutSubviews()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.bounces = true
@@ -108,7 +107,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         chatView.register(MessageCell.self, forCellReuseIdentifier: "Message")
         chatView.keyboardDismissMode = .interactive
         
-        menu.chatLogController = self
+//        menu.chatLogController = self
         //        menu.becomeFirstResponder()
         
         
@@ -183,7 +182,6 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     lazy var menu: ChatInputView = {
         let view = ChatInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 60))
         view.chatDelegate = self
-        view.chatLogController = self
         return view
     }()
     
@@ -201,7 +199,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         scrollToBottom(animated: false)
-        //        menu.inputTextField.textView.becomeFirstResponder()
+        menu.inputTextField.textView.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -251,7 +249,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     
-    @objc func handleSend() {
+    @objc func handleSend(_ text: String) {
         guard let text = menu.inputTextField.textView.text, text.count > 0 else { return }
         guard let chat = chat else {
             print("NO CHAT TO FETCH")
@@ -300,18 +298,21 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let userInfo = notification.userInfo!
         let keyboardSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         if notification.name == Notification.Name.UIKeyboardDidHide {
-            animateContentInset(inset: 0)
+            animateContentInset(inset: 20)
         } else {
             animateContentInset(inset: keyboardSize.height)
-            self.scrollToBottom(animated: true)
         }
         chatView.scrollIndicatorInsets = chatView.contentInset
     }
     
+    
+    
     func animateContentInset(inset: CGFloat) {
-        UIView.animate(withDuration: 1.0) {
-            self.chatView.contentInset.bottom = inset+20
-            print(self.chatView.contentInset)
+        let offset: CGPoint = chatView.contentOffset
+        UIView.animate(withDuration: 2.0) {
+            self.chatView.contentInset.bottom = inset + 20
+            self.chatView.contentOffset = offset
+            self.scrollToBottom(animated: true)
         }
     }
     
@@ -365,9 +366,9 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let date = messages[indexPath.row].timestamp
         let timestamp = formatter.string(from: date)
         let action = UITableViewRowAction(style: .normal, title: timestamp) { (action, indexPath) in
-            
         }
         action.backgroundColor = Theme.lightBackground
+        
         return [action]
     }
     
@@ -400,8 +401,6 @@ extension ChatController: MessageCellDelegate {
     
 }
 
-//extension ChatController: ChatMenuDelegate {
-//
-//}
+
 
 

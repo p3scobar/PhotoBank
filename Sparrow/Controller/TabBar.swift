@@ -19,33 +19,30 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         super.viewDidLoad()
     
         timelineVC = TimelineController()
-        let timeline = UINavigationController(rootViewController: timelineVC)
+        let timeline = NavigationController(rootViewController: timelineVC)
+            //UINavigationController(rootViewController: timelineVC)
         timeline.tabBarItem.image = UIImage(named: "home")
         timeline.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
         let layout = UICollectionViewFlowLayout()
         discoverVC = DiscoverController(collectionViewLayout: layout)
-        let discover = UINavigationController(rootViewController: discoverVC)
+        let discover = NavigationController(rootViewController: discoverVC)
         discover.tabBarItem.image = UIImage(named: "search")
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
         let walletVC = WalletController()
-        let wallet = UINavigationController(rootViewController: walletVC)
+        let wallet = NavigationController(rootViewController: walletVC)
         wallet.tabBarItem.image = UIImage(named: "coin")
         wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
-        
-//        let activityVC = ActivityController(style: .plain)
-//        let activity = UINavigationController(rootViewController: activityVC)
-//        activity.tabBarItem.image = UIImage(named: "bell")
-//        activity.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
+
 
         let messagesVC = MessagesController(style: .plain)
-        let messages = UINavigationController(rootViewController: messagesVC)
+        let messages = NavigationController(rootViewController: messagesVC)
         messages.tabBarItem.image = UIImage(named: "message")
         messages.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
         let accountVC = AccountController(style: .grouped)
-        let account = UINavigationController(rootViewController: accountVC)
+        let account = NavigationController(rootViewController: accountVC)
         account.tabBarItem.image = UIImage(named: "user")
         account.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
@@ -82,7 +79,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let items = tabBar.items else { return }
-        if item != items[selectedIndex], Model.shared.soundsEnabled == true {
+        if item != items[selectedIndex], CurrentUser.sounds == true {
             SoundKit.playSound(type: .tab)
         }
         if item == items[0] {
@@ -118,20 +115,21 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     
     
     func auth() {
-        let id = Model.shared.uid
-        guard id != "" else {
+        guard let id = Auth.auth().currentUser?.uid,
+        id != "" else {
             let vc = HomeController()
             let nav = UINavigationController(rootViewController: vc)
             self.tabBarController?.present(nav, animated: true, completion: nil)
             return
         }
         UserService.getUser(id) { (user) in
-            Model.shared.uid = user?.id ?? ""
-            Model.shared.name = user?.name ?? ""
-            Model.shared.username = user?.bio ?? ""
-            Model.shared.image = user?.image ?? ""
-            Model.shared.url = user?.url ?? ""
-            Model.shared.image = user?.image ?? ""
+            CurrentUser.uid = id
+            CurrentUser.name = user?.name ?? ""
+            CurrentUser.username = user?.username ?? ""
+            CurrentUser.image = user?.image ?? ""
+            CurrentUser.url = user?.url ?? ""
+            CurrentUser.image = user?.image ?? ""
+            CurrentUser.bio = user?.bio ?? ""
         }
     }
     

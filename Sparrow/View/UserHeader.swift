@@ -27,7 +27,7 @@ class UserHeader: UICollectionReusableView {
         didSet {
             if following {
                 followButton.titleLabel.text = "Following"
-                followButton.icon.image = UIImage(named: "minus")?.withRenderingMode(.alwaysTemplate)
+                followButton.icon.image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)
             } else {
                 followButton.titleLabel.text = "Follow"
                 followButton.icon.image = UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate)
@@ -67,7 +67,7 @@ class UserHeader: UICollectionReusableView {
             }
             if user?.publicKey != nil { payButton.isEnabled = true }
             
-            guard let userId = user?.id, userId != "", userId != Model.shared.uid else {
+            guard let userId = user?.id, userId != "", userId != CurrentUser.uid else {
                 followButton.isEnabled = false
                 payButton.isEnabled = false
                 messageButton.isEnabled = false

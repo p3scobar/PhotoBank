@@ -27,6 +27,7 @@
 		CE024EC22113AD3900E51F37 /* PixelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EC12113AD3900E51F37 /* PixelView.swift */; };
 		CE024EC42113D4A500E51F37 /* PhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE024EC32113D4A500E51F37 /* PhotoButton.swift */; };
 		CE0629B12234C69E002C5AB0 /* TagsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0629B02234C69E002C5AB0 /* TagsController.swift */; };
+		CE06556C2325EC7400937A54 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE06556B2325EC7400937A54 /* ChatCell.swift */; };
 		CE16B162211E85900047E903 /* PendingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16B161211E85900047E903 /* PendingController.swift */; };
 		CE16B164211F60010047E903 /* ProfileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16B163211F60010047E903 /* ProfileButton.swift */; };
 		CE218CD72117BC0600AD1EF2 /* AmountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE218CD62117BC0600AD1EF2 /* AmountController.swift */; };
@@ -58,6 +59,7 @@
 		CE4A957823133A9400EFC617 /* Ad+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */; };
 		CE4A957923133A9400EFC617 /* Ad+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */; };
 		CE4A957B23133DE400EFC617 /* AdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957A23133DE400EFC617 /* AdCell.swift */; };
+		CE514D9D232416B00073C877 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE514D9C232416B00073C877 /* NavigationController.swift */; };
 		CE75AE252133CB1B00A54F42 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE242133CB1B00A54F42 /* ActivityCell.swift */; };
 		CE75AE272133E95900A54F42 /* ReceiptController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE262133E95900A54F42 /* ReceiptController.swift */; };
 		CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */; };
@@ -86,8 +88,7 @@
 		CEC4F32E22FFE3CD00CCE1AC /* OrderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32D22FFE3CD00CCE1AC /* OrderService.swift */; };
 		CEC4F33022FFE3FF00CCE1AC /* ExchangeOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F32F22FFE3FF00CCE1AC /* ExchangeOrder.swift */; };
 		CEC4F3322300A90400CCE1AC /* TableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC4F3312300A90400CCE1AC /* TableFooterView.swift */; };
-		CECC03FA211647B800AD8390 /* Comment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */; };
-		CECC03FB211647B800AD8390 /* Comment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03F9211647B800AD8390 /* Comment+CoreDataProperties.swift */; };
+		CECC03FA211647B800AD8390 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03F8211647B800AD8390 /* Comment.swift */; };
 		CECC03FD21165AF700AD8390 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03FC21165AF700AD8390 /* EditProfileController.swift */; };
 		CECC03FF21165D6E00AD8390 /* InputTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03FE21165D6E00AD8390 /* InputTextViewCell.swift */; };
 		CECC040121176C2400AD8390 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC040021176C2300AD8390 /* Activity+CoreDataProperties.swift */; };
@@ -102,6 +103,8 @@
 		CEEBB949210BF896007E87EE /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBB948210BF896007E87EE /* TabBar.swift */; };
 		CEEBB94B210BF8B2007E87EE /* TimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBB94A210BF8B2007E87EE /* TimelineController.swift */; };
 		CEEBB94D210BF8C9007E87EE /* StatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBB94C210BF8C9007E87EE /* StatusCell.swift */; };
+		CEF37E3F2325A8B80028DFE0 /* PaymentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */; };
+		CEF37E412325A8F70028DFE0 /* PaymentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF37E402325A8F70028DFE0 /* PaymentHeader.swift */; };
 		CEFA04142195709F00F1103A /* ErrorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA04132195709F00F1103A /* ErrorPresenter.swift */; };
 		CEFA041B21992C6B00F1103A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEFA041A21992C6A00F1103A /* GoogleService-Info.plist */; };
 		CEFA041D219A182B00F1103A /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA041C219A182B00F1103A /* CurrencyField.swift */; };
@@ -137,6 +140,7 @@
 		CE024EC12113AD3900E51F37 /* PixelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelView.swift; sourceTree = "<group>"; };
 		CE024EC32113D4A500E51F37 /* PhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoButton.swift; sourceTree = "<group>"; };
 		CE0629B02234C69E002C5AB0 /* TagsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsController.swift; sourceTree = "<group>"; };
+		CE06556B2325EC7400937A54 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		CE16B161211E85900047E903 /* PendingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingController.swift; sourceTree = "<group>"; };
 		CE16B163211F60010047E903 /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
 		CE218CD62117BC0600AD1EF2 /* AmountController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountController.swift; sourceTree = "<group>"; };
@@ -168,6 +172,7 @@
 		CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		CE4A957723133A9400EFC617 /* Ad+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Ad+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Ad+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		CE4A957A23133DE400EFC617 /* AdCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCell.swift; sourceTree = "<group>"; };
+		CE514D9C232416B00073C877 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		CE75AE242133CB1B00A54F42 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		CE75AE262133E95900A54F42 /* ReceiptController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptController.swift; sourceTree = "<group>"; };
 		CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Payment+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -196,8 +201,7 @@
 		CEC4F32D22FFE3CD00CCE1AC /* OrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderService.swift; sourceTree = "<group>"; };
 		CEC4F32F22FFE3FF00CCE1AC /* ExchangeOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeOrder.swift; sourceTree = "<group>"; };
 		CEC4F3312300A90400CCE1AC /* TableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableFooterView.swift; sourceTree = "<group>"; };
-		CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Comment+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Comment+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		CECC03F9211647B800AD8390 /* Comment+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Comment+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Comment+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		CECC03F8211647B800AD8390 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = /Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Comment.swift; sourceTree = "<absolute>"; };
 		CECC03FC21165AF700AD8390 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
 		CECC03FE21165D6E00AD8390 /* InputTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewCell.swift; sourceTree = "<group>"; };
 		CECC040021176C2300AD8390 /* Activity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Activity+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/Sparrow/Sparrow/Model/Activity+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
@@ -214,6 +218,8 @@
 		CEEBB948210BF896007E87EE /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		CEEBB94A210BF8B2007E87EE /* TimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineController.swift; sourceTree = "<group>"; };
 		CEEBB94C210BF8C9007E87EE /* StatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusCell.swift; sourceTree = "<group>"; };
+		CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentController.swift; sourceTree = "<group>"; };
+		CEF37E402325A8F70028DFE0 /* PaymentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentHeader.swift; sourceTree = "<group>"; };
 		CEFA04132195709F00F1103A /* ErrorPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ErrorPresenter.swift; path = Sparrow/Controller/ErrorPresenter.swift; sourceTree = SOURCE_ROOT; };
 		CEFA041A21992C6A00F1103A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CEFA041C219A182B00F1103A /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
@@ -280,8 +286,7 @@
 				CE4A957623133A9400EFC617 /* Ad+CoreDataProperties.swift */,
 				CE961F21210EE29000025D0D /* Activity+CoreDataClass.swift */,
 				CECC040021176C2300AD8390 /* Activity+CoreDataProperties.swift */,
-				CECC03F8211647B800AD8390 /* Comment+CoreDataClass.swift */,
-				CECC03F9211647B800AD8390 /* Comment+CoreDataProperties.swift */,
+				CECC03F8211647B800AD8390 /* Comment.swift */,
 				CE2E61A921A1099B00BF46B8 /* Like+CoreDataClass.swift */,
 				CE2E61AA21A1099B00BF46B8 /* Like+CoreDataProperties.swift */,
 				CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */,
@@ -327,6 +332,8 @@
 				CEC4F3312300A90400CCE1AC /* TableFooterView.swift */,
 				CEFAA6C42322008800D123D7 /* MessageCell.swift */,
 				CEFAA6C6232200A600D123D7 /* ChatInputView.swift */,
+				CEF37E402325A8F70028DFE0 /* PaymentHeader.swift */,
+				CE06556B2325EC7400937A54 /* ChatCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -371,6 +378,8 @@
 				CEC4F32122FFD33200CCE1AC /* PayController.swift */,
 				CE024EA32113768F00E51F37 /* WalletController.swift */,
 				CEFAA6B82321B49400D123D7 /* WalletLoginController.swift */,
+				CE514D9C232416B00073C877 /* NavigationController.swift */,
+				CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -583,12 +592,13 @@
 				CE218CF72118CE1700AD1EF2 /* PaymentCell.swift in Sources */,
 				CE2E628D21AA68DF00BF46B8 /* SoundKit.swift in Sources */,
 				CE024EB221138BE600E51F37 /* UsersController.swift in Sources */,
-				CECC03FA211647B800AD8390 /* Comment+CoreDataClass.swift in Sources */,
+				CECC03FA211647B800AD8390 /* Comment.swift in Sources */,
 				CE024EBE2113A9EC00E51F37 /* SignupController.swift in Sources */,
 				CEC4F32622FFE04800CCE1AC /* Token.swift in Sources */,
 				CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */,
 				CEEBB934210BF827007E87EE /* AppDelegate.swift in Sources */,
 				CEEBB94B210BF8B2007E87EE /* TimelineController.swift in Sources */,
+				CEF37E3F2325A8B80028DFE0 /* PaymentController.swift in Sources */,
 				CEC4F3322300A90400CCE1AC /* TableFooterView.swift in Sources */,
 				CE961EDF210CDF2100025D0D /* PersistenceService.swift in Sources */,
 				CECC03FD21165AF700AD8390 /* EditProfileController.swift in Sources */,
@@ -599,6 +609,7 @@
 				CEC4F32822FFE0B000CCE1AC /* InputCurrencyCell.swift in Sources */,
 				CE961F24210EE29000025D0D /* Status+CoreDataClass.swift in Sources */,
 				CE961EDD210C517200025D0D /* StatusController.swift in Sources */,
+				CE514D9D232416B00073C877 /* NavigationController.swift in Sources */,
 				CE961ED7210BFD6900025D0D /* NewsService.swift in Sources */,
 				CE961F28210EE29000025D0D /* Status+CoreDataProperties.swift in Sources */,
 				CE024EBA2113A76400E51F37 /* InputTextCell.swift in Sources */,
@@ -611,6 +622,7 @@
 				CE024EB82113A04C00E51F37 /* LoginController.swift in Sources */,
 				CE961F02210D752C00025D0D /* ComposeToolbar.swift in Sources */,
 				CE961EFA210D6C0900025D0D /* AccountController.swift in Sources */,
+				CE06556C2325EC7400937A54 /* ChatCell.swift in Sources */,
 				CE218CE521181BAE00AD1EF2 /* Tools.swift in Sources */,
 				CE0629B12234C69E002C5AB0 /* TagsController.swift in Sources */,
 				CECC040321176F2500AD8390 /* ActivityService.swift in Sources */,
@@ -635,10 +647,10 @@
 				CE218CD72117BC0600AD1EF2 /* AmountController.swift in Sources */,
 				CE218CD92117BCEA00AD1EF2 /* WalletService.swift in Sources */,
 				CE024EB0211388B600E51F37 /* CommentInputView.swift in Sources */,
-				CECC03FB211647B800AD8390 /* Comment+CoreDataProperties.swift in Sources */,
 				CE218CEF2118C30C00AD1EF2 /* BlockedUsersController.swift in Sources */,
 				CE024EB421139D0300E51F37 /* Model.swift in Sources */,
 				CEC4F32A22FFE0D900CCE1AC /* TransactionType.swift in Sources */,
+				CEF37E412325A8F70028DFE0 /* PaymentHeader.swift in Sources */,
 				CEEBB94D210BF8C9007E87EE /* StatusCell.swift in Sources */,
 				CEEBB949210BF896007E87EE /* TabBar.swift in Sources */,
 				CEFA04142195709F00F1103A /* ErrorPresenter.swift in Sources */,

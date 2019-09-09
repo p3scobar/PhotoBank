@@ -14,14 +14,21 @@ import Firebase
 struct UserService {
 
     static func follow(userId: String, follow: Bool, completion: @escaping (Bool) -> Void) {
+        
         DispatchQueue.global(qos: .background).async {
         let urlString = "\(baseUrl)/follow"
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
+        let uid = CurrentUser.uid
+            print("User: \(uid)")
+            print("FOLLOW: \(userId)")
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: Parameters = ["userId":userId, "follow": follow.description]
+        let params: Parameters = ["uid":uid,
+                                  "follow": follow.description,
+                                  "userId":userId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             print(response)
+            print("FOLLOWING: \(follow.description)")
             guard let json = response.result.value as? [String:Any],
                 let resp = json["response"] as? [String:Any] else { return }
             let following = resp["following"] as? Bool ?? false
@@ -46,18 +53,52 @@ struct UserService {
     }
 
    
+//    static func fetchUsers(query username: String, completion: @escaping ([User]) -> Swift.Void) {
+//        guard username != "" else { return }
+//        DispatchQueue.global(qos: .background).async {
+//        var users: [User] = []
+//            let blocked: [String:Bool] = [:]
+//            let ref = db.collection("users")
+//            let query = ref.whereField("username", isGreaterThan: username)
+//                //ref.whereField("username", isGreaterThanOrEqualTo: username)
+//        query.getDocuments { (querySnapshot, error) in
+//            guard let documents = querySnapshot?.documents else { return }
+//            for item in documents {
+//                print(item.data())
+//                guard let user = User(item) else {
+//                    return
+//                }
+//                users.append(user)
+////                if let userId = user.id {
+////                    if blocked[userId] != true {
+////                        users.append(user)
+////                    } else {
+////                        print("\(user.name ?? "") is blocked.")
+////                    }
+////                }
+//            }
+//            completion(users)
+//        }
+//        }
+//    }
+
     static func fetchUsers(query username: String, completion: @escaping ([User]) -> Swift.Void) {
-        DispatchQueue.global(qos: .background).async {
+        print("FETCHING USER FOR: \(username)")
+        
         var users: [User] = []
-        let blocked = Model.shared.blocked ?? [:]
-        let ref = db.collection("users").whereField("username", isGreaterThanOrEqualTo: username)
-        ref.getDocuments { (querySnapshot, error) in
+        let blocked: [String:Bool] = [:]
+        let ref = db.collection("users")
+// let query = ref.whereField("username", isEqualTo: username.lowercased())
+        let query = ref.whereField("username", isGreaterThanOrEqualTo: username.lowercased())
+
+        query.getDocuments { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else { return }
             for item in documents {
-                let user = User(data: item.data())
+                guard let user = User(item.data()) else { return }
                 if let userId = user.id {
                     if blocked[userId] != true {
                         users.append(user)
+                        print("User.Service.fetchUsers: \(user.name)")
                     } else {
                         print("\(user.name ?? "") is blocked.")
                     }
@@ -65,92 +106,8 @@ struct UserService {
             }
             completion(users)
         }
-        }
     }
     
-    
-//    static func fetchUsers(username: String, completion: @escaping ([User]) -> Void) {
-//        let urlString = "\(baseUrl)/users"
-//        let url = URL(string: urlString)!
-//        let params: [String:Any] = ["text":username]
-//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
-//            var users = [User]()
-//            guard let json = response.result.value as? [String:Any],
-//                let resp = json["response"] as? [String:Any],
-//                let results = resp["users"] as? [[String:Any]] else { return }
-//            results.forEach({ (data) in
-//                print(data)
-//                let id = data["_id"] as? String ?? ""
-//                let user = User.findOrCreateUser(id: id, data: data, in: PersistenceService.context)
-//                users.append(user)
-//            })
-//            completion(users)
-//        }
-//    }
-
-//    static func fetchUser(uuid: String, completion: @escaping (User, Bool) -> Void) {
-//        let urlString = "\(baseUrl)/user"
-//        let url = URL(string: urlString)!
-//        let token = bubbleAPIKey
-//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//        let params: [String:Any] = ["userId":uuid]
-//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-//            print(response)
-//            guard let json = response.result.value as? [String:Any],
-//                let resp = json["response"] as? [String:Any],
-//                let result = resp["user"] as? [String:Any] else { return }
-//
-//            let following: Bool = resp["following"] as? Bool ?? false
-//            let id = result["_id"] as? String ?? ""
-//            let user = User.findOrCreateUser(id: id, data: result, in: PersistenceService.context)
-//            completion(user, following)
-//        }
-//    }
-
-//    static func fetchUser(byPublicKey publicKey: String, completion: @escaping (User, Bool) -> Void) {
-//        let urlString = "\(baseUrl)/user"
-//        let url = URL(string: urlString)!
-//        let token = bubbleAPIKey
-//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-//        let params: [String:Any] = ["publicKey":publicKey]
-//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-//            print(response)
-//            guard let json = response.result.value as? [String:Any],
-//                let resp = json["response"] as? [String:Any],
-//                let result = resp["user"] as? [String:Any] else { return }
-//
-//            let following: Bool = resp["following"] as? Bool ?? false
-//            let id = result["_id"] as? String ?? ""
-//            let user = User.findOrCreateUser(id: id, data: result, in: PersistenceService.context)
-//            completion(user, following)
-//        }
-//    }
-
-//
-//    static func signup(name: String, email: String, password: String, completion: @escaping (Bool) -> Void) {
-//        let urlString = "\(baseUrl)/signup"
-//        let url = URL(string: urlString)!
-//        let params: [String:Any] = ["name":name, "email":email, "password":password]
-//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
-//            print(response)
-//            guard let json = response.result.value as? [String:Any],
-//                let resp = json["response"] as? [String:Any],
-//                let userData = resp["user"] as? [String:Any] else { return }
-//
-//            let token = resp["token"] as? String ?? ""
-//            let id = userData["_id"] as? String ?? ""
-//            let user = User.findOrCreateUser(id: id, data: userData, in: PersistenceService.context)
-//            Model.shared.token = token
-//            Model.shared.uuid = user.id ?? ""
-//            Model.shared.name = user.name ?? ""
-//            Model.shared.email = email
-//            Model.shared.username = user.username ?? ""
-//            Model.shared.bio = user.bio ?? ""
-//            KeychainHelper.mnemonic = Wallet.generate12WordMnemonic()
-//            completion(true)
-//        }
-//    }
-
 
 
 
@@ -173,11 +130,11 @@ struct UserService {
         let headers: HTTPHeaders = [:]
         let params: [String:Any] = ["email":email, "password":password]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            Model.shared.uid = ""
-            Model.shared.name = ""
-            Model.shared.username = ""
-            Model.shared.image = ""
-            Model.shared.bio = ""
+            CurrentUser.uid = ""
+            CurrentUser.name = ""
+            CurrentUser.username = ""
+            CurrentUser.image = ""
+            CurrentUser.bio = ""
             KeychainHelper.publicKey = ""
             KeychainHelper.privateSeed = ""
             Payment.deleteAll()
@@ -201,11 +158,11 @@ struct UserService {
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         let params: [String:Any] = [:]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            Model.shared.uid = ""
-            Model.shared.name = ""
-            Model.shared.username = ""
-            Model.shared.image = ""
-            Model.shared.bio = ""
+            CurrentUser.uid = ""
+            CurrentUser.name = ""
+            CurrentUser.username = ""
+            CurrentUser.image = ""
+            CurrentUser.bio = ""
             KeychainHelper.publicKey = ""
             KeychainHelper.privateSeed = ""
             Payment.deleteAll()
@@ -229,7 +186,7 @@ struct UserService {
 //                    completion(false)
 //                    return
 //                }
-//                Model.shared.username = username
+//                CurrentUser.username = username
 //                completion(true)
 //            }
 //        }
@@ -298,13 +255,8 @@ extension UserService {
                 print(err.localizedDescription)
                 completion(nil)
             } else {
-                guard let data = snap?.documents.first?.data() else {
-                    print("No user fetched from username")
-                    completion(nil)
-                    return
-                }
-                let user = User(data: data)
-                completion(user)
+                let snap = snap?.documents.first
+//                let user = User(snap)
             }
         }
     }
@@ -355,8 +307,8 @@ extension UserService {
                         completion(nil)
                         return
                     }
-                    let user = User(data: data)
-                    completion(user)
+//                    let user = User(snap)
+//                    completion(user)
                 }
             }
         }
@@ -364,34 +316,41 @@ extension UserService {
 
     
     static func fetchUser(userId: String, completion: @escaping (User) -> Swift.Void) {
-        guard userId != "" else {
-            print("COULD NOT FETCH USER FROM EMPTY USER ID")
-            return
-        }
-        print("USER ID: \(userId)")
-        
-        let ref = db.collection("users").document(userId)
-        ref.getDocument { (document, error) in
-            if let err = error {
-                print(err.localizedDescription)
-            } else {
-                if let document = document, let data = document.data(), document.exists {
-                    let user = User(data: data)
-                    completion(user)
+        DispatchQueue.global(qos: .background).async {
+            guard userId != "" else {
+                print("COULD NOT FETCH USER FROM EMPTY USER ID")
+                return
+            }
+            print("USER ID: \(userId)")
+            
+            let ref = db.collection("users").document(userId)
+            ref.getDocument { (document, error) in
+                if let err = error {
+                    print(err.localizedDescription)
+                } else {
+                    if let document = document,
+                        document.exists,
+                        let user = User(document) {
+                        completion(user)
+                    }
                 }
             }
         }
     }
     
+    
+    
+    
     static func getUser(_ id: String, completion: @escaping (User?) -> Swift.Void) {
         DispatchQueue.global(qos: .background).async {
             let ref = db.collection("users").document(id)
             ref.getDocument { (document, error) in
-                if let document = document, let data = document.data(), document.exists {
+                if let document = document,
+                    document.exists {
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                     print("Document data: \(dataDescription)")
                     
-                    let user = User(data: data)
+                    let user = User(document)
                     completion(user)
                 } else {
                     completion(nil)
@@ -420,13 +379,17 @@ extension UserService {
             if let error = err {
                 print(error.localizedDescription)
             } else {
-                guard let data = snap?.data() else { return }
-                let user = User(data: data)
-                Model.shared.uid = id
-                Model.shared.bio = user.bio ?? ""
-                Model.shared.image = user.image ?? ""
-                Model.shared.username = user.username ?? ""
-                Model.shared.name = user.name ?? ""
+                guard let snap = snap,
+                    let user = User(snap) else {
+                    print("No user fetched from username")
+                    return
+                }
+                
+                CurrentUser.uid = id
+                CurrentUser.bio = user.bio ?? ""
+                CurrentUser.image = user.image ?? ""
+                CurrentUser.username = user.username ?? ""
+                CurrentUser.name = user.name ?? ""
             }
         }
         }
@@ -438,22 +401,31 @@ extension UserService {
         DispatchQueue.global(qos: .background).async {
         Auth.auth().createUser(withEmail: email, password: password) { (auth, err) in
             if let error = err {
+                
                 print(error.localizedDescription)
                 completion(false)
             } else {
-                updateUserInfo(values: ["name":name], completion: { _ in })
+                guard let id = Auth.auth().currentUser?.uid else { return }
+                CurrentUser.name = name
+                CurrentUser.email = email
+                CurrentUser.uid = id
+                updateUserInfo(values: ["id":id, "name":name], completion: { _ in })
                 completion(true)
-                createBubbleUser(email, password)
+                createBubbleUser(name, email, password)
             }
         }
         }
     }
     
-    private static func createBubbleUser(_ email: String, _ password: String) {
+    private static func createBubbleUser(_ name: String, _ email: String, _ password: String) {
         DispatchQueue.global(qos: .background).async {
         let urlString = "\(baseUrl)/signup"
+        let uid = CurrentUser.uid
         let url = URL(string: urlString)!
-        let params: [String:Any] = ["email":email, "password":password]
+            let params: [String:Any] = ["uid":uid,
+                                        "name":name,
+                                        "email":email,
+                                        "password":password]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
             print(response)
             
@@ -469,4 +441,91 @@ extension UserService {
     }
     
     
+    
+    static func following(userId: String, completion: @escaping (Bool) -> Void) {
+        let urlString = "\(baseUrl)/user"
+        let url = URL(string: urlString)!
+        let token = bubbleAPIKey
+        let uid = CurrentUser.uid
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        let params: [String:Any] = ["userId":userId, "uid":uid]
+        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+            print(response)
+            guard let json = response.result.value as? [String:Any],
+                let resp = json["response"] as? [String:Any],
+                let result = resp["user"] as? [String:Any] else { return }
+            
+            let following: Bool = resp["following"] as? Bool ?? false
+            completion(following)
+        }
+    }
+    
+    
+    
+    
 }
+
+//    static func fetchUsers(username: String, completion: @escaping ([User]) -> Void) {
+//        let urlString = "\(baseUrl)/users"
+//        let url = URL(string: urlString)!
+//        let params: [String:Any] = ["text":username]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+//            var users = [User]()
+//            guard let json = response.result.value as? [String:Any],
+//                let resp = json["response"] as? [String:Any],
+//                let results = resp["users"] as? [[String:Any]] else { return }
+//            results.forEach({ (data) in
+//                print(data)
+//                let id = data["_id"] as? String ?? ""
+//                let user = User.findOrCreateUser(id: id, data: data, in: PersistenceService.context)
+//                users.append(user)
+//            })
+//            completion(users)
+//        }
+//    }
+
+
+
+//    static func fetchUser(byPublicKey publicKey: String, completion: @escaping (User, Bool) -> Void) {
+//        let urlString = "\(baseUrl)/user"
+//        let url = URL(string: urlString)!
+//        let token = bubbleAPIKey
+//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//        let params: [String:Any] = ["publicKey":publicKey]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+//            print(response)
+//            guard let json = response.result.value as? [String:Any],
+//                let resp = json["response"] as? [String:Any],
+//                let result = resp["user"] as? [String:Any] else { return }
+//
+//            let following: Bool = resp["following"] as? Bool ?? false
+//            let id = result["_id"] as? String ?? ""
+//            let user = User.findOrCreateUser(id: id, data: result, in: PersistenceService.context)
+//            completion(user, following)
+//        }
+//    }
+
+//
+//    static func signup(name: String, email: String, password: String, completion: @escaping (Bool) -> Void) {
+//        let urlString = "\(baseUrl)/signup"
+//        let url = URL(string: urlString)!
+//        let params: [String:Any] = ["name":name, "email":email, "password":password]
+//        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: nil).responseJSON { (response) in
+//            print(response)
+//            guard let json = response.result.value as? [String:Any],
+//                let resp = json["response"] as? [String:Any],
+//                let userData = resp["user"] as? [String:Any] else { return }
+//
+//            let token = resp["token"] as? String ?? ""
+//            let id = userData["_id"] as? String ?? ""
+//            let user = User.findOrCreateUser(id: id, data: userData, in: PersistenceService.context)
+//            Model.shared.token = token
+//            Model.shared.uuid = user.id ?? ""
+//            CurrentUser.name = user.name ?? ""
+//            CurrentUser.email = email
+//            CurrentUser.username = user.username ?? ""
+//            CurrentUser.bio = user.bio ?? ""
+//            KeychainHelper.mnemonic = Wallet.generate12WordMnemonic()
+//            completion(true)
+//        }
+//    }
