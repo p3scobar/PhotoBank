@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 protocol MessageCellDelegate: class {
-    func handleLongPress(userId: String)
+    func handleLongPress(_ message: Message)
 }
 
 class MessageCell: UITableViewCell {
@@ -30,29 +30,43 @@ class MessageCell: UITableViewCell {
             } else {
                 usernameLabel.text = ""
             }
+            incoming = message?.incoming ?? true
+        }
+    }
+    
+    var incoming: Bool = true {
+        didSet {
+            if incoming == true {
+                bubbleView.setX(12)
+            } else {
+                let offset = bubbleView.frame.width+12
+                let x = frame.width-offset
+                bubbleView.setX(x)
+            }
         }
     }
     
     var isGroupMessage: Bool = false
     
     var bubbleView: UIView = {
-        let frame = CGRect(x: 0, y: 0, width: 240, height: 200)
+        let frame = CGRect(x: 0, y: 12, width: 40, height: 40)
         let view = UIView(frame: frame)
         view.layer.cornerRadius = 20
-        view.backgroundColor = .red
         view.isUserInteractionEnabled = true
-        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     var messageLabel: UILabel = {
-        let view = UILabel()
+        let frame = CGRect(x:18, y: 8, width: 40, height: 40)
+        let view = UILabel(frame: frame)
         view.font = Theme.medium(18)
         view.numberOfLines = 0
         view.lineBreakMode = .byWordWrapping
         view.textAlignment = .left
+        
         view.textColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -63,7 +77,7 @@ class MessageCell: UITableViewCell {
         view.textAlignment = .left
         view.textColor = Theme.gray
         view.isHidden = true
-        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -84,46 +98,16 @@ class MessageCell: UITableViewCell {
     func setupView() {
         backgroundColor = .clear
         addSubview(bubbleView)
-        addSubview(messageLabel)
-        addSubview(usernameLabel)
-        
-        contentRight = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -18)
-        contentRight?.isActive = false
-        
-        contentLeft = bubbleView.leftAnchor.constraint(equalTo: leftAnchor, constant: 18)
-        contentLeft?.isActive = false
-        
-        contentWidth = bubbleView.widthAnchor.constraint(equalToConstant: 240)
-        contentWidth?.priority = UILayoutPriority.init(999.0)
-        contentWidth?.isActive = false
-        
-        contentHeight = bubbleView.heightAnchor.constraint(equalToConstant: 40)
-        contentHeight?.isActive = true
-        
-        
-        
-        
-        
-        messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        
-        messageLabel.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant: 14).isActive = true
-        messageLabel.rightAnchor.constraint(equalTo: bubbleView.rightAnchor, constant: -14).isActive = true
-        messageLabel.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
-        messageLabel.bottomAnchor.constraint(equalTo: bubbleView.bottomAnchor).isActive = true
-        
-        usernameLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        usernameLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        usernameLabel.bottomAnchor.constraint(equalTo: bubbleView.topAnchor, constant: -4).isActive = true
-        usernameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
+        bubbleView.addSubview(messageLabel)
+
         let press = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         bubbleView.addGestureRecognizer(press)
     }
     
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
         if sender?.state == UIGestureRecognizerState.began {
-            guard let userId = message?.userId else { return }
-            delegate?.handleLongPress(userId: userId)
+            guard let message = message else { return }
+            delegate?.handleLongPress(message)
         }
     }
     
@@ -136,8 +120,8 @@ class MessageCell: UITableViewCell {
     func setupCell() {
         guard let msg = message else { return }
         if msg.incoming {
-            contentRight?.isActive = false
-            contentLeft?.isActive = true
+//            contentRight?.isActive = false
+//            contentLeft?.isActive = true
             messageLabel.textAlignment = .left
             if isGroupMessage {
                 usernameLabel.isHidden = false
@@ -145,12 +129,12 @@ class MessageCell: UITableViewCell {
                 usernameLabel.isHidden = true
             }
         } else {
-            contentRight?.isActive = true
-            contentLeft?.isActive = false
+//            contentRight?.isActive = true
+//            contentLeft?.isActive = false
             messageLabel.textAlignment = .left
             usernameLabel.isHidden = true
         }
-        contentWidth?.isActive = true
+//        contentWidth?.isActive = true
         calculateFrame()
         setupColors(msg)
     }
@@ -159,7 +143,7 @@ class MessageCell: UITableViewCell {
         switch msg.type {
             case .Text:
                 if msg.incoming {
-                    messageLabel.textColor = .white
+                    messageLabel.textColor = .black
                     bubbleView.backgroundColor = Theme.incoming
                 } else {
                     messageLabel.textColor = .white
@@ -177,13 +161,18 @@ class MessageCell: UITableViewCell {
         guard let text = message?.text else {
             return
         }
-        let frame = estimateChatBubbleSize(text: text, fontSize: 18)
-        var width = frame.width+2
-        width = width > 28 ? width : 28
-        contentWidth?.constant = width + 28
-        contentHeight?.constant = frame.height+20
-        bubbleView.sizeToFit()
-        messageLabel.sizeToFit()
+        let frame = estimateChatBubbleSize(text: text, fontSize: 19)
+        let bubbleHeight = frame.height + 20
+        let bubbleWidth = frame.width + 34
+        bubbleView.setWidth(bubbleWidth)
+        bubbleView.setHeight(bubbleHeight)
+        
+        let messageHeight = frame.height + 4
+        let messageWidth = frame.width + 4
+        
+        messageLabel.setWidth(messageWidth)
+        messageLabel.setHeight(messageHeight)
+
     }
     
     

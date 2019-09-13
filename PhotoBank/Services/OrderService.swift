@@ -56,10 +56,12 @@ struct OrderService {
                 orderBook.asks.forEach({ (ask) in
                     let order = ExchangeOrder(exchangeOrder: ask, side: .sell)
                     asks.append(order)
+                    print(order.price)
                 })
                 orderBook.bids.forEach({ (bid) in
                     let order = ExchangeOrder(exchangeOrder: bid, side: .buy)
                     bids.append(order)
+                    print(order.price)
                 })
                 asks.sort { $0.price > $1.price }
                 bids.sort { $0.price > $1.price }
@@ -78,7 +80,7 @@ struct OrderService {
         let buyingAssetType = "native"
         let buyingAssetIssuer = ""
         let buyingAssetCode = ""
-        let sell = baseAsset
+        let sell = reserveAsset
         let sellingAssetType = sell.assetType
         guard let sellingAssetCode = sell.assetCode,
             let sellingAssetIssuer = sell.assetIssuer else { return }
@@ -112,7 +114,7 @@ struct OrderService {
         let buyingAssetType = "native"
         let buyingAssetIssuer = ""
         let buyingAssetCode = ""
-        let sell = baseAsset
+        let sell = reserveAsset
         let sellingAssetType = sell.assetType
         guard let sellingAssetCode = sell.assetCode,
             let sellingAssetIssuer = sell.assetIssuer else { return }

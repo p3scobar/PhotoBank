@@ -16,12 +16,10 @@ class WalletController: UITableViewController {
     
     var payments = [Payment]() {
         didSet {
-            DispatchQueue.main.async {
-                self.refresh.endRefreshing()
-                self.tableView.reloadData()
-                self.setupEmptyView()
-                self.setupFooter()
-            }
+            refresh.endRefreshing()
+            tableView.reloadData()
+            setupEmptyView()
+            setupFooter()
         }
     }
     
@@ -35,14 +33,19 @@ class WalletController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        header.delegate = self
+        self.refreshControl = refresh
+        refresh.addTarget(self, action: #selector(getData), for: .valueChanged)
         tableView.tableHeaderView = header
+        header.delegate = self
         tableView.alwaysBounceVertical = true
         tableView.separatorColor = Theme.border
         tableView.showsVerticalScrollIndicator = false
         tableView.backgroundColor = Theme.lightBackground
 
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
+        navigationController?.navigationBar.barTintColor = Theme.lightBackground
+        navigationController?.navigationBar.isTranslucent = false
+        
         
 //        navigationController?.navigationBar.prefersLargeTitles = true
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleQR(notification:)), name: NSNotification.Name(rawValue: "qrScan"), object: nil)
@@ -51,7 +54,6 @@ class WalletController: UITableViewController {
         let qrButton = UIBarButtonItem(image: qrIcon, style: .done, target: self, action: #selector(presentCamera))
         self.navigationItem.rightBarButtonItem = qrButton
         payments = Payment.fetchAll(in: PersistenceService.context)
-        pullToRefresh()
         setupTitle()
     }
     
@@ -67,11 +69,11 @@ class WalletController: UITableViewController {
     }
     
     func setupFooter() {
-        if KeychainHelper.privateSeed == "" {
+        guard walletLoggedIn() else {
             tableView.tableFooterView = footer
-        } else {
-            tableView.tableFooterView = UIView()
+            return
         }
+        tableView.tableFooterView = UIView()
     }
     
     @objc func presentCamera() {
@@ -84,11 +86,15 @@ class WalletController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableView.refreshControl = refresh
-        refresh.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         getAccountDetails()
     }
  
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupTitle()
+        setupFooter()
+        tableView.reloadData()
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -97,6 +103,7 @@ class WalletController: UITableViewController {
     
     @objc func getTransactions() {
         WalletService.fetchTransactions { payments in
+            self.refresh.endRefreshing()
             self.payments = payments
         }
     }
@@ -107,15 +114,12 @@ class WalletController: UITableViewController {
         }
     }
     
-    @objc func pullToRefresh() {
+    @objc func getData(_ refresh: UIRefreshControl?) {
         print("PUBLIC KEY: \(KeychainHelper.publicKey)")
         print("SECRET KEY: \(KeychainHelper.privateSeed)")
         print("SEED: \(KeychainHelper.mnemonic)")
         getAccountDetails()
         getTransactions()
-        setupTitle()
-        setupFooter()
-        refresh.endRefreshing()
     }
     
     
@@ -267,6 +271,7 @@ class WalletController: UITableViewController {
         guard KeychainHelper.privateSeed != "" else {
             return false
         }
+        
         return true
     }
 
@@ -275,8 +280,7 @@ class WalletController: UITableViewController {
 extension WalletController: WalletHeaderDelegate {
     
     func handleBuy() {
-        let token = Token.ARS
-        let vc = OrderController(token: token, side: .buy)
+        let vc = OrderController(token: reserveAsset, side: .buy)
         let nav = UINavigationController(rootViewController: vc)
         self.tabBarController?.present(nav, animated: true, completion: nil)
     }
@@ -295,8 +299,7 @@ extension WalletController: WalletHeaderDelegate {
     }
     
     func presentOrderController() {
-        let token = Token.ARS
-        let vc = OrderController(token: token, side: .buy)
+        let vc = OrderController(token: reserveAsset, side: .buy)
         let nav = UINavigationController(rootViewController: vc)
         self.present(nav, animated: true)
     }
@@ -332,7 +335,7 @@ extension WalletController: ButtonTableFooterDelegate {
         } else if button == footer.button {
             footer.isLoading = true
             WalletService.login(footer.passphrase) { (success) in
-                self.pullToRefresh()
+                self.getData(nil)
             }
         }
     }

@@ -20,7 +20,7 @@ class NewMessageController: UITableViewController {
     let cellId = "cellId"
     
     var delegate: NewMessageDelegate?
-    var messagesController: MessagesController?
+//    var messagesController: MessagesController?
     
     var query: String? {
         didSet {
@@ -104,24 +104,19 @@ class NewMessageController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 0 {
-            pushGroupChatController(id: "general")
-        } else {
-            createNewChat(indexPath)
-        }
+        createNewChat(indexPath)
     }
     
     fileprivate func createNewChat(_ indexPath: IndexPath) {
         let user = self.users[indexPath.row]
         let uid = CurrentUser.uid
-        guard let toId = user.id else { return }
+        let toId = user.id ?? ""
         let ids = [uid, toId]
         let chatId = generateChatId(ids: ids)
         let image = user.image ?? ""
         let name = user.name ?? ""
-        self.dismiss(animated: true) {
-            self.delegate?.handleNewChat(chatId: chatId, toId: toId, title: name, image: image)
-        }
+        delegate?.handleNewChat(chatId: chatId, toId: toId, title: name, image: image)
+        self.dismiss(animated: true, completion: nil)
     }
     
     fileprivate func pushGroupChatController(id: String) {

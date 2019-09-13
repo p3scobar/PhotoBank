@@ -44,21 +44,49 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        tableView.keyboardDismissMode = .interactive
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.allowsSelection = false
-        tableView.backgroundColor = Theme.lightBackground
+        tableView.backgroundColor = .white
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
         tableView.register(CommentCell.self, forCellReuseIdentifier: commentCell)
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.contentInset.bottom = 60
-        tableView.backgroundColor = Theme.lightBackground
         navigationItem.title = "Photo"
         let more = UIImage(named: "more")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: more, style: .done, target: self, action: #selector(handleMore))
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
+        let keyboardSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        if notification.name == Notification.Name.UIKeyboardDidHide {
+            animateContentInset(inset: 20)
+        } else {
+            animateContentInset(inset: keyboardSize.height)
+        }
+        tableView.scrollIndicatorInsets = tableView.contentInset
+    }
+    
+    
+    func animateContentInset(inset: CGFloat) {
+//        let offset: CGPoint = tableView.contentOffset
+        UIView.animate(withDuration: 1.0) {
+//            self.tableView.contentInset.bottom = inset
+            let y = self.view.frame.origin.y + inset
+            let frame = CGRect(x: 0, y: y, width: 0, height: 0)
+            self.tableView.scrollRectToVisible(frame, animated: true)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,7 +140,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return status?.cellHeight(view.frame.width) ?? 640
+            return status?.cellHeight(view.frame.width) ?? 620
         } else {
             return comments[indexPath.row].height()
         }
@@ -125,7 +153,6 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     lazy var menu: ChatInputView = {
         let view = ChatInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 60))
         view.chatDelegate = self
-        
         return view
     }()
     
@@ -238,6 +265,9 @@ extension StatusController: StatusCellDelegate {
     
     
     
+    
+    
+    
 }
 
 
@@ -247,14 +277,14 @@ extension StatusController: ChatMenuDelegate {
     func handleSend(_ text: String) {
         guard let status = status else { return }
         menu.inputTextField.textView.text = ""
-        view.resignFirstResponder()
+        menu.inputTextField.textView.endEditing(true)
+        view.endEditing(true)
         NewsService.postComment(status: status, text: text) { (comment) in
             guard let comment = comment else { return }
             self.comments.insert(comment, at: 0)
-            if self.tableView.numberOfRows(inSection: 0) > 0 {
-                let path = IndexPath(item: 0, section: 1)
-                self.tableView.scrollToRow(at: path, at: .top, animated: true)
-            }
+//            if self.tableView.numberOfRows(inSection: 1) > 0 {
+//                let path = IndexPath(item: 0, section: 1)
+//            }
         }
     }
     
@@ -263,4 +293,10 @@ extension StatusController: ChatMenuDelegate {
 
 extension StatusController: CommentCellDelegate {
 
+}
+
+
+
+extension StatusController: UIBarPositioningDelegate {
+    
 }

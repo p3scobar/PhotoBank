@@ -85,7 +85,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     lazy var chatView: UITableView = {
         let frame = UIScreen.main.bounds
         let view = UITableView(frame: frame, style: .plain)
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = .white
         view.separatorStyle = .none
         view.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         view.layoutSubviews()
@@ -323,8 +323,8 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func animateContentInset(inset: CGFloat) {
         let offset: CGPoint = chatView.contentOffset
-        UIView.animate(withDuration: 2.0) {
-            self.chatView.contentInset.bottom = inset + 20
+        UIView.animate(withDuration: 1.0) {
+            self.chatView.contentInset.bottom = inset
             self.chatView.contentOffset = offset
             self.scrollToBottom(animated: true)
         }
@@ -386,14 +386,18 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         return [action]
     }
     
-    func handleLongPress(userId: String) {
-        presentAlertController(userId: userId)
+    func handleLongPress(_ message: Message) {
+        presentAlertController(message)
     }
     
-    func presentAlertController(userId: String) {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300
+    }
+    
+    func presentAlertController(_ message: Message) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let viewProfile = UIAlertAction(title: "View Profile", style: .default) { (tap) in
-            self.handleUserTap(userId: userId)
+        let viewProfile = UIAlertAction(title: "Copy", style: .default) { (tap) in
+            UIPasteboard.general.string = message.text ?? ""
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(viewProfile)
@@ -412,6 +416,7 @@ extension ChatController: ChatMenuDelegate {
 }
 
 extension ChatController: MessageCellDelegate {
+
     
 }
 
@@ -428,7 +433,7 @@ extension ChatController: CashKeyboarDelegate {
             print("NO PUBLIC KEY FOR OTHER USER")
             return
         }
-        let assetCode = reserveAsset?.assetCode ?? ""
+        let assetCode = reserveAsset.assetCode ?? ""
         let status = "pending"
         guard let chat = chat else { return }
         
@@ -437,7 +442,7 @@ extension ChatController: CashKeyboarDelegate {
         
         ChatService.sendMessage(chat: chat, properties: data) { (msgID) in
             
-            WalletService.sendPayment(token: baseAsset, toAccountID: publicKey, amount: amount, completion: { (success) in
+            WalletService.sendPayment(token: reserveAsset, toAccountID: publicKey, amount: amount, completion: { (success) in
 
                 let chatId = chat.id
 //                ChatService.updateTransaction(chatID: chatId, messageID: msgID, txID: , values: <#T##[String : Any]#>)

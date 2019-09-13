@@ -23,7 +23,7 @@ class UsersController: UITableViewController {
         }
     }
     
-    var query: String = "" {
+    var query: String = "a" {
         didSet {
             fetchData(query: query)
         }

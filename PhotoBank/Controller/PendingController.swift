@@ -30,8 +30,7 @@ class PendingController: UIViewController {
         print("DESTINATION: \(accountId)")
         print("USERNAME: \(username)")
         print("AMOUNT: \(amount)")
-        let token = Token.ARS
-        WalletService.sendPayment(token: token, toAccountID: accountId, amount: amount) { (txID) in
+        WalletService.sendPayment(token: reserveAsset, toAccountID: accountId, amount: amount) { (txID) in
             if let id = txID {
                 self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
             } else {

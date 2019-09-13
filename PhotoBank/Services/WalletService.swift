@@ -34,6 +34,7 @@ struct WalletService {
                         print("Trustline set: \(trusted)")
                         DispatchQueue.main.async {
                             completion(details)
+                            
                         }
                     })
                 case .failure(let error):
@@ -60,7 +61,7 @@ struct WalletService {
                 case .success(let accountDetails):
                     accountDetails.balances.forEach({ (asset) in
                         let token = Token(response: asset)
-                        let assetCode = Token.ARS.assetCode ?? "ARS"
+                        let assetCode = reserveAsset.assetCode ?? "PBK"
                         if token.assetCode == assetCode {
                             DispatchQueue.main.async {
                                 completion(token)
@@ -84,7 +85,7 @@ struct WalletService {
             return
         }
         
-        let asset = Token.ARS.toRawAsset()
+        let asset = reserveAsset.toRawAsset()
         
         Stellar.sdk.accounts.getAccountDetails(accountId: KeychainHelper.publicKey) { (response) -> (Void) in
             switch response {
@@ -197,6 +198,9 @@ struct WalletService {
                     }
 
                 case .failure(let error):
+                    DispatchQueue.main.async {
+                        completion([])
+                    }
                     print(error.localizedDescription)
                 }
             }
@@ -222,17 +226,19 @@ struct WalletService {
                 if let paymentResponse = operationResponse as? PaymentOperationResponse {
                     
                     
-                        let isReceived = paymentResponse.from != accountID ? true : false
-                        let date = paymentResponse.createdAt
-                        let amount = paymentResponse.amount
-                        let data = ["amount":amount,
-                                      "id":paymentResponse.id,
-                                      "date":date,
-                                      "isReceived":isReceived] as [String : Any]
-                        let payment = Payment.findOrCreatePayment(id: paymentResponse.id, data: data, in: PersistenceService.context)
+                    let isReceived = paymentResponse.from != accountID ? true : false
+                    let date = paymentResponse.createdAt
+                    let amount = paymentResponse.amount
+                    let data = ["amount":amount,
+                                "id":paymentResponse.id,
+                                "date":date,
+                                "isReceived":isReceived] as [String : Any]
+                    let payment = Payment.findOrCreatePayment(id: paymentResponse.id, data: data, in: PersistenceService.context)
+                    DispatchQueue.main.async {
                         completion(payment)
-                        
-                        print("Payment of \(paymentResponse.amount) PBK from \(paymentResponse.sourceAccount) received -  id \(id)" )
+                    }
+                    
+                    print("Payment of \(paymentResponse.amount) PBK from \(paymentResponse.sourceAccount) received -  id \(id)" )
                 }
             case .error(let err):
                 print(err!.localizedDescription)

@@ -154,7 +154,7 @@ extension Status {
     }
     
     func cellHeight(_ viewWidth: CGFloat) -> CGFloat {
-        var cellHeight = imageHeight(viewWidth) + 20
+        var cellHeight = imageHeight(viewWidth)
         if let text = self.text {
             let textHeight = estimateFrameForText(text: text, fontSize: 18).height
             cellHeight += textHeight
@@ -189,7 +189,38 @@ internal func generateChatId(ids:[String]) -> String {
 
 
 internal func estimateChatBubbleSize(text: String, fontSize: CGFloat) -> CGSize {
-    let size = CGSize(width: 240, height: 240)
+    let size = CGSize(width: 240, height: 480)
     let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
     return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: Theme.medium(fontSize)], context: nil).size
+}
+
+
+
+
+
+extension UIView {
+   
+    func setX(_ x:CGFloat) {
+        var frame:CGRect = self.frame
+        frame.origin.x = x
+        self.frame = frame
+    }
+    
+    func setY(_ y:CGFloat) {
+        var frame:CGRect = self.frame
+        frame.origin.y = y
+        self.frame = frame
+    }
+    
+    func setWidth(_ width:CGFloat) {
+        var frame:CGRect = self.frame
+        frame.size.width = width
+        self.frame = frame
+    }
+
+    func setHeight(_ height:CGFloat) {
+        var frame:CGRect = self.frame
+        frame.size.height = height
+        self.frame = frame
+    }
 }

@@ -64,6 +64,7 @@
 		CE2E629821AA691C00BF46B8 /* tab02.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629221AA691C00BF46B8 /* tab02.m4a */; };
 		CE2E629921AA691C00BF46B8 /* select01.m4a in Resources */ = {isa = PBXBuildFile; fileRef = CE2E629321AA691C00BF46B8 /* select01.m4a */; };
 		CE2E62A521B266C300BF46B8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2E62A421B266C300BF46B8 /* WebViewController.swift */; };
+		CE2EEEA2232B64A200658A17 /* NewPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2EEEA1232B64A200658A17 /* NewPageController.swift */; };
 		CE2FE1A32326B7270094C633 /* MessageMoneyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2FE1A22326B7270094C633 /* MessageMoneyCell.swift */; };
 		CE4A9575231321E200EFC617 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A9574231321E200EFC617 /* AdService.swift */; };
 		CE4A957823133A9400EFC617 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957623133A9400EFC617 /* Activity+CoreDataProperties.swift */; };
@@ -161,6 +162,7 @@
 		CE0AB4C323283A5200101705 /* Photobank.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Photobank.xcdatamodel; sourceTree = "<group>"; };
 		CE0AB4C52328530D00101705 /* Ad+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ad+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE0AB4C62328530E00101705 /* Ad+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ad+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		CE0AB4C92328699300101705 /* PhotoBank.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoBank.entitlements; sourceTree = "<group>"; };
 		CE16B161211E85900047E903 /* PendingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingController.swift; sourceTree = "<group>"; };
 		CE16B163211F60010047E903 /* ProfileButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileButton.swift; sourceTree = "<group>"; };
 		CE218CD62117BC0600AD1EF2 /* AmountController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountController.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		CE2E629221AA691C00BF46B8 /* tab02.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = tab02.m4a; sourceTree = "<group>"; };
 		CE2E629321AA691C00BF46B8 /* select01.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = select01.m4a; sourceTree = "<group>"; };
 		CE2E62A421B266C300BF46B8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		CE2EEEA1232B64A200658A17 /* NewPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPageController.swift; sourceTree = "<group>"; };
 		CE2FE1A22326B7270094C633 /* MessageMoneyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMoneyCell.swift; sourceTree = "<group>"; };
 		CE4A9574231321E200EFC617 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
 		CE4A957623133A9400EFC617 /* Activity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -314,7 +317,6 @@
 				CE961F1E210EE29000025D0D /* Status+CoreDataClass.swift */,
 				CE961F22210EE29000025D0D /* Status+CoreDataProperties.swift */,
 				CE961F20210EE29000025D0D /* User+CoreDataClass.swift */,
-				CE961EFD210D6D2000025D0D /* Theme.swift */,
 				CE024EB321139D0300E51F37 /* Model.swift */,
 				CEC4F32522FFE04800CCE1AC /* Token.swift */,
 				CEC4F32922FFE0D900CCE1AC /* TransactionType.swift */,
@@ -407,6 +409,7 @@
 				CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */,
 				CE0AB4B72327286900101705 /* OrderController.swift */,
 				CE0AB4B923272B1B00101705 /* OrderConfirmController.swift */,
+				CE2EEEA1232B64A200658A17 /* NewPageController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 		CEEBB932210BF827007E87EE /* PhotoBank */ = {
 			isa = PBXGroup;
 			children = (
+				CE0AB4C92328699300101705 /* PhotoBank.entitlements */,
 				CE2E628B21AA68D400BF46B8 /* Sound */,
 				CEFA04122195708F00F1103A /* Utilities */,
 				CE961EF2210D273500025D0D /* Services */,
@@ -471,6 +475,7 @@
 				CEFA04132195709F00F1103A /* ErrorPresenter.swift */,
 				CEFA041C219A182B00F1103A /* CurrencyField.swift */,
 				CE218CDA2117BDF100AD1EF2 /* Constants.swift */,
+				CE961EFD210D6D2000025D0D /* Theme.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -509,6 +514,11 @@
 				TargetAttributes = {
 					CEEBB92F210BF827007E87EE = {
 						CreatedOnToolsVersion = 9.4;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -697,6 +707,7 @@
 				CE961EF8210D364400025D0D /* ActivityController.swift in Sources */,
 				CECC040121176C2400AD8390 /* Activity+CoreDataClass.swift in Sources */,
 				CE024EC22113AD3900E51F37 /* PixelView.swift in Sources */,
+				CE2EEEA2232B64A200658A17 /* NewPageController.swift in Sources */,
 				CE218CF12118C33600AD1EF2 /* UserCell.swift in Sources */,
 				CE024EAC2113883B00E51F37 /* CommentsController.swift in Sources */,
 				CE0AB4C82328530E00101705 /* Ad+CoreDataProperties.swift in Sources */,
@@ -843,6 +854,8 @@
 			baseConfigurationReference = 756EB2943701D23EB1D503A6 /* Pods-PhotoBank.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhotoBank/PhotoBank.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CKRM3BRD2H;
 				INFOPLIST_FILE = "$(SRCROOT)/PhotoBank/Info.plist";
@@ -852,6 +865,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.photobank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -862,6 +876,8 @@
 			baseConfigurationReference = 33C1161669D002C5429683CE /* Pods-PhotoBank.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PhotoBank/PhotoBank.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CKRM3BRD2H;
 				INFOPLIST_FILE = "$(SRCROOT)/PhotoBank/Info.plist";
@@ -871,6 +887,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.photobank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

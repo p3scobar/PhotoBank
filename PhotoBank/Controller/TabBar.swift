@@ -26,7 +26,9 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         
         let layout = UICollectionViewFlowLayout()
         discoverVC = DiscoverController(collectionViewLayout: layout)
+            //NewPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         let discover = NavigationController(rootViewController: discoverVC)
+        
         discover.tabBarItem.image = UIImage(named: "search")
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
@@ -62,9 +64,9 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     @objc func handleUnread(notification: Notification) {
         guard let count = notification.userInfo?["count"] as? Int else { return }
         if count < 1 {
-            self.tabBar.items?[3].badgeValue = nil
+//            self.tabBar.items?[3].badgeValue = nil
         } else {
-            self.tabBar.items?[3].badgeValue = "\(count)"
+//            self.tabBar.items?[3].badgeValue = "\(count)"
         }
     }
 
@@ -86,7 +88,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
             timelineVC.scrollToTop()
         }
         if item == items[1] {
-            discoverVC.scrollToTop()
+//            discover.scrollToTop()
         }
     }
     

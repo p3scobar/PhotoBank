@@ -67,8 +67,8 @@ extension Message {
         switch self.type {
         case .Text:
             guard let text = self.text else { return 0 }
-            var height = estimateChatBubbleSize(text: text, fontSize: 18).height
-            height += 28
+            var height = estimateChatBubbleSize(text: text, fontSize: 19).height
+            height += 30
             if isGroup && self.incoming { height += 20 }
             return height
         case .Money:

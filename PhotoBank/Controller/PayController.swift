@@ -97,7 +97,7 @@ class PayController: UIViewController {
         ErrorPresenter.showError(message: "No destination keypair", on: self)
         return
     }
-        WalletService.sendPayment(token: baseAsset, toAccountID: accountID, amount: amount) { (_) in
+        WalletService.sendPayment(token: reserveAsset, toAccountID: accountID, amount: amount) { (_) in
             self.dismiss(animated: true, completion: nil)
         }
     }

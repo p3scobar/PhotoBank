@@ -153,8 +153,8 @@ class CommentCell: UITableViewCell {
             contentRight?.isActive = true
             contentLeft?.isActive = false
             messageLabel.textAlignment = .left
-            messageLabel.textColor = Theme.black
-            bubbleView.backgroundColor = .white
+            messageLabel.textColor = .white
+            bubbleView.backgroundColor = Theme.outgoing
             usernameLabel.isHidden = true
             profileImage.isHidden = true
             return
@@ -162,7 +162,7 @@ class CommentCell: UITableViewCell {
         contentRight?.isActive = false
         contentLeft?.isActive = true
         messageLabel.textAlignment = .left
-        messageLabel.textColor = .white
+        messageLabel.textColor = .black
         bubbleView.backgroundColor = Theme.incoming
         contentWidth?.isActive = true
         profileImage.isHidden = false
@@ -174,9 +174,11 @@ class CommentCell: UITableViewCell {
         guard let text = comment?.text else { return }
         let frame = estimateChatBubbleSize(text: text, fontSize: 18)
         var width = frame.width+2
-        width = width > 20 ? width : 20.0
-        contentWidth?.constant = width
+        width = width > 28 ? width : 28.0
+        contentWidth?.constant = width + 4
         contentHeight?.constant = frame.height+20
+        bubbleView.sizeToFit()
+        messageLabel.sizeToFit()
     }
     
     

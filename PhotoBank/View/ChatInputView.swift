@@ -101,8 +101,6 @@ class ChatInputView: UIView, UITextViewDelegate {
         view.textView.font = Theme.semibold(18)
         view.backgroundColor = Theme.lightBackground
         view.layer.cornerRadius = 20
-        view.layer.borderColor = Theme.lightGray.cgColor
-        view.layer.borderWidth = 1
         view.isScrollEnabled = false
         view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -110,37 +108,26 @@ class ChatInputView: UIView, UITextViewDelegate {
     }()
     
     
-    lazy var container: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
+//    lazy var container: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .white
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
+
+    lazy var container: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .regular)
+        let view = UIVisualEffectView(frame: self.frame)
+        view.frame.size.height += 100
+        view.effect = effect
         return view
     }()
     
-    
     func setupView() {
         addSubview(container)
-//        addSubview(plusButton)
         addSubview(inputMoney)
         addSubview(sendButton)
         addSubview(inputTextField)
-        addSubview(separator)
-        
-        container.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        container.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        container.topAnchor.constraint(equalTo: separator.topAnchor).isActive = true
-        container.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 40).isActive = true
-        
-        separator.bottomAnchor.constraint(equalTo: inputTextField.topAnchor, constant: -8).isActive = true
-        separator.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        separator.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-//        plusButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
-//         plusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-//        plusButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-//        plusButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
         
         inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor, constant: 0).isActive = true
         inputTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 12).isActive = true

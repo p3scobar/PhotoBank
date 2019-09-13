@@ -135,6 +135,10 @@ extension Token {
         return Token(assetCode: "ARS", issuer: "GAUM73DX3ZHRPFDUCYN5AQIEJ4YYWDBH2RYEW276TWJLSCJSFLB23UWN")
     }
     
+    public static var PBK: Token {
+        return Token(assetCode: "PBK", issuer: "GAUM73DX3ZHRPFDUCYN5AQIEJ4YYWDBH2RYEW276TWJLSCJSFLB23UWN")
+    }
+    
     
     
     

@@ -193,24 +193,35 @@ struct UserService {
 //        }
 //    }
 
-
-    static func updatePublicKey(pk: String, completion: @escaping (Bool) -> Void) {
+    
+    static func updatePublicKey(completion: @escaping (Bool) -> Void) {
         DispatchQueue.global(qos: .background).async {
-        let urlString = "\(baseUrl)/publickey"
-        let url = URL(string: urlString)!
-        let token = bubbleAPIKey
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["key":pk]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            if let error = response.error {
-                print(error.localizedDescription)
-                completion(false)
-            } else {
-                completion(true)
-            }
-        }
+            let userId = CurrentUser.uid
+            let ref = db.collection("users").document(userId)
+            let pk = KeychainHelper.publicKey
+            let data = ["publicKey":pk]
+            ref.setData(data, merge: true)
         }
     }
+    
+
+//    static func updatePublicKey(pk: String, completion: @escaping (Bool) -> Void) {
+//        DispatchQueue.global(qos: .background).async {
+//        let urlString = "\(baseUrl)/publickey"
+//        let url = URL(string: urlString)!
+//        let token = bubbleAPIKey
+//        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+//        let params: [String:Any] = ["key":pk]
+////        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+////            if let error = response.error {
+////                print(error.localizedDescription)
+////                completion(false)
+////            } else {
+////                completion(true)
+////            }
+////        }
+////        }
+//    }
 
 
     static func updateUser(name: String, bio: String, website: String, completion: @escaping (Bool) -> Void) {

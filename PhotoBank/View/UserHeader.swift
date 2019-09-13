@@ -65,15 +65,6 @@ class UserHeader: UICollectionReusableView {
             if let bio = user?.bio {
                 bioLabel.text = bio
             }
-            if user?.publicKey != nil { payButton.isEnabled = true }
-            
-            guard let userId = user?.id, userId != "", userId != CurrentUser.uid else {
-                followButton.isEnabled = false
-                payButton.isEnabled = false
-                messageButton.isEnabled = false
-                return
-            }
-            
             
             if let followersCount = user?.followersCount {
                 followersLabel.text = "\(followersCount) Followers"
@@ -83,6 +74,36 @@ class UserHeader: UICollectionReusableView {
                 urlLabel.text = url
             }
         }
+    }
+    
+    var buttonsEnabled: Bool = true {
+        didSet {
+            guard let id = user?.id, CurrentUser.uid != id else { return }
+            followButton.isEnabled = buttonsEnabled
+            payButton.isEnabled = buttonsEnabled
+            messageButton.isEnabled = buttonsEnabled
+        }
+    }
+    
+    func setupButtons() {
+        /// CURRENT USER
+        guard let id = user?.id, CurrentUser.uid != id else {
+            buttonsEnabled = false
+            return
+        }
+        
+        /// NO Wallet (Current User)
+        guard KeychainHelper.privateSeed != "" else {
+            payButton.isEnabled = false
+            return
+        }
+        
+        /// NO WALLET (Other User)
+        guard user?.publicKey != "" else {
+            payButton.isEnabled = false
+            return
+        }
+        
     }
     
     lazy var profileImageView: UIImageView = {
@@ -126,7 +147,7 @@ class UserHeader: UICollectionReusableView {
     lazy var followButton: ProfileButton = {
         let button = ProfileButton(imageName: "plus", title: "Follow")
         button.layer.cornerRadius = 10
-        button.isEnabled = false
+        button.isEnabled = true
         button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -135,8 +156,7 @@ class UserHeader: UICollectionReusableView {
     lazy var payButton: ProfileButton = {
         let button = ProfileButton(imageName: "token", title: "Pay")
         button.layer.cornerRadius = 10
-        button.isEnabled = false
-        button.isEnabled = false
+        button.isEnabled = true
         button.addTarget(self, action: #selector(handlePay), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -145,7 +165,7 @@ class UserHeader: UICollectionReusableView {
     lazy var messageButton: ProfileButton = {
         let button = ProfileButton(imageName: "chat", title: "Message")
         button.layer.cornerRadius = 10
-        button.isEnabled = false
+        button.isEnabled = true
         button.addTarget(self, action: #selector(message), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

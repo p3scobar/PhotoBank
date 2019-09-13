@@ -57,11 +57,11 @@ class WalletHeaderView: UIView {
     lazy var card: UIImageView = {
         let frame = CGRect(x: 12, y: 20, width: UIScreen.main.bounds.width-24, height: 220)
         let view = UIImageView(frame: frame)
-        view.image = UIImage(named: "card")?.withRenderingMode(.alwaysOriginal)
+        view.image = UIImage(named: "cliff")?.withRenderingMode(.alwaysOriginal)
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
-        view.layer.borderColor = Theme.darkGray.withAlphaComponent(0.3).cgColor
+        view.layer.borderColor = Theme.black.withAlphaComponent(0.3).cgColor
         view.layer.borderWidth = 3
         return view
     }()
@@ -79,7 +79,7 @@ class WalletHeaderView: UIView {
         view.layer.cornerRadius = card.layer.cornerRadius
         view.backgroundColor = .white
         view.layer.masksToBounds = false
-        view.layer.shadowColor = UIColor.darkGray.cgColor
+        view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowRadius = 10
         view.layer.shadowOpacity = 0.4
         view.layer.shadowOffset = CGSize(width: 0, height: 10)

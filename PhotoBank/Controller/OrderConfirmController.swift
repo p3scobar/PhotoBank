@@ -65,16 +65,17 @@ class OrderConfirmController: UITableViewController {
     func setupCell(indexPath: Int, cell: InputNumberCell) {
         cell.key = indexPath
         cell.valueInput.isEnabled = false
+        let assetCode = baseAsset.assetCode ?? ""
         switch indexPath {
         case 0:
             cell.textLabel?.text = "Amount"
             cell.valueInput.text = "\(amount)"
         case 1:
             cell.textLabel?.text = "Price"
-            cell.valueInput.text = price.rounded(2)
+            cell.valueInput.text = price.rounded(2) + " \(assetCode)"
         case 2:
             cell.textLabel?.text = "Total"
-            cell.valueInput.text = total.rounded(2)
+            cell.valueInput.text = total.rounded(2) + " \(assetCode)"
         default:
             break
         }

@@ -46,8 +46,8 @@ class PassphraseController: UITableViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
 
         if isModal {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Continue", style: .done, target: self, action: #selector(handleContinue))
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+//            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Continue", style: .done, target: self, action: #selector(handleContinue))
+//            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         }
         setupFooter()
     }
@@ -86,29 +86,28 @@ class PassphraseController: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    @objc func handleContinue() {
-        DispatchQueue.global(qos: .background).async {
-            WalletService.generateKeyPair(mnemonic: self.mnemonic) { (keyPair) in
-                let publicKey = keyPair.accountId
-                guard let privateSeed = keyPair.secretSeed else { return }
-
-                KeychainHelper.mnemonic = self.mnemonic
-                KeychainHelper.publicKey = publicKey
-                KeychainHelper.privateSeed = privateSeed
-
-                UserService.updatePublicKey(pk: publicKey, completion: { (_) in })
-
-
-                WalletService.createStellarTestAccount(accountID: publicKey, completion: { (response) in
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: true, completion: {
-                            self.controller?.loadData()
-                        })
-                    }
-                })
-            }
-        }
-    }
+//    @objc func handleContinue() {
+//        DispatchQueue.global(qos: .background).async {
+//            WalletService.generateKeyPair(mnemonic: self.mnemonic) { (keyPair) in
+//                let publicKey = keyPair.accountId
+//                guard let privateSeed = keyPair.secretSeed else { return }
+//
+//                KeychainHelper.mnemonic = self.mnemonic
+//                KeychainHelper.publicKey = publicKey
+//                KeychainHelper.privateSeed = privateSeed
+//
+//                UserService.updatePublicKey(pk: publicKey, completion: { (_) in })
+//
+//                WalletService.createStellarTestAccount(accountID: publicKey, completion: { (response) in
+//                    DispatchQueue.main.async {
+//                        self.dismiss(animated: true, completion: {
+//                            self.controller?.loadData()
+//                        })
+//                    }
+//                })
+//            }
+//        }
+//    }
 
     var isModal: Bool {
         return presentingViewController != nil ||
@@ -141,6 +140,8 @@ extension PassphraseController: ButtonTableFooterDelegate {
             KeychainHelper.publicKey = publicKey
             KeychainHelper.privateSeed = secretKey
             KeychainHelper.mnemonic = self.mnemonic
+            
+            UserService.updatePublicKey(completion: { (_) in })
             WalletService.createStellarTestAccount(accountID: publicKey, completion: { (something) in
                 self.navigationController?.popToRootViewController(animated: true)
             })

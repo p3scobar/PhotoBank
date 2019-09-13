@@ -18,7 +18,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var following: Bool = false {
         didSet {
-            self.headerView?.following = following
+            self.headerView.following = following
         }
     }
     
@@ -30,22 +30,12 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     private let refresh = UIRefreshControl()
     
-    var headerView: UserHeader? = UserHeader()
+    var headerView: UserHeader = UserHeader()
     
     var user: User? {
         didSet {
-            headerView?.user = user
+            headerView.user = user
             collectionView?.reloadData()
-            buttonsEnabled = true
-        }
-    }
-    
-    var buttonsEnabled: Bool = false {
-        didSet {
-            guard let id = user?.id, CurrentUser.uid != id else { return }
-            headerView?.followButton.isEnabled = buttonsEnabled
-            headerView?.payButton.isEnabled = buttonsEnabled
-            headerView?.messageButton.isEnabled = buttonsEnabled
         }
     }
     
@@ -90,6 +80,11 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         getData(id)
     }
 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        headerView.setupButtons()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -164,16 +159,16 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: self.header, for: indexPath) as? UserHeader
-        headerView?.delegate = self
-        headerView?.user = user
-        return headerView ?? UserHeader()
+        headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: self.header, for: indexPath) as! UserHeader
+        headerView.delegate = self
+        headerView.user = user
+        return headerView
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         var height: CGFloat = 240
         if let bio = user?.bio {
-            let bioHeight = estimateFrameForTextWidth(width: self.view.frame.width-32, text: bio, fontSize: 18)
+            let bioHeight = estimateFrameForTextWidth(width: self.view.frame.width-32, text: bio, fontSize: 19)+20
             height += bioHeight
         }
         return CGSize(width: self.view.frame.width, height: height)

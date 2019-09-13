@@ -24,11 +24,12 @@ public struct HorizonServer {
     static let url = HorizonServer.test
 }
 
-// A static shared Token property for use across entire app that represents Single main asset used in app (ARIES).
-var reserveAsset: Token?
+/// The primary numerator currency used in the app (i.e. ARIES).
+var reserveAsset: Token = Token.PBK
 
 var superlikeAmount: Decimal = 0.1
 
+/// STELLAR LUMENS: The base currency of the app. XLM or USD
 var baseAsset = Token(assetType: AssetTypeAsString.NATIVE, assetCode: "XLM", assetIssuer: nil, balance: "")
 
 let db = Firestore.firestore()

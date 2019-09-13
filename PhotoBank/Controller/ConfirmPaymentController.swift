@@ -73,7 +73,8 @@ class ConfirmPaymentController: UITableViewController {
         case 1:
             cell.titleLabel.text = "Amount"
             if let amount = data["amount"] as? Decimal {
-                let assetCode = " ARS"
+                let code = reserveAsset.assetCode ?? ""
+                let assetCode = " \(code)"
                 cell.valueInput.text = amount.rounded(2) + assetCode
             }
         default:
@@ -103,8 +104,7 @@ class ConfirmPaymentController: UITableViewController {
         }
         
         footer.isLoading = true
-        let token = Token.ARS
-        WalletService.sendPayment(token: token, toAccountID: accountID, amount: amount) { (success) in
+        WalletService.sendPayment(token: reserveAsset, toAccountID: accountID, amount: amount) { (success) in
             if success != nil {
                 self.dismiss(animated: true, completion: nil)
             } else {

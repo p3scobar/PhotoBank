@@ -405,8 +405,7 @@ extension TimelineController: StatusCellDelegate {
     }
     
     private func handleSuperLike(pk: String, username: String) {
-        guard let token = reserveAsset else { return }
-        WalletService.sendPayment(token: token, toAccountID: pk, amount: superlikeAmount) { (_) in
+        WalletService.sendPayment(token: reserveAsset, toAccountID: pk, amount: superlikeAmount) { (_) in
             SoundKit.playSound(type: .pay)
         }
     }
