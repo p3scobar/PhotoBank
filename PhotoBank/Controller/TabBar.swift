@@ -37,6 +37,11 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         wallet.tabBarItem.image = UIImage(named: "coin")
         wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
+        
+        let scan = ScanController()
+//        let scan = NavigationController(rootViewController: scanVC)
+        scan.tabBarItem.image = UIImage(named: "camera")
+        scan.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
         let messagesVC = MessagesController(style: .plain)
         let messages = NavigationController(rootViewController: messagesVC)

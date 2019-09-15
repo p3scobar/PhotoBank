@@ -16,6 +16,12 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     private let photoCell = "photoCell"
     private let header = "header"
     
+    var status: String? {
+        didSet {
+            print(status)
+        }
+    }
+    
     var following: Bool = false {
         didSet {
             self.headerView.following = following
@@ -48,8 +54,9 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         UserService.getUser(id) { (user) in
             self.user = user
         }
-        UserService.following(userId: id) { (following) in
+        UserService.following(userId: id) { (following, status) in
             self.following = following
+            self.status = status
         }
     }
     
@@ -268,5 +275,19 @@ extension UserController: UserHeaderDelegate {
         present(nav, animated: true, completion: nil)
     }
     
+    
+}
+
+
+
+extension UserController {
+    
+    @objc func handlePhotoTap() {
+        guard let status = status, let url = URL(string: status) else { return }
+        let vc = AVController(url)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalTransitionStyle = .crossDissolve
+        self.tabBarController?.present(nav, animated: true, completion: nil)
+    }
     
 }

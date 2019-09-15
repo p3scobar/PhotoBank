@@ -454,7 +454,7 @@ extension UserService {
     
     
     
-    static func following(userId: String, completion: @escaping (Bool) -> Void) {
+    static func following(userId: String, completion: @escaping (Bool, String) -> Void) {
         let urlString = "\(baseUrl)/user"
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
@@ -468,7 +468,8 @@ extension UserService {
                 let result = resp["user"] as? [String:Any] else { return }
             
             let following: Bool = resp["following"] as? Bool ?? false
-            completion(following)
+            let status: String = resp["status"] as? String ?? ""
+            completion(following, status)
         }
     }
     

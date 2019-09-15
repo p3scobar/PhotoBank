@@ -20,8 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.layer.cornerRadius = 8
-        let tabBar = TabBar()
-        window?.rootViewController = tabBar
+        window?.layer.masksToBounds = true
+        let vc = VerticalPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        window?.rootViewController = vc
 
         UINavigationBar.appearance().tintColor = .black
         UINavigationBar.appearance().prefersLargeTitles = true

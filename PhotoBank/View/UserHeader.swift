@@ -17,6 +17,7 @@ protocol UserHeaderDelegate: class {
     func handleMessage()
     func handleMore()
     func handleURLTap()
+    func handlePhotoTap()
 }
 
 class UserHeader: UICollectionReusableView {
@@ -42,6 +43,13 @@ class UserHeader: UICollectionReusableView {
         
         let urlTap = UITapGestureRecognizer(target: self, action: #selector(handleURLTap))
         urlLabel.addGestureRecognizer(urlTap)
+        
+        let imgTap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoTap))
+        profileImageView.addGestureRecognizer(imgTap)
+    }
+    
+    @objc func handlePhotoTap() {
+        delegate?.handlePhotoTap()
     }
     
     @objc func handleURLTap() {

@@ -36,15 +36,23 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         }
     }
     
+    
+    lazy var header: StoryHeaderView = {
+        let view = StoryHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 84))
+        view.storyDelegate = self
+        return view
+    }()
+    
+    
     override func loadView() {
         super.loadView()
         tableView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
-        
     }
     
     
     var tabBarIndex: Int = 0
     var scrollEnabled: Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +63,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
 //
 //        button.tintColor = .white
 
-        
+        tableView.tableHeaderView = header
         tableView.backgroundColor = Theme.lightBackground
         
         tableView.prefetchDataSource = self
@@ -86,6 +94,8 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         self.navigationItem.rightBarButtonItem = plus
         
         let userIcon = UIImage(named: "user")?.withRenderingMode(.alwaysTemplate)
+//
+//        pushAccountController
         let user = UIBarButtonItem(image: userIcon, style: .done, target: self, action: #selector(pushAccountController))
         user.tintColor = Theme.black
         self.navigationItem.leftBarButtonItem = user
@@ -456,6 +466,7 @@ extension UIViewController {
     
     
     
+    
 }
 
 
@@ -478,5 +489,26 @@ extension TimelineController: UITableViewDataSourcePrefetching {
         //        let images = links.compactMap { URL(string: $0.image ?? "") }
         fetcher.prefetchURLs(links)
     }
+    
+    func presentStory(_ indexPath: IndexPath) {
+        //let url = URL(string: "https://s3.amazonaws.com/appforest_uf/f1568505031457x435915541507913500/bigShort.mp4")!
+        let url = URL(string: "https://s3.amazonaws.com/appforest_uf/f1568576126334x363779841034903800/appleCard.mp4")!
+        let vc = AVController(url)
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalTransitionStyle = .crossDissolve
+        self.tabBarController?.present(nav, animated: true, completion: nil)
+    }
+    
+}
+
+
+
+
+extension TimelineController: StoryDelegate {
+    
+    func didSelectStory(_ indexPath: IndexPath) {
+        presentStory(indexPath)
+    }
+    
     
 }

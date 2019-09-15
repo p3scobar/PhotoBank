@@ -209,11 +209,11 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     }
     
     
-    func pushProfileController() {
-        guard let id = Auth.auth().currentUser?.uid else { return }
-        let vc = UserController(id)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    func pushProfileController() {
+//        guard let id = Auth.auth().currentUser?.uid else { return }
+//        let vc = UserController(id)
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
     
     func presentAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -270,9 +270,8 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         controller.dismiss(animated: true, completion: nil)
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return ""
-//    }
+    
+    
     
 }
 

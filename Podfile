@@ -16,6 +16,8 @@ pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
 pod 'Firebase/Database'
 
+pod 'SwiftyCam'
+
 pod 'QRCode'
 pod 'KeychainSwift', '~> 11.0'
 pod 'NextGrowingTextView'
