@@ -29,8 +29,8 @@ class CommentsController: UITableViewController, CommentInputDelegate {
         tableView.register(CommentCell.self, forCellReuseIdentifier: commentCell)
         tableView.tableFooterView = UIView()
         tableView.keyboardDismissMode = .interactive
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 80, bottom: 0, right: 0)
         view.backgroundColor = .white
     }
     
@@ -43,8 +43,8 @@ class CommentsController: UITableViewController, CommentInputDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     convenience init(statusID: String) {
@@ -134,7 +134,7 @@ class CommentsController: UITableViewController, CommentInputDelegate {
     
     
     @objc func adjustForKeyboard(notification: Notification) {
-        if notification.name == Notification.Name.UIKeyboardDidHide {
+        if notification.name == UIResponder.keyboardDidHideNotification {
             tableView.contentInset.bottom = 0
         } else {
             tableView.contentInset.bottom = 40
@@ -160,7 +160,7 @@ class CommentsController: UITableViewController, CommentInputDelegate {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
             guard let commentId = comments[indexPath.row].id,
                 let post = status else {

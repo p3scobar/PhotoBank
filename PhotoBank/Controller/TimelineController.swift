@@ -24,9 +24,6 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     private let refresh = UIRefreshControl()
     private var spinner: UIActivityIndicatorView!
     
-//    var timeline: [Status] = []
-//    var ads: [Ad] = []
-    
     var feed = [Any]() {
         didSet {
             DispatchQueue.main.async {
@@ -56,22 +53,19 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.dataSource = self
         tableView.delegate = self
-//        let bell = UIImage(named: "bell")?.withRenderingMode(.alwaysTemplate)
-//        let button = UIBarButtonItem(image: bell, style: .done, target: self, action: #selector(handlePayTap))
-//
-//        button.tintColor = .white
 
-        tableView.tableHeaderView = header
-        tableView.backgroundColor = Theme.lightBackground
+//        tableView.tableHeaderView = header
+        tableView.backgroundColor = Theme.black
         
         tableView.prefetchDataSource = self
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
         tableView.register(AdCell.self, forCellReuseIdentifier: adCell)
         tableView.tableFooterView = UIView()
 
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         navigationItem.title = "Today"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -100,13 +94,18 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         user.tintColor = Theme.black
         self.navigationItem.leftBarButtonItem = user
         
-        spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner = UIActivityIndicatorView(style: .white)
         spinner.hidesWhenStopped = true
         spinner.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 80)
         tableView.tableFooterView = spinner
         
         checkAuthentication()
         NotificationCenter.default.addObserver(self, selector: #selector(checkAuthentication), name: Notification.Name(rawValue: "login"), object: nil)
+        
+        tableView.refreshControl = refresh
+        refresh.tintColor = Theme.lightGray
+        refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
+        scrollEnabled = true
         
         
 //        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(gesture:)))
@@ -122,13 +121,13 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             
             switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.right:
+            case UISwipeGestureRecognizer.Direction.right:
                 print("Swiped right")
-            case UISwipeGestureRecognizerDirection.down:
+            case UISwipeGestureRecognizer.Direction.down:
                 print("Swiped down")
-            case UISwipeGestureRecognizerDirection.left:
+            case UISwipeGestureRecognizer.Direction.left:
                 print("Swiped left")
-            case UISwipeGestureRecognizerDirection.up:
+            case UISwipeGestureRecognizer.Direction.up:
                 print("Swiped up")
             default:
                 break
@@ -156,13 +155,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.refreshControl = refresh
-        refresh.tintColor = Theme.gray
-        refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
-        scrollEnabled = true
-    }
+   
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -228,9 +221,10 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
 
     @objc func fetchData() {
         allPostsLoaded = false
-        NewsService.fetchTimeline(cursor: 0) { posts, ads  in
+        NewsService.getTimeline(cursor: 0) { posts, ads, stories  in
             self.feed = posts
             self.feed.append(contentsOf: ads)
+            self.header.stories = stories
         }
     }
     
@@ -300,7 +294,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         guard allPostsLoaded == false, loadingPosts == false else { return }
         loadingPosts = true
         self.spinner.startAnimating()
-        NewsService.fetchTimeline(cursor: feed.count+1) { [weak self] posts, ads in
+        NewsService.getTimeline(cursor: feed.count+1) { [weak self] posts, ads, stories in
             self?.spinner.stopAnimating()
             self?.loadingPosts = false
             if posts.count <= 0 {
@@ -358,9 +352,9 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if let ad = feed[indexPath.row] as? Ad {
-            pushSafariVC(ad)
+//            pushSafariVC(ad)
         } else if let status = feed[indexPath.row] as? Status {
-            pushStatus(status)
+//            pushStatus(status)
         }
     }
     
@@ -490,10 +484,8 @@ extension TimelineController: UITableViewDataSourcePrefetching {
         fetcher.prefetchURLs(links)
     }
     
-    func presentStory(_ indexPath: IndexPath) {
-        //let url = URL(string: "https://s3.amazonaws.com/appforest_uf/f1568505031457x435915541507913500/bigShort.mp4")!
-        let url = URL(string: "https://s3.amazonaws.com/appforest_uf/f1568576126334x363779841034903800/appleCard.mp4")!
-        let vc = AVController(url)
+    func presentStory(_ story: Story) {
+        let vc = AVController(story)
         let nav = UINavigationController(rootViewController: vc)
         nav.modalTransitionStyle = .crossDissolve
         self.tabBarController?.present(nav, animated: true, completion: nil)
@@ -506,8 +498,8 @@ extension TimelineController: UITableViewDataSourcePrefetching {
 
 extension TimelineController: StoryDelegate {
     
-    func didSelectStory(_ indexPath: IndexPath) {
-        presentStory(indexPath)
+    func didSelectStory(_ story: Story) {
+//        presentStory(story)
     }
     
     

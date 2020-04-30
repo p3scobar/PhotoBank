@@ -46,7 +46,7 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.register(ActivityCell.self, forCellReuseIdentifier: activityCell)
         tableView.backgroundColor = .white
         navigationItem.title = "Activity"

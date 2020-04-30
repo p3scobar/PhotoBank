@@ -9,10 +9,16 @@
 import UIKit
 
 protocol StoryDelegate {
-    func didSelectStory(_ indexPath: IndexPath)
+    func didSelectStory(_ story: Story)
 }
 
 class StoryHeaderView: UIView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    var stories: [Story] = [] {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -33,7 +39,7 @@ class StoryHeaderView: UIView, UICollectionViewDelegateFlowLayout, UICollectionV
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceHorizontal = true
-        backgroundColor = .white
+        backgroundColor = Theme.black
         collectionView.register(StoryCell.self, forCellWithReuseIdentifier: storyCell)
         setupView()
     }
@@ -47,17 +53,20 @@ class StoryHeaderView: UIView, UICollectionViewDelegateFlowLayout, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return stories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: storyCell, for: indexPath) as! StoryCell
+        cell.story = stories[indexPath.row]
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        storyDelegate?.didSelectStory(indexPath)
+        let story = stories[indexPath.row]
+        storyDelegate?.didSelectStory(story)
     }
     
     

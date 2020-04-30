@@ -244,8 +244,69 @@ class CameraController: SwiftyCamViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        panGesture.isEnabled = false
+        cameraButton.delegate = self
+        cameraDelegate = self
     }
     
+    
+    lazy var cameraButton: SwiftyCamButton = {
+        let safeAreaBottom = self.view.safeAreaInsets.bottom
+        let y = self.view.frame.height - 100 - safeAreaBottom
+        let frame = CGRect(x: self.view.center.x-50, y: self.view.frame.height-150, width: 100, height: 100)
+        var button = SwiftyCamButton(frame: frame)
+        let capture = UIImage(named: "camera")?.withRenderingMode(.alwaysTemplate)
+        button.tintColor = .white
+        button.setImage(capture, for: .normal)
+        button.addTarget(self, action: #selector(startCapture), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func startCapture() {
+        
+        startVideoRecording()
+    }
+    
+        
 }
 
+
+extension CameraController: SwiftyCamViewControllerDelegate {
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {
+        // Called when takePhoto() is called or if a SwiftyCamButton initiates a tap gesture
+        // Returns a UIImage captured from the current session
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didBeginRecordingVideo camera: SwiftyCamViewController.CameraSelection) {
+        // Called when startVideoRecording() is called
+        // Called if a SwiftyCamButton begins a long press gesture
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didFinishRecordingVideo camera: SwiftyCamViewController.CameraSelection) {
+        // Called when stopVideoRecording() is called
+        // Called if a SwiftyCamButton ends a long press gesture
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didFinishProcessVideoAt url: URL) {
+        // Called when stopVideoRecording() is called and the video is finished processing
+        // Returns a URL in the temporary directory where video is stored
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didFocusAtPoint point: CGPoint) {
+        // Called when a user initiates a tap gesture on the preview layer
+        // Will only be called if tapToFocus = true
+        // Returns a CGPoint of the tap location on the preview layer
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didChangeZoomLevel zoom: CGFloat) {
+        // Called when a user initiates a pinch gesture on the preview layer
+        // Will only be called if pinchToZoomn = true
+        // Returns a CGFloat of the current zoom level
+    }
+    
+    func swiftyCam(_ swiftyCam: SwiftyCamViewController, didSwitchCameras camera: SwiftyCamViewController.CameraSelection) {
+        // Called when user switches between cameras
+        // Returns current camera selection
+    }
+}

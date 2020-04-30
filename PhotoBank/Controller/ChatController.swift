@@ -202,8 +202,8 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewWillAppear(animated)
         scrollToBottom(animated: true)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         inputAccessoryView.reloadInputViews()
     }
     
@@ -254,9 +254,9 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     
-    static var AllowUserInteraction: UIViewKeyframeAnimationOptions {
+    static var AllowUserInteraction: UIView.KeyframeAnimationOptions {
         get {
-            return UIViewKeyframeAnimationOptions(rawValue: UIViewAnimationOptions.allowUserInteraction.rawValue)
+            return UIView.KeyframeAnimationOptions(rawValue: UIView.AnimationOptions.allowUserInteraction.rawValue)
         }
     }
     
@@ -310,9 +310,9 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func adjustForKeyboard(notification: Notification) {
         let userInfo = notification.userInfo!
-        let keyboardSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        if notification.name == Notification.Name.UIKeyboardDidHide {
-            animateContentInset(inset: 20)
+        let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        if notification.name == UIResponder.keyboardDidHideNotification {
+            animateContentInset(inset: 32)
         } else {
             animateContentInset(inset: keyboardSize.height)
         }
@@ -381,7 +381,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let timestamp = formatter.string(from: date)
         let action = UITableViewRowAction(style: .normal, title: timestamp) { (action, indexPath) in
         }
-        action.backgroundColor = Theme.lightBackground
+        action.backgroundColor = Theme.black
         
         return [action]
     }

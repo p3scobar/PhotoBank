@@ -12,7 +12,7 @@ import UIKit
 
 class NotificationsController: UITableViewController {
     
-    override init(style: UITableViewStyle) {
+    override init(style: UITableView.Style) {
         super.init(style: style)
         if CurrentUser.sounds {
             toggleSound.isOn = true

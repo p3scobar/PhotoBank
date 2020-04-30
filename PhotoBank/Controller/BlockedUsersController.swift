@@ -29,7 +29,7 @@ class BlockedUsersController: UITableViewController {
         }
     }
     
-    override init(style: UITableViewStyle) {
+    override init(style: UITableView.Style) {
         super.init(style: style)
         
     }
@@ -45,7 +45,7 @@ class BlockedUsersController: UITableViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         
         tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 100, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
         fetchData()
     }
     

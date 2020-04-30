@@ -51,7 +51,7 @@ class ButtonTableFooterView: UIView {
     lazy var indicator: UIActivityIndicatorView = {
         let frame = CGRect(x: center.x-24, y: center.y-24, width: 48, height: 48)
         let view = UIActivityIndicatorView(frame: frame)
-        view.activityIndicatorViewStyle = .gray
+        view.style = .gray
         return view
     }()
     

@@ -14,7 +14,7 @@ class InputTextViewCell: UITableViewCell, UITextViewDelegate {
     var indexPath: IndexPath!
     var delegate: InputTextCellDelegate?
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         textView.delegate = self
@@ -31,7 +31,7 @@ class InputTextViewCell: UITableViewCell, UITextViewDelegate {
         view.font = Theme.medium(18)
         view.placeholderColor = Theme.gray
         view.backgroundColor = .white
-        view.contentInset = UIEdgeInsetsMake(8, 0, 0, 0)
+        view.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

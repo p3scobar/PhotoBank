@@ -37,9 +37,35 @@ struct NewsService {
             }
         }
     }
+    
+    
+    static func stories(completion: @escaping ([Status]) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            let urlString = "\(baseUrl)/stories"
+            let url = URL(string: urlString)!
+            let token = bubbleAPIKey
+            let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+            
+            Alamofire.request(url, method: .post, parameters: nil, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+                var feed = [Status]()
+                print(response.result.value)
+                guard let json = response.result.value as? [String:Any],
+                    let resp = json["response"] as? [String:Any],
+                    let results = resp["stories"] as? [[String:Any]] else { return }
+                results.forEach({ (result) in
+                    let id = result["_id"] as? String ?? ""
+                    let status = Status.findOrCreateStatus(id: id, data: result, in: PersistenceService.context)
+                    feed.append(status)
+                })
+                DispatchQueue.main.async {
+                    completion(feed)
+                }
+            }
+        }
+    }
 
     
-    static func fetchTimeline(cursor: Int, completion: @escaping (_ feed: [Status], _ ads: [Ad]) -> Void) {
+    static func getTimeline(cursor: Int, completion: @escaping (_ feed: [Status], _ ads: [Ad], _ stories: [Story]) -> Void) {
         DispatchQueue.global(qos: .background).async {
             let urlString = "\(baseUrl)/timeline"
             let url = URL(string: urlString)!
@@ -53,13 +79,13 @@ struct NewsService {
                 var ads = [Ad]()
                 guard let json = response.result.value as? [String:Any],
                     let resp = json["response"] as? [String:Any],
-                    let results = resp["posts"] as? [[String:Any]],
+                    let postsJSON = resp["posts"] as? [[String:Any]],
                     let unread = resp["unread"] as? Int else {
-                        completion([], [])
+                        completion([], [], [])
                         return }
                 let adsJson = resp["ads"] as? [[String:Any]] ?? []
-                
-                results.forEach({ (result) in
+                let storiesJSON = resp["stories"] as? [[String:Any]] ?? []
+                postsJSON.forEach({ (result) in
                     let id = result["_id"] as? String ?? ""
                     let status = Status.findOrCreateStatus(id: id, data: result, in: PersistenceService.context)
                     feed.append(status)
@@ -70,8 +96,16 @@ struct NewsService {
                     let status = Ad.findOrCreateAd(id: id, data: ad, in: PersistenceService.context)
                     ads.append(status)
                 })
-                completion(feed, ads)
-                NotificationCenter.default.post(name: Notification.Name("unread"), object: nil, userInfo: ["count":unread])
+                var stories: [Story] = []
+                storiesJSON.forEach({ (result) in
+                    let id = result["_id"] as? String ?? ""
+                    let status = Story.findOrCreateStory(id: id, data: result, in: PersistenceService.context)
+                    stories.append(status)
+                })
+                DispatchQueue.main.async {
+                    completion(feed, ads, stories)
+                }
+//                NotificationCenter.default.post(name: Notification.Name("unread"), object: nil, userInfo: ["count":unread])
             }
         }
     }
@@ -108,7 +142,6 @@ struct NewsService {
                 let resp = json["response"] as? [String:Any],
                 let data = resp["post"] as? [String:Any] else { return }
                 let id = data["_id"] as? String ?? ""
-            print(data)
                 let status = Status.findOrCreateStatus(id: id, data: data, in: PersistenceService.context)
             completion(status)
         }
@@ -142,7 +175,6 @@ struct NewsService {
                 params["image"] = photoUrl
                 params["thumbnail"] = thumbnailUrl
                 Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-                    print(response)
                     guard let json = response.result.value as? [String:Any],
                         let resp = json["response"] as? [String:Any],
                         let result = resp["post"] as? [String:Any] else { return }
@@ -263,7 +295,6 @@ struct NewsService {
                 print(err.localizedDescription)
                 completion([])
             } else {
-                print(snap.debugDescription)
                 var comments: [Comment] = []
                 snap?.documents.forEach({ (doc) in
                     let data = doc.data()
@@ -337,7 +368,7 @@ struct NewsService {
 internal func uploadImageToStorage(image: UIImage, completion: @escaping (String) -> Swift.Void) {
     let imageName = UUID.init().uuidString
     let ref = Storage.storage().reference().child("images").child(imageName)
-    if let uploadData = UIImageJPEGRepresentation(image, 0.8) {
+    if let uploadData = image.jpegData(compressionQuality: 0.9) {
         ref.putData(uploadData, metadata: nil, completion: { (metaData, error) in
             if error != nil {
                 print("failed to upload image:", error!)
@@ -353,7 +384,7 @@ internal func uploadImageToStorage(image: UIImage, completion: @escaping (String
 }
 
 internal func convertImageToBase64(image: UIImage) -> String {
-    let imageData = UIImagePNGRepresentation(image)!
+    guard let imageData = image.pngData() else { return "" }
     let base64 = imageData.base64EncodedString()
     return base64
 }

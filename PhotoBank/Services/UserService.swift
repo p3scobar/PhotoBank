@@ -16,24 +16,20 @@ struct UserService {
     static func follow(userId: String, follow: Bool, completion: @escaping (Bool) -> Void) {
         
         DispatchQueue.global(qos: .background).async {
-        let urlString = "\(baseUrl)/follow"
-        let url = URL(string: urlString)!
-        let token = bubbleAPIKey
-        let uid = CurrentUser.uid
-            print("User: \(uid)")
-            print("FOLLOW: \(userId)")
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: Parameters = ["uid":uid,
-                                  "follow": follow.description,
-                                  "userId":userId]
-        Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            print(response)
-            print("FOLLOWING: \(follow.description)")
-            guard let json = response.result.value as? [String:Any],
-                let resp = json["response"] as? [String:Any] else { return }
-            let following = resp["following"] as? Bool ?? false
-            completion(following)
-        }
+            let urlString = "\(baseUrl)/follow"
+            let url = URL(string: urlString)!
+            let token = bubbleAPIKey
+            let uid = CurrentUser.uid
+            let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+            let params: Parameters = ["uid":uid,
+                                      "follow": follow.description,
+                                      "userId":userId]
+            Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+                guard let json = response.result.value as? [String:Any],
+                    let resp = json["response"] as? [String:Any] else { return }
+                let following = resp["following"] as? Bool ?? false
+                completion(following)
+            }
         }
     }
 
@@ -454,7 +450,7 @@ extension UserService {
     
     
     
-    static func following(userId: String, completion: @escaping (Bool, String) -> Void) {
+    static func following(userId: String, completion: @escaping (Bool, [Story]) -> Void) {
         let urlString = "\(baseUrl)/user"
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
@@ -468,8 +464,16 @@ extension UserService {
                 let result = resp["user"] as? [String:Any] else { return }
             
             let following: Bool = resp["following"] as? Bool ?? false
-            let status: String = resp["status"] as? String ?? ""
-            completion(following, status)
+            
+            var stories: [Story] = []
+            guard let storiesJSON = resp["stories"] as? [[String:Any]] else { return }
+            
+            storiesJSON.forEach({ (story) in
+                let id = story["_id"] as? String ?? ""
+                let story = Story.findOrCreateStory(id: id, data: story, in: PersistenceService.context)
+                stories.append(story)
+            })
+            completion(following, stories)
         }
     }
     

@@ -90,7 +90,7 @@ class MessageCell: UITableViewCell {
     
     var leftMargin: CGFloat = 20
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
@@ -105,7 +105,7 @@ class MessageCell: UITableViewCell {
     }
     
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
-        if sender?.state == UIGestureRecognizerState.began {
+        if sender?.state == UIGestureRecognizer.State.began {
             guard let message = message else { return }
             delegate?.handleLongPress(message)
         }

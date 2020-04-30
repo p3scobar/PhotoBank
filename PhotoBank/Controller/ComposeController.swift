@@ -59,7 +59,7 @@ class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINa
         view.placeholderColor = .lightGray
         view.font = Theme.semibold(18)
         view.keyboardType = .twitter
-        view.textContainerInset = UIEdgeInsetsMake(20, 10, 0, 10)
+        view.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
         return view
     }()
     

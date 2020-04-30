@@ -21,6 +21,8 @@ class VerticalPageController: UIPageViewController {
 //            pageViewController.horizontalScrollEnabled = horizontalScrollEnabled
 //        }
 //    }
+    
+//    var isScrollEnabled: Bool =
 
     lazy var controllers: [UIViewController] = {
         let scan = CameraController()
@@ -34,9 +36,14 @@ class VerticalPageController: UIPageViewController {
         super.viewDidLoad()
         dataSource = self
         delegate = self
+        
         view.backgroundColor = Theme.black
         let second = controllers[1]
-        self.setViewControllers([second], direction: .forward, animated: true, completion: nil)
+        
+        DispatchQueue.main.async {
+            self.setViewControllers([second], direction: .forward, animated: true, completion: nil)
+        }
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {

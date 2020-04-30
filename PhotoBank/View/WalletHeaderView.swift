@@ -193,7 +193,7 @@ class WalletHeaderView: UIView {
     
     
     func setupView() {
-        backgroundColor = Theme.lightBackground
+        backgroundColor = Theme.black
         addSubview(shadow)
         addSubview(card)
 //        addSubview(buyButton)

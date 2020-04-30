@@ -14,23 +14,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+    
         FirebaseApp.configure()
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.layer.cornerRadius = 8
         window?.layer.masksToBounds = true
-        let vc = VerticalPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        window?.rootViewController = vc
-
+//        let vc = VerticalPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        let tabBar = TabBar()
+//        let vc = UINavigationController(rootViewController: timeline)
+        window?.rootViewController = tabBar
+        
+        UINavigationBar.appearance().barStyle = .black
         UINavigationBar.appearance().tintColor = .black
+        UINavigationBar.appearance().barTintColor = Theme.black
         UINavigationBar.appearance().prefersLargeTitles = true
+        UINavigationBar.appearance().isTranslucent = true
+        
         UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = .black
+        UITabBar.appearance().tintColor = .white
         UITabBar.appearance().unselectedItemTintColor = Theme.gray
         
-        return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

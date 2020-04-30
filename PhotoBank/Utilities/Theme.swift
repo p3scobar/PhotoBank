@@ -59,7 +59,7 @@ extension Theme {
     }
     
     public static var black: UIColor {
-        return UIColor(14, 14, 14)
+        return UIColor(12, 12, 12)
     }
     
     public static var blue: UIColor {
@@ -111,14 +111,14 @@ internal func estimateFrameForText(text: String, fontSize: CGFloat) -> CGRect {
     let width = UIScreen.main.bounds.width-84
     let size = CGSize(width: width, height: 320)
     let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: Theme.medium(18)], context: nil)
+    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: Theme.medium(18)], context: nil)
 }
 
 
 internal func estimateFrameForTextWidth(width: CGFloat, text: String, fontSize: CGFloat) -> CGFloat {
     let size = CGSize(width: width, height: 320)
     let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: fontSize)], context: nil).height
+    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize)], context: nil).height
 }
 
 

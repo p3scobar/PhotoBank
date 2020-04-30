@@ -19,7 +19,7 @@ class PendingController: UIViewController {
     }
     
     let indicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let view = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

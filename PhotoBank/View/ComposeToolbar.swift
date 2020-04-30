@@ -28,8 +28,8 @@ class ComposeToolbar: UIToolbar {
     
     
     lazy var sendButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Submit", style: UIBarButtonItemStyle.done, target: self, action: #selector(handleSend))
-        button.setTitlePositionAdjustment(UIOffsetMake(0, 10), for: .default)
+        let button = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.done, target: self, action: #selector(handleSend))
+        button.setTitlePositionAdjustment(UIOffset(horizontal: 0, vertical: 10), for: .default)
         return button
     }()
     

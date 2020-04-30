@@ -82,7 +82,7 @@ class StatusCell: UITableViewCell {
         label.lineBreakMode = .byWordWrapping
         label.hashtagColor = Theme.link
         label.mentionColor = Theme.link
-        label.textColor = Theme.black
+        label.textColor = .white
         label.handleHashtagTap { (hashtag) in
            self.delegate?.handleHashtagTap(hashtag)
         }
@@ -96,7 +96,7 @@ class StatusCell: UITableViewCell {
     lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.semibold(18)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +122,7 @@ class StatusCell: UITableViewCell {
         let view = UIImageView(frame: frame)
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 24
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.tint
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view
@@ -132,7 +132,7 @@ class StatusCell: UITableViewCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.tint
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -188,7 +188,7 @@ class StatusCell: UITableViewCell {
         SoundKit.playSound(type: .select)
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         let userTap = UITapGestureRecognizer(target: self, action: #selector(handleUserTap))
@@ -229,7 +229,7 @@ class StatusCell: UITableViewCell {
         
         addSubview(mainImageView)
         
-//        backgroundColor = Theme.black
+        backgroundColor = Theme.black
         
         
         mainImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true

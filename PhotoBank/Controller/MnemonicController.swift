@@ -23,7 +23,7 @@ class PassphraseController: UITableViewController {
         let view = UIView(frame: frame)
         var instructionsLabel: UITextView = {
             let view = UITextView(frame: frame)
-            view.textContainerInset = UIEdgeInsetsMake(30, 16, 10, 16)
+            view.textContainerInset = UIEdgeInsets(top: 30, left: 16, bottom: 10, right: 16)
             view.backgroundColor = Theme.lightBackground
             view.font = UIFont.boldSystemFont(ofSize: 18)
             view.text = "This is your 12 word passphrase. It is the only way to access your account. We do not store this data, therefore, if you lose your passphrase, we cannot recover your funds. Store your passphrase securely in multiple locations, and do not share it with anyone."

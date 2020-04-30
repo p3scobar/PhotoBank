@@ -182,8 +182,8 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     
     
     func pushNotificationController() {
-        let vc = NotificationsController(style: .grouped)
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let vc = NotificationsController(style: .grouped)
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func confirmLogout() {

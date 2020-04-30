@@ -83,12 +83,12 @@ class EmailController: UITableViewController, InputTextCellDelegate {
             cell.valueInput.keyboardType = .twitter
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .none
-            let placeholder = NSAttributedString(string: "New Email", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "New Email", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         case 1:
             cell.valueInput.keyboardType = .default
             cell.valueInput.isSecureTextEntry = true
-            let placeholder = NSAttributedString(string: "Password", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         default:
             break

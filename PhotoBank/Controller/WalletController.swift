@@ -40,7 +40,7 @@ class WalletController: UITableViewController {
         tableView.alwaysBounceVertical = true
         tableView.separatorColor = Theme.border
         tableView.showsVerticalScrollIndicator = false
-        tableView.backgroundColor = Theme.lightBackground
+        tableView.backgroundColor = Theme.black
 
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
         navigationController?.navigationBar.barTintColor = Theme.lightBackground

@@ -31,10 +31,10 @@ class MessagesController: UITableViewController {
 //        compose.tintColor = Theme.black
 //        self.navigationItem.rightBarButtonItem = compose
         
-        tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
         
-        view.backgroundColor = Theme.lightBackground
-        tableView.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.black
+        tableView.backgroundColor = Theme.black
         tableView.tableFooterView = UIView()
         
         
@@ -116,8 +116,8 @@ class MessagesController: UITableViewController {
     }
     
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCell.EditingStyle.delete) {
             let id = chats[indexPath.row].id
             chats.remove(at: indexPath.row)
             ChatService.deleteChat(chatId: id)

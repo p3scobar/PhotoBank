@@ -36,7 +36,7 @@ class UsersController: UITableViewController {
         }
     }
     
-    override init(style: UITableViewStyle) {
+    override init(style: UITableView.Style) {
         super.init(style: style)
         
     }
@@ -48,7 +48,7 @@ class UsersController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 72, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 72, bottom: 0, right: 0)
     }
     
     

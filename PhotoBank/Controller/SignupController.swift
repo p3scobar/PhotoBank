@@ -76,18 +76,18 @@ class SignupController: UITableViewController, InputTextCellDelegate {
             cell.valueInput.keyboardType = .twitter
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .words
-            let placeholder = NSAttributedString(string: "Name", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Name", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         case 1:
             cell.valueInput.keyboardType = .emailAddress
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .none
-            let placeholder = NSAttributedString(string: "Email Address", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Email Address", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         case 2:
             cell.valueInput.keyboardType = .default
             cell.valueInput.isSecureTextEntry = true
-            let placeholder = NSAttributedString(string: "Password", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         default:
             break

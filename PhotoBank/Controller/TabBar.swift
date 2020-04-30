@@ -32,7 +32,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         discover.tabBarItem.image = UIImage(named: "search")
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
-        let walletVC = WalletController()
+        let walletVC = TokensController()
         let wallet = NavigationController(rootViewController: walletVC)
         wallet.tabBarItem.image = UIImage(named: "coin")
         wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)

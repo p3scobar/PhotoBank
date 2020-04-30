@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class StoryCell: UICollectionViewCell {
     
@@ -19,9 +20,11 @@ class StoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var story: String? {
+    var story: Story? {
         didSet {
-           
+            guard let userImage = story?.userImage,
+            let url = URL(string: userImage) else { return }
+            mainImageView.sd_setImage(with: url, completed: nil)
         }
     }
     

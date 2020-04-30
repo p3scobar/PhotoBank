@@ -92,12 +92,12 @@ class AmountController: UIViewController, UIScrollViewDelegate, UITextFieldDeleg
     lazy var amountInput: CurrencyField = {
         let field = CurrencyField()
         field.textAlignment = .center
-        field.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        field.attributedPlaceholder = NSAttributedString(string: "0.000", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         field.adjustsFontSizeToFitWidth = true
         field.keyboardType = .decimalPad
         field.keyboardAppearance = UIKeyboardAppearance.light
         field.font = Theme.bold(36)
-        field.borderStyle = UITextBorderStyle.none
+        field.borderStyle = UITextField.BorderStyle.none
         field.delegate = self
         field.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
         field.translatesAutoresizingMaskIntoConstraints = false

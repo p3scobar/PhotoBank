@@ -22,7 +22,7 @@ class NavigationController: UINavigationController {
 
             //UIPanGestureRecognizer(target: self, action: #selector(handleSwipe(gesture:)))
         
-        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
                 self.view.addGestureRecognizer(swipeRight)
     self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
@@ -33,13 +33,13 @@ class NavigationController: UINavigationController {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             
             switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.right:
+            case UISwipeGestureRecognizer.Direction.right:
                 popViewController(animated: true)
-            case UISwipeGestureRecognizerDirection.down:
+            case UISwipeGestureRecognizer.Direction.down:
                 print("Swiped down")
-            case UISwipeGestureRecognizerDirection.left:
+            case UISwipeGestureRecognizer.Direction.left:
                 break
-            case UISwipeGestureRecognizerDirection.up:
+            case UISwipeGestureRecognizer.Direction.up:
                 print("Swiped up")
             default:
                 break

@@ -16,11 +16,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     private let photoCell = "photoCell"
     private let header = "header"
     
-    var status: String? {
-        didSet {
-            print(status)
-        }
-    }
+    var stories: [Story]?
     
     var following: Bool = false {
         didSet {
@@ -54,9 +50,9 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         UserService.getUser(id) { (user) in
             self.user = user
         }
-        UserService.following(userId: id) { (following, status) in
+        UserService.following(userId: id) { (following, stories) in
             self.following = following
-            self.status = status
+            self.stories = stories
         }
     }
     
@@ -98,7 +94,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView?.dataSource = self
         collectionView?.delegate = self
         collectionView?.backgroundColor = Theme.lightBackground
-        collectionView?.register(UserHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: header)
+        collectionView?.register(UserHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: header)
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         navigationItem.title = "User"
         collectionView?.refreshControl = refresh
@@ -166,7 +162,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: self.header, for: indexPath) as! UserHeader
+        headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: self.header, for: indexPath) as! UserHeader
         headerView.delegate = self
         headerView.user = user
         return headerView
@@ -283,8 +279,8 @@ extension UserController: UserHeaderDelegate {
 extension UserController {
     
     @objc func handlePhotoTap() {
-        guard let status = status, let url = URL(string: status) else { return }
-        let vc = AVController(url)
+        guard let stories = stories else { return }
+        let vc = AVController(stories)
         let nav = UINavigationController(rootViewController: vc)
         nav.modalTransitionStyle = .crossDissolve
         self.tabBarController?.present(nav, animated: true, completion: nil)

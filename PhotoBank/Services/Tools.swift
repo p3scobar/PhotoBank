@@ -114,7 +114,7 @@ extension UIImageView {
                        delay: 0,
                        usingSpringWithDamping: 1.0,
                        initialSpringVelocity: 1.0,
-                       options: UIViewAnimationOptions.allowUserInteraction,
+                       options: UIView.AnimationOptions.allowUserInteraction,
                        animations: {
                         self.transform = CGAffineTransform.identity
         },
@@ -137,7 +137,7 @@ extension UIButton {
                        delay: 0,
                        usingSpringWithDamping: CGFloat(1.0),
                        initialSpringVelocity: CGFloat(1.0),
-                       options: UIViewAnimationOptions.allowUserInteraction,
+                       options: UIView.AnimationOptions.allowUserInteraction,
                        animations: {
                         self.transform = CGAffineTransform.identity
         },
@@ -191,7 +191,7 @@ internal func generateChatId(ids:[String]) -> String {
 internal func estimateChatBubbleSize(text: String, fontSize: CGFloat) -> CGSize {
     let size = CGSize(width: 240, height: 480)
     let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedStringKey.font: Theme.medium(fontSize)], context: nil).size
+    return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: Theme.medium(fontSize)], context: nil).size
 }
 
 

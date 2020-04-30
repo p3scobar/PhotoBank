@@ -52,7 +52,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
         tableView.register(CommentCell.self, forCellReuseIdentifier: commentCell)
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.contentInset.bottom = 60
         navigationItem.title = "Photo"
         let more = UIImage(named: "more")
@@ -63,14 +63,14 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
         let userInfo = notification.userInfo!
-        let keyboardSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        if notification.name == Notification.Name.UIKeyboardDidHide {
+        let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        if notification.name == UIResponder.keyboardDidHideNotification {
             animateContentInset(inset: 20)
         } else {
             animateContentInset(inset: keyboardSize.height)
@@ -168,9 +168,9 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     
-    static var AllowUserInteraction: UIViewKeyframeAnimationOptions {
+    static var AllowUserInteraction: UIView.KeyframeAnimationOptions {
         get {
-            return UIViewKeyframeAnimationOptions(rawValue: UIViewAnimationOptions.allowUserInteraction.rawValue)
+            return UIView.KeyframeAnimationOptions(rawValue: UIView.AnimationOptions.allowUserInteraction.rawValue)
         }
     }
     

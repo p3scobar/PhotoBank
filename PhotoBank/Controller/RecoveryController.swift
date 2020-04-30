@@ -64,7 +64,7 @@ class RecoveryController: UITableViewController, InputTextCellDelegate {
         cell.indexPath = indexPath
         cell.valueInput.autocorrectionType = .no
         cell.valueInput.autocapitalizationType = .none
-        let placeholder = NSAttributedString(string: "Secret phrase", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+        let placeholder = NSAttributedString(string: "Secret phrase", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
         cell.valueInput.attributedPlaceholder = placeholder
         return cell
     }

@@ -93,7 +93,7 @@ class CommentCell: UITableViewCell {
     
     var leftMargin: CGFloat = 20
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
@@ -136,7 +136,7 @@ class CommentCell: UITableViewCell {
     }
     
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
-        if sender?.state == UIGestureRecognizerState.began {
+        if sender?.state == UIGestureRecognizer.State.began {
             guard let userId = comment?.userId else { return }
             delegate?.handleUserTap(userId)
         }

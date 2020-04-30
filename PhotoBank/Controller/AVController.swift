@@ -12,10 +12,15 @@ import AVKit
 
 class AVController: UIViewController {
     
-    var url: URL
+    var stories: [Story] = []
     
-    init(_ url: URL) {
-        self.url = url
+    init(_ stories: [Story]) {
+        self.stories = stories
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(_ story: Story) {
+        self.stories = [story]
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,12 +38,16 @@ class AVController: UIViewController {
     }
     
     func setupPlayer() {
-        let player = AVPlayer(url: url)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = self.view.bounds
-        playerLayer.videoGravity = .resizeAspectFill
-        self.view.layer.addSublayer(playerLayer)
-        player.play()
+        
+        
+//        guard let urlString = story.url,
+//            let url = URL(string: urlString) else { return }
+//        let player = AVPlayer(url: url)
+//        let playerLayer = AVPlayerLayer(player: player)
+//        playerLayer.frame = self.view.bounds
+//        playerLayer.videoGravity = .resizeAspectFill
+//        self.view.layer.addSublayer(playerLayer)
+//        player.play()
     }
     
     @objc func handleCancel() {

@@ -56,7 +56,7 @@ class CommentInputView: UIView, UITextViewDelegate {
         super.init(frame:frame)
         backgroundColor = .white
         self.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 62)
-        autoresizingMask = UIViewAutoresizing.flexibleHeight
+        autoresizingMask = UIView.AutoresizingMask.flexibleHeight
         inputTextField.isScrollEnabled = false
         inputTextField.textView.delegate = self
         
@@ -77,7 +77,7 @@ class CommentInputView: UIView, UITextViewDelegate {
         super.didMoveToWindow()
         if #available(iOS 11.0, *) {
             if let window = self.window {
-                self.bottomAnchor.constraintLessThanOrEqualToSystemSpacingBelow(window.safeAreaLayoutGuide.bottomAnchor, multiplier: 1.0).isActive = true
+                self.bottomAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: window.safeAreaLayoutGuide.bottomAnchor, multiplier: 1.0).isActive = true
             }
         }
         inputTextField.inputView?.becomeFirstResponder()
@@ -95,13 +95,13 @@ class CommentInputView: UIView, UITextViewDelegate {
         let view = NextGrowingTextView()
         view.maxNumberOfLines = 6
         view.textView.textContainer.lineBreakMode = .byWordWrapping
-        view.textView.placeholder = "Aa"
-        view.textView.placeholderColor = Theme.gray
+//        view.textView.placeholder = "Aa"
+//        view.textView.placeholderColor = Theme.gray
         view.textView.font = Theme.medium(18)
         view.textView.textColor = .black
         view.layer.borderColor = Theme.lightGray.cgColor
         view.layer.borderWidth = 1
-        view.textView.textContainerInset = UIEdgeInsetsMake(12, 14, 12, 12)
+        view.textView.textContainerInset = UIEdgeInsets(top: 12, left: 14, bottom: 12, right: 12)
         view.layer.cornerRadius = 22
         view.isScrollEnabled = false
         view.showsVerticalScrollIndicator = false
@@ -142,7 +142,7 @@ class CommentInputView: UIView, UITextViewDelegate {
         sendButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         sendButton.heightAnchor.constraint(equalToConstant: 38).isActive = true
-        bringSubview(toFront: sendButton)
+        bringSubviewToFront(sendButton)
     }
     
     

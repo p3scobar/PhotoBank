@@ -38,7 +38,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView?.prefetchDataSource = self
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = Theme.lightBackground
+        collectionView?.backgroundColor = Theme.black
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         
         self.definesPresentationContext = true
@@ -59,7 +59,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidAppear(_ animated: Bool) {
         collectionView?.refreshControl = refresh
-        refresh.tintColor = .black
+        refresh.tintColor = .white
         refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
         scrollEnabled = true
     }

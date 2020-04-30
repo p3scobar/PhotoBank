@@ -50,7 +50,7 @@ class NewMessageController: UITableViewController {
         tableView.frame = view.frame
         self.definesPresentationContext = true
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        tableView.separatorInset = UIEdgeInsetsMake(0, 88, 0, 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 88, bottom: 0, right: 0)
 
         tableView.delegate = self
         tableView.dataSource = self

@@ -101,13 +101,13 @@ class ReceiptController: UIViewController {
     }()
     
     func animateCardIn(_ after: TimeInterval) {
-        UIView.animate(withDuration: 0.1, delay: after, options: UIViewAnimationOptions.curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.1, delay: after, options: UIView.AnimationOptions.curveEaseOut, animations: {
             self.card.center.y = self.view.bounds.height-self.card.frame.height/2-4
         }, completion: nil)
     }
     
     func animateCardOut() {
-        UIView.animate(withDuration: 0.1, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
             self.card.center.y += self.card.frame.height+4
         }, completion: { (_) in
             self.dismiss(animated: true, completion: nil)

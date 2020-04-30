@@ -98,21 +98,21 @@ class PasswordController: UITableViewController, InputTextCellDelegate {
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .none
             cell.valueInput.isSecureTextEntry = true
-            let placeholder = NSAttributedString(string: "Current Password", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Current Password", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         case (1,0):
             cell.valueInput.keyboardType = .default
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .none
             cell.valueInput.isSecureTextEntry = true
-            let placeholder = NSAttributedString(string: "New Password", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "New Password", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         case (1,1):
             cell.valueInput.keyboardType = .default
             cell.valueInput.autocorrectionType = .no
             cell.valueInput.autocapitalizationType = .none
             cell.valueInput.isSecureTextEntry = true
-            let placeholder = NSAttributedString(string: "Confirm New Password", attributes: [NSAttributedStringKey.foregroundColor:Theme.gray])
+            let placeholder = NSAttributedString(string: "Confirm New Password", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
             cell.valueInput.attributedPlaceholder = placeholder
         default:
             break

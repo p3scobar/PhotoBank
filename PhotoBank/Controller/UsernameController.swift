@@ -86,7 +86,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
         view.textRect(forBounds: CGRect(x: 20, y: 0, width: 20, height: 10))
         view.placeholder = "@username"
         if view.placeholder != nil {
-            view.attributedPlaceholder = NSAttributedString(string: view.placeholder!, attributes: [NSAttributedStringKey.foregroundColor: Theme.gray])
+            view.attributedPlaceholder = NSAttributedString(string: view.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: Theme.gray])
         }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

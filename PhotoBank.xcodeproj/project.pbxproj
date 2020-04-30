@@ -74,7 +74,11 @@
 		CE4A957823133A9400EFC617 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957623133A9400EFC617 /* Activity+CoreDataProperties.swift */; };
 		CE4A957923133A9400EFC617 /* Activity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957723133A9400EFC617 /* Activity+CoreDataClass.swift */; };
 		CE4A957B23133DE400EFC617 /* AdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A957A23133DE400EFC617 /* AdCell.swift */; };
+		CE4D7A36232EF54C00759C3E /* Story+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4D7A34232EF54C00759C3E /* Story+CoreDataProperties.swift */; };
+		CE4D7A37232EF54C00759C3E /* Story+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4D7A35232EF54C00759C3E /* Story+CoreDataClass.swift */; };
 		CE514D9D232416B00073C877 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE514D9C232416B00073C877 /* NavigationController.swift */; };
+		CE5D1FEF245B4DD90094D40F /* TokensController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5D1FEE245B4DD90094D40F /* TokensController.swift */; };
+		CE5D1FF1245B4E980094D40F /* TokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5D1FF0245B4E980094D40F /* TokenCell.swift */; };
 		CE75AE252133CB1B00A54F42 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE242133CB1B00A54F42 /* ActivityCell.swift */; };
 		CE75AE272133E95900A54F42 /* ReceiptController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE75AE262133E95900A54F42 /* ReceiptController.swift */; };
 		CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */; };
@@ -204,7 +208,11 @@
 		CE4A957623133A9400EFC617 /* Activity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CE4A957723133A9400EFC617 /* Activity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Activity+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/PhotoBank/PhotoBank/Model/Activity+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		CE4A957A23133DE400EFC617 /* AdCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCell.swift; sourceTree = "<group>"; };
+		CE4D7A34232EF54C00759C3E /* Story+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Story+CoreDataProperties.swift"; path = "/Users/Hello/Desktop/Projects/PhotoBank/PhotoBank/Model/Story+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		CE4D7A35232EF54C00759C3E /* Story+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Story+CoreDataClass.swift"; path = "/Users/Hello/Desktop/Projects/PhotoBank/PhotoBank/Model/Story+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		CE514D9C232416B00073C877 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		CE5D1FEE245B4DD90094D40F /* TokensController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensController.swift; sourceTree = "<group>"; };
+		CE5D1FF0245B4E980094D40F /* TokenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenCell.swift; sourceTree = "<group>"; };
 		CE75AE242133CB1B00A54F42 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
 		CE75AE262133E95900A54F42 /* ReceiptController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptController.swift; sourceTree = "<group>"; };
 		CE8E2DC2211C065900B45DB2 /* Payment+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Payment+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -324,6 +332,8 @@
 				CE8E2DC4211C066100B45DB2 /* Payment+CoreDataProperties.swift */,
 				CE961F1E210EE29000025D0D /* Status+CoreDataClass.swift */,
 				CE961F22210EE29000025D0D /* Status+CoreDataProperties.swift */,
+				CE4D7A35232EF54C00759C3E /* Story+CoreDataClass.swift */,
+				CE4D7A34232EF54C00759C3E /* Story+CoreDataProperties.swift */,
 				CE961F20210EE29000025D0D /* User+CoreDataClass.swift */,
 				CE024EB321139D0300E51F37 /* Model.swift */,
 				CEC4F32522FFE04800CCE1AC /* Token.swift */,
@@ -371,6 +381,7 @@
 				CE0AB4BD23275C2A00101705 /* FooterLoginView.swift */,
 				CE2837FD232DA52C0080DB8B /* StoryCollectionView.swift */,
 				CE2837FF232DA5E90080DB8B /* StoryCell.swift */,
+				CE5D1FF0245B4E980094D40F /* TokenCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -422,6 +433,7 @@
 				CE2EEEA1232B64A200658A17 /* NewPageController.swift */,
 				CE2837F7232C49AC0080DB8B /* AVController.swift */,
 				CE2837F9232D7F740080DB8B /* VerticalController.swift */,
+				CE5D1FEE245B4DD90094D40F /* TokensController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -631,6 +643,7 @@
 				CE024EA6211376A600E51F37 /* WalletHeaderView.swift in Sources */,
 				CE4A957B23133DE400EFC617 /* AdCell.swift in Sources */,
 				CE024EC42113D4A500E51F37 /* PhotoButton.swift in Sources */,
+				CE4D7A37232EF54C00759C3E /* Story+CoreDataClass.swift in Sources */,
 				CEDA042D2112AF1E00F57E15 /* PhotoCell.swift in Sources */,
 				CE024EBC2113A8D500E51F37 /* HomeController.swift in Sources */,
 				CE024EA2211372AD00E51F37 /* UserService.swift in Sources */,
@@ -649,6 +662,7 @@
 				CE8E2DC3211C065900B45DB2 /* Payment+CoreDataClass.swift in Sources */,
 				CE0AB4B62327234900101705 /* NAVMenu.swift in Sources */,
 				CE2837FC232D8F5B0080DB8B /* CameraController.swift in Sources */,
+				CE4D7A36232EF54C00759C3E /* Story+CoreDataProperties.swift in Sources */,
 				CEEBB934210BF827007E87EE /* AppDelegate.swift in Sources */,
 				CE0AB4BC23272B4800101705 /* ButtonTableFooterView.swift in Sources */,
 				CEEBB94B210BF8B2007E87EE /* TimelineController.swift in Sources */,
@@ -663,6 +677,7 @@
 				CEC4F32822FFE0B000CCE1AC /* InputCurrencyCell.swift in Sources */,
 				CE961F24210EE29000025D0D /* Status+CoreDataClass.swift in Sources */,
 				CE961EDD210C517200025D0D /* StatusController.swift in Sources */,
+				CE5D1FF1245B4E980094D40F /* TokenCell.swift in Sources */,
 				CE514D9D232416B00073C877 /* NavigationController.swift in Sources */,
 				CE961ED7210BFD6900025D0D /* NewsService.swift in Sources */,
 				CE06556E2326349600937A54 /* CashKeyboard.swift in Sources */,
@@ -705,6 +720,7 @@
 				CE218CD72117BC0600AD1EF2 /* AmountController.swift in Sources */,
 				CE0AB4C72328530E00101705 /* Ad+CoreDataClass.swift in Sources */,
 				CE218CD92117BCEA00AD1EF2 /* WalletService.swift in Sources */,
+				CE5D1FEF245B4DD90094D40F /* TokensController.swift in Sources */,
 				CE024EB0211388B600E51F37 /* CommentInputView.swift in Sources */,
 				CE218CEF2118C30C00AD1EF2 /* BlockedUsersController.swift in Sources */,
 				CE024EB421139D0300E51F37 /* Model.swift in Sources */,
@@ -882,7 +898,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.photobank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -904,7 +920,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.stack.photobank;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

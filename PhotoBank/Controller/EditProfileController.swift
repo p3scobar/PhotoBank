@@ -26,7 +26,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
         tableView.separatorColor = Theme.border
         tableView.register(InputTextCell.self, forCellReuseIdentifier: inputCell)
         tableView.register(InputTextViewCell.self, forCellReuseIdentifier: inputTextView)
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
+        tableView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
         tableView.tableFooterView = UIView()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(handleSave))
         title = "Edit Profile"
