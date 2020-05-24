@@ -36,8 +36,11 @@ public class TransactionResponse: NSObject, Decodable {
     /// The current transaction sequence number of the source account.
     public var sourceAccountSequence:String
     
-    /// The fee paid by the source account of this transaction when the transaction was applied to the ledger.
-    public var feePaid:Int
+    /// Defines the maximum fee the source account is willing to pay.
+    public var maxFee:Int?
+    
+    /// Defines the fee that was actually paid for a transaction.
+    public var feeCharged:Int?
     
     /// The number of operations that are contained within this transaction.
     public var operationCount:Int
@@ -62,7 +65,8 @@ public class TransactionResponse: NSObject, Decodable {
         case createdAt = "created_at"
         case sourceAccount = "source_account"
         case sourceAccountSequence = "source_account_sequence"
-        case feePaid = "fee_paid"
+        case maxFee = "max_fee"
+        case feeCharged = "fee_charged"
         case operationCount = "operation_count"
         case memoType = "memo_type"
         case memo = "memo"
@@ -82,7 +86,8 @@ public class TransactionResponse: NSObject, Decodable {
         createdAt = try values.decode(Date.self, forKey: .createdAt)
         sourceAccount = try values.decode(String.self, forKey: .sourceAccount)
         sourceAccountSequence = try values.decode(String.self, forKey: .sourceAccountSequence)
-        feePaid = try values.decode(Int.self, forKey: .feePaid)
+        maxFee = try values.decodeIfPresent(Int.self, forKey: .maxFee)
+        feeCharged = try values.decodeIfPresent(Int.self, forKey: .feeCharged)
         operationCount = try values.decode(Int.self, forKey: .operationCount)
         memoType = try values.decode(String.self, forKey: .memoType)
         

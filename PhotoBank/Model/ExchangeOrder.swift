@@ -15,7 +15,7 @@ public struct ExchangeOrder {
     var price: Decimal
     var total: Decimal
     var side: TransactionType
-    var id: Int?
+    var id: String?
     var buy: Token?
     var sell: Token?
     

@@ -35,6 +35,7 @@ class TokensController: UITableViewController {
         self.navigationItem.title = "Wallet"
         /// REDO THIS TO SHOW THE TOTAL WALLET VALUE
         
+        
         tableView.tableFooterView = UIView()
         tableView.contentInsetAdjustmentBehavior = .automatic
         tableView.refreshControl = refresh
@@ -43,7 +44,7 @@ class TokensController: UITableViewController {
         view.backgroundColor = Theme.black
         
         
-        tableView.register(TokenCellDetails.self, forCellReuseIdentifier: tokenCell)
+        tableView.register(TokenCell.self, forCellReuseIdentifier: tokenCell)
         
         refresh.addTarget(self, action: #selector(getAssets(_:)), for: .valueChanged)
         NotificationCenter.default.addObserver(self, selector: #selector(auth), name: Notification.Name(rawValue: "login"), object: nil)
@@ -78,9 +79,9 @@ class TokensController: UITableViewController {
     }
     
     @objc func addToken() {
-        let vc = NewAssetController(style: .grouped)
-        let nav = UINavigationController(rootViewController: vc)
-        present(nav, animated: true, completion: nil)
+//        let vc = NewAssetController(style: .grouped)
+//        let nav = UINavigationController(rootViewController: vc)
+//        present(nav, animated: true, completion: nil)
     }
     
     
@@ -99,16 +100,16 @@ class TokensController: UITableViewController {
     
     
     func handleLoggedOut() {
-        if let tabBar = self.tabBarController as? TabBar {
-            tabBar.presentHomeController()
-        }
+//        if let tabBar = self.tabBarController as? TabBar {
+//            tabBar.presentHomeController()
+//        }
     }
     
     @objc func getAssets(_ sender: UIRefreshControl?) {
         WalletService.getAccountDetails { (tokens) in
             let assets = tokens.sorted { $0.assetCode ?? "XLM" < $1.assetCode ?? "XLM" }
             self.tokens = assets
-            CurrentAssets = assets
+//            CurrentAssets = assets
         }
     }
     
@@ -122,14 +123,14 @@ class TokensController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: tokenCell, for: indexPath) as! TokenCellDetails
+        let cell = tableView.dequeueReusableCell(withIdentifier: tokenCell, for: indexPath) as! TokenCell
         let token = tokens[indexPath.row]
         cell.token = token
         setColor(cell, indexPath)
         return cell
     }
     
-    func setColor(_ cell: TokenCellDetails, _ indexPath: IndexPath) {
+    func setColor(_ cell: TokenCell, _ indexPath: IndexPath) {
         
     }
     
@@ -178,80 +179,80 @@ class TokensController: UITableViewController {
     }
     
     func removeTrust(_ token: Token) {
-        WalletService.changeTrust(token: token) { (success) in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    
-    func pushChangeTrustController(_ scan: Scan) {
-        let vc = CustomAssetController(assetCode: scan.assetCode, issuer: scan.address)
-        let nav = UINavigationController(rootViewController: vc)
-        self.present(nav, animated: true, completion: nil)
-    }
-    
-    func pushSelectTokenController(_ pk: String) {
-        let vc = SelectTokenController(publicKey: pk)
-        let nav = UINavigationController(rootViewController: vc)
-        self.present(nav, animated: true, completion: nil)
-    }
-
-    
-}
-
-
-
-extension TokensController: NewAssetDelegate {
-    
-    func handleNewAsset(_ token: Token) {
-        let vc = TokenController(token)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-}
-
-extension TokensController: ScanDelegate {
-    
-    static func scanType(_ code: String) -> ScanType {
-        return .asset
-    }
-    
-    func handleScan(_ scan: Scan) {
-         switch scan.type {
-         case .asset:
-             pushChangeTrustController(scan)
-         case .publicKey:
-            print(scan.publicKey)
-             pushSelectTokenController(scan.publicKey)
-         }
-     }
-    
-}
-
-
-extension ScanDelegate {
-   
-    
-    static func scanType(code: String) -> ScanType {
-        
-        
-        
-//        if let assetCode = code["assetCode"] as? String,
-//            let address = code["address"] as? String {
-//            self.type = ScanType.asset
-//            self.assetCode = assetCode
-//            self.address = address
+//        WalletService.changeTrust(token: token) { (success) in
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
 //        }
-        
-        return .publicKey
-        
     }
     
     
- 
+//    func pushChangeTrustController(_ scan: Scan) {
+////        let vc = CustomAssetController(assetCode: scan.assetCode, issuer: scan.address)
+////        let nav = UINavigationController(rootViewController: vc)
+////        self.present(nav, animated: true, completion: nil)
+//    }
+//
+//    func pushSelectTokenController(_ pk: String) {
+////        let vc = SelectTokenController(publicKey: pk)
+////        let nav = UINavigationController(rootViewController: vc)
+////        self.present(nav, animated: true, completion: nil)
+//    }
+
     
 }
+
+
+
+//extension TokensController: NewAssetDelegate {
+//
+//    func handleNewAsset(_ token: Token) {
+////        let vc = TokenController(token)
+////        self.navigationController?.pushViewController(vc, animated: true)
+//    }
+//
+//}
+
+//extension TokensController: ScanDelegate {
+//
+//    static func scanType(_ code: String) -> ScanType {
+//        return .asset
+//    }
+//
+//    func handleScan(_ scan: Scan) {
+//         switch scan.type {
+//         case .asset:
+//             pushChangeTrustController(scan)
+//         case .publicKey:
+//            print(scan.publicKey)
+//             pushSelectTokenController(scan.publicKey)
+//         }
+//     }
+//
+//}
+//
+//
+//extension ScanDelegate {
+//
+//
+//    static func scanType(code: String) -> ScanType {
+//
+//
+//
+////        if let assetCode = code["assetCode"] as? String,
+////            let address = code["address"] as? String {
+////            self.type = ScanType.asset
+////            self.assetCode = assetCode
+////            self.address = address
+////        }
+//
+//        return .publicKey
+//
+//    }
+//
+//
+//
+//
+//}
 
 

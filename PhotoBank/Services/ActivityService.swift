@@ -17,9 +17,11 @@ struct ActivityService {
             let url = URL(string: urlString)!
             let token = bubbleAPIKey
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-            let params: Parameters = [:]
+            let uid = CurrentUser.uid
+            let params: Parameters = ["uid":uid]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                 var notifications = [Activity]()
+                print(response.result.value)
                 guard let json = response.result.value as? [String:Any],
                     let resp = json["response"] as? [String:Any],
                     let results = resp["activity"] as? [[String:Any]] else { return }

@@ -9,6 +9,7 @@
 
 import UIKit
 import Foundation
+import CoreNFC
 
 class WalletController: UITableViewController {
     
@@ -18,14 +19,13 @@ class WalletController: UITableViewController {
         didSet {
             refresh.endRefreshing()
             tableView.reloadData()
-            setupEmptyView()
             setupFooter()
         }
     }
     
     
     lazy var header: WalletHeaderView = {
-        let view = WalletHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 260))
+        let view = WalletHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: headerHeight))
         return view
     }()
     
@@ -43,37 +43,92 @@ class WalletController: UITableViewController {
         tableView.backgroundColor = Theme.black
 
         tableView.register(PaymentCell.self, forCellReuseIdentifier: paymentCell)
-        navigationController?.navigationBar.barTintColor = Theme.lightBackground
-        navigationController?.navigationBar.isTranslucent = false
-        
-        
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        NotificationCenter.default.addObserver(self, selector: #selector(handleQR(notification:)), name: NSNotification.Name(rawValue: "qrScan"), object: nil)
+
+        extendedLayoutIncludesOpaqueBars = true
         
         let qrIcon = UIImage(named: "qrcode")?.withRenderingMode(.alwaysTemplate)
         let qrButton = UIBarButtonItem(image: qrIcon, style: .done, target: self, action: #selector(presentCamera))
-        self.navigationItem.rightBarButtonItem = qrButton
+        self.navigationItem.leftBarButtonItem = qrButton
+        
+        let moreIcon = UIImage(named: "more")?.withRenderingMode(.alwaysTemplate)
+        moreButton = UIBarButtonItem(image: moreIcon, style: .done, target: self, action: #selector(handleMoreTap))
+//        signOut = UIBarButtonItem(title: "Sign Out", style: .done, target: self, action: #selector(handleSignout))
+        
+//        let more = UIBarButtonItem
+        
+        self.navigationItem.rightBarButtonItem = moreButton
+        
         payments = Payment.fetchAll(in: PersistenceService.context)
-        setupTitle()
+        navigationItem.title = "Wallet"
     }
     
-    func setupTitle() {
-        self.navigationItem.title = (KeychainHelper.privateSeed != "") ? "Wallet" : "Setup Wallet"
-        if KeychainHelper.privateSeed == "" {
-            header.titleLabel.text = ""
-            header.balanceLabel.text = "Welcome"
-            header.currencyLabel.text = "Tap to Setup Wallet"
-        } else {
-            footer.buttonTitle = "Buy"
+    var moreButton: UIBarButtonItem?
+    
+    @objc func handleMoreTap() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let signOut = UIAlertAction(title: "Sign Out", style: .destructive) { _ in
+            self.handleSignOut()
         }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            self.dismiss(animated: true)
+        }
+        alert.addAction(signOut)
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
     }
+    
+    
+    @objc func handleSignOut() {
+        KeychainHelper.publicKey = ""
+        KeychainHelper.privateSeed = ""
+        KeychainHelper.mnemonic = ""
+        setupFooter()
+    }
+    
+    var session: NFCNDEFReaderSession?
+    
+    @objc func handlePlusTap() {
+        guard NFCNDEFReaderSession.readingAvailable else {
+            let alertController = UIAlertController(
+                title: "Scanning Not Supported",
+                message: "This device doesn't support tag scanning.",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        footer.isLoading = true
+        session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        session?.alertMessage = "Scan a Photobank card."
+        session?.begin()
+        
+    }
+    
+    lazy var footer: ButtonTableFooterView = {
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80)
+        let view = ButtonTableFooterView(frame: frame, title: "Add Wallet")
+        view.delegate = self
+        return view
+    }()
+    
+    lazy var headerHeight: CGFloat = self.view.frame.width*0.62+100
     
     func setupFooter() {
         guard walletLoggedIn() else {
             tableView.tableFooterView = footer
+            header.buyButton.isHidden = true
+            header.sellButton.isHidden = true
+            header.frame.size.height = headerHeight-100
+            navigationItem.rightBarButtonItem = nil
             return
         }
         tableView.tableFooterView = UIView()
+        header.frame.size.height = headerHeight
+        header.buyButton.isHidden = false
+        header.sellButton.isHidden = false
+        navigationItem.rightBarButtonItem = moreButton
+        tableView.reloadData()
     }
     
     @objc func presentCamera() {
@@ -86,60 +141,72 @@ class WalletController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        getAccountDetails()
     }
  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupTitle()
-        setupFooter()
         tableView.reloadData()
+        auth()
     }
+    
+    func auth() {
+        guard KeychainHelper.publicKey != "" else {
+//            setupEmptyView()
+            return
+        }
+        getData(nil)
+    }
+//
+//    func presentWalletLogin() {
+//        let vc = WalletLoginController()
+//        let nav = UINavigationController(rootViewController: vc)
+//        nav.modalPresentationStyle = .fullScreen
+//        present(nav, animated: true)
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         refresh.endRefreshing()
     }
     
-    @objc func getTransactions() {
-        WalletService.fetchTransactions { payments in
-            self.refresh.endRefreshing()
+    func getTransactions() {
+        WalletService.getPayments { (payments) in
             self.payments = payments
         }
     }
     
+    var isStreaming = false
+    
     func streamTransactions() {
+        guard isStreaming == false else { return }
         WalletService.streamPayments { payment in
+            self.isStreaming = true
             self.payments.insert(payment, at: 0)
         }
     }
     
     @objc func getData(_ refresh: UIRefreshControl?) {
+        guard walletLoggedIn() else {
+            refresh?.endRefreshing()
+            return
+        }
+        refresh?.endRefreshing()
+        
         print("PUBLIC KEY: \(KeychainHelper.publicKey)")
         print("SECRET KEY: \(KeychainHelper.privateSeed)")
         print("SEED: \(KeychainHelper.mnemonic)")
-        getAccountDetails()
-        getTransactions()
     }
     
     
-    func getAccountDetails() {
-        WalletService.getAccountDetails { (asset) in
-            self.header.token = asset
+    func getBalance() {
+        WalletService.getBalance { (token) in
+            self.header.token = token
+            self.refresh.endRefreshing()
+            self.tableView.reloadData()
         }
     }
     
-    @objc func loadData() {
-        if KeychainHelper.publicKey != "" {
-            getAccountDetails()
-            getTransactions()
-            streamTransactions()
-        } else {
-//            header.balance = "0.000"
-//            header.currencyCodeLabel.text = "Create an Account"
-            setupEmptyView()
-        }
-    }
+
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -211,14 +278,14 @@ class WalletController: UITableViewController {
     }
     
     func presentQRController() {
-        let vc = QRController()
+        let vc = QRController(code: KeychainHelper.publicKey)
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true, completion: nil)
     }
 
     func presentPassphraseController() {
-        let vc = PassphraseController()
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let vc = WalletLoginController()
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 
@@ -231,29 +298,13 @@ class WalletController: UITableViewController {
     }
     
     
-    lazy var emptyLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: self.view.frame.height/2, width: self.view.frame.width, height: 80))
-        label.text = "No transactions yet."
-        label.textColor = Theme.lightGray
-        label.font = Theme.semibold(18)
-        label.textAlignment = .center
-        return label
-    }()
-    
-    lazy var footer: FooterLoginView = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 180)
-        let view = FooterLoginView(frame: frame, title: "Login")
-        view.delegate = self
+    lazy var emptyView: EmptyView = {
+        let view = EmptyView(frame: self.view.frame)
+//        view.delegate = self
         return view
     }()
     
-    lazy var buyButton: ButtonTableFooterView = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80)
-        let view = ButtonTableFooterView(frame: frame, title: "Buy")
-        view.delegate = self
-        return view
-    }()
-    
+
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard walletLoggedIn(), section == 0 else { return 0 }
@@ -264,7 +315,8 @@ class WalletController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard walletLoggedIn() else { return nil }
-        return buyButton
+//        return buyButton
+        return nil
     }
     
     func walletLoggedIn() -> Bool {
@@ -279,27 +331,18 @@ class WalletController: UITableViewController {
 
 extension WalletController: WalletHeaderDelegate {
     
-    func handleBuy() {
-        let vc = OrderController(token: reserveAsset, side: .buy)
-        let nav = UINavigationController(rootViewController: vc)
-        self.tabBarController?.present(nav, animated: true, completion: nil)
-    }
-    
-    func handleSell() {
-        
-    }
     
     func handleCardTap() {
         print("header tap")
         guard KeychainHelper.privateSeed != "" else {
-            presentPassphraseController()
+//            presentPassphraseController()
             return
         }
         presentQRController()
     }
     
-    func presentOrderController() {
-        let vc = OrderController(token: reserveAsset, side: .buy)
+    func presentOrderController(side: TransactionType) {
+        let vc = OrderController(token: counterAsset, side: side)
         let nav = UINavigationController(rootViewController: vc)
         self.present(nav, animated: true)
     }
@@ -313,11 +356,57 @@ extension WalletController: QRScanDelegate {
     }
     
     
-    func setupEmptyView() {
-        if payments.count == 0 {
-            self.tableView.backgroundView = emptyLabel
-        } else {
-            self.tableView.backgroundView = nil
+//    func setupEmptyView() {
+//        if KeychainHelper.publicKey == "" {
+//            self.tableView.backgroundView = emptyView
+//            self.tableView.tableHeaderView = nil
+//            self.navigationItem.title = ""
+//
+//        } else {
+//            self.tableView.tableHeaderView = header
+//            self.tableView.backgroundView = nil
+//            self.navigationItem.title = "Wallet"
+//
+//        }
+//    }
+    
+    
+}
+
+
+
+
+extension WalletController: NFCNDEFReaderSessionDelegate {
+    
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+        print(error.localizedDescription)
+        self.session = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+        messages.forEach { (message) in
+            let records = message.records
+            for r in records {
+                let data = r.payload.advanced(by: 3)
+                let string = String(data: data, encoding: String.Encoding.utf8) ?? ""
+                DispatchQueue.main.async {
+                    self.handleNFCScan(string)
+                }
+            }
+        }
+    }
+    
+    
+    func handleNFCScan(_ string: String) {
+//        let vc = WalletLoginController()
+//        let nav = UINavigationController(rootViewController: vc)
+//        nav.modalPresentationStyle = .overFullScreen
+//        present(nav, animated: true)
+        WalletService.login(string) { (success) in
+//            self.setupEmptyView()
+            self.setupFooter()
+            self.getData(nil)
         }
     }
     
@@ -325,20 +414,12 @@ extension WalletController: QRScanDelegate {
 }
 
 
-
 extension WalletController: ButtonTableFooterDelegate {
     
     func didTapButton(_ button: UIButton?) {
-        print("DID TAP BUTTON")
-        if button == buyButton.button {
-            presentOrderController()
-        } else if button == footer.button {
-            footer.isLoading = true
-            WalletService.login(footer.passphrase) { (success) in
-                self.getData(nil)
-            }
-        }
+        handlePlusTap()
     }
+    
     
     
 }

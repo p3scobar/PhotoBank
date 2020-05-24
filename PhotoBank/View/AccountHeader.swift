@@ -22,7 +22,7 @@ class AccountHeader: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = Theme.background
         setupView()
         tap = UITapGestureRecognizer(target: self, action: #selector(editProfilePic))
         profileImage.addGestureRecognizer(tap)
@@ -56,10 +56,9 @@ class AccountHeader: UIView {
         view.contentMode = .scaleAspectFill
         view.layer.borderWidth = 0
         view.layer.cornerRadius = 54
-        view.layer.borderColor = Theme.border.cgColor
         view.layer.borderWidth = 0.6
         view.layer.masksToBounds = true
-        view.backgroundColor = Theme.lightGray
+        view.backgroundColor = Theme.tint
         view.isUserInteractionEnabled = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -68,6 +67,7 @@ class AccountHeader: UIView {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.bold(28)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -95,7 +95,7 @@ class AccountHeader: UIView {
         let button = UIButton()
         button.setTitle("Edit Profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .darkGray
+        button.backgroundColor = Theme.tint
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.layer.cornerRadius = 18
         button.translatesAutoresizingMaskIntoConstraints = false

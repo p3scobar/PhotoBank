@@ -19,6 +19,8 @@ class SecurityController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: standardCell)
         title = "Security"
         tableView.tableFooterView = UIView()
+        view.backgroundColor = Theme.background
+        tableView.backgroundColor = Theme.background
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -70,6 +72,8 @@ class SecurityController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: standardCell, for: indexPath)
+        cell.backgroundColor = Theme.tint
+        cell.textLabel?.textColor = .white
         switch (indexPath.section, indexPath.row) {
         case (0,0):
             cell.textLabel?.text = "Email"
@@ -85,7 +89,7 @@ class SecurityController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 72
+        return 64
     }
     
     

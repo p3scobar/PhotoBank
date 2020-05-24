@@ -30,8 +30,9 @@ class CommentsController: UITableViewController, CommentInputDelegate {
         tableView.tableFooterView = UIView()
         tableView.keyboardDismissMode = .interactive
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 80, bottom: 0, right: 0)
-        view.backgroundColor = .white
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.backgroundColor = Theme.background
+        tableView.backgroundColor = Theme.background
     }
     
     func reloadTable() {
@@ -80,7 +81,7 @@ class CommentsController: UITableViewController, CommentInputDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: commentCell, for: indexPath) as! CommentCell
-//        cell.delegate = self
+        cell.delegate = self
         cell.comment = comments[indexPath.row]
         return cell
     }
@@ -88,7 +89,7 @@ class CommentsController: UITableViewController, CommentInputDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let width = view.frame.width-76
         let text = comments[indexPath.row].text ?? ""
-        return estimateFrameForTextWidth(width: width, text: text, fontSize: 18)+44
+        return estimateFrameForTextWidth(width: width, text: text, fontSize: 18)+30
     }
     
     lazy var menu: CommentInputView = {
@@ -162,23 +163,41 @@ class CommentsController: UITableViewController, CommentInputDelegate {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == .delete) {
-            guard let commentId = comments[indexPath.row].id,
-                let post = status else {
+            guard let commentID = comments[indexPath.row].id,
+                let statusID = status?.id else {
                     print("no comment ID")
                     return
             }
-//            NewsService.deleteComment(id: commentId, post: post, completion: { (success) in
-//                self.comments.remove(at: indexPath.row)
-//            })
+            confirmDelete(statusID: statusID, commentID: commentID, indexPath: indexPath)
         }
     }
     
-    func handleUserTap(userId: String) {
-        let vc = UserController(userId)
-    self.navigationController?.pushViewController(vc, animated: true)
+    func confirmDelete(statusID: String, commentID: String, indexPath: IndexPath) {
+        let alert = UIAlertController(title: "Delete Comment?", message: nil, preferredStyle: .alert)
+        let delete = UIAlertAction(title: "Delete", style: .destructive) { _ in
+            NewsService.deleteComment(statusID: statusID, commentID: commentID)
+            self.comments.remove(at: indexPath.row)
+            self.tableView.reloadData()
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(delete)
+        alert.addAction(cancel)
+        present(alert, animated: true)
     }
+    
+   
     
     func handlePhotoTap(_ statusId: String) {}
     
+    
+}
+
+
+extension CommentsController: CommentCellDelegate {
+    
+    func handleUserTap(_ userId: String) {
+        let vc = UserController(userId)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
 }

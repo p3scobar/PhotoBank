@@ -158,7 +158,9 @@ struct NewsService {
         let userImage = CurrentUser.image
         let publicKey = KeychainHelper.publicKey
         let url = URL(string: urlString)!
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let uid = CurrentUser.uid
+        print("UID: \(uid)")
+//        guard let uid = Auth.auth().currentUser?.uid else { return }
         let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         var params: [String:Any] = ["userId":uid,
@@ -257,6 +259,22 @@ struct NewsService {
 //        }
 //    }
     
+    
+    static func deleteComment(statusID: String, commentID: String) {
+           
+           let ref = db.collection("status").document(statusID).collection("comments").document(commentID)
+        ref.delete()
+//           ref.setData(data, merge: true) { err in
+//               if let err = err {
+//                   print(err.localizedDescription)
+//                   completion(nil)
+//               } else {
+//                   let comment = Comment(data)
+//                   completion(comment)
+//                   print("Comment Added")
+//               }
+//           }
+       }
     
     
     static func postComment(status: Status, text: String, completion: @escaping (Comment?) -> Void) {

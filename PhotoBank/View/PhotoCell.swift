@@ -23,7 +23,7 @@ class PhotoCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        backgroundColor = Theme.lightBackground
+        backgroundColor = Theme.background
     }
     
     lazy var mainImageView: UIImageView = {

@@ -19,7 +19,8 @@ class PayController: UIViewController {
     var amount: Decimal = 0
     
     lazy var amountInput: UILabel = {
-        let frame = CGRect(x: 0, y: 100, width: self.view.frame.width, height: 180)
+        let width = self.view.frame.width ?? 320
+        let frame = CGRect(x: 0, y: 100, width: width, height: 180)
         let view = UILabel(frame: frame)
         view.textAlignment = .center
         view.backgroundColor = .clear
@@ -32,14 +33,16 @@ class PayController: UIViewController {
     
     
     lazy var header: UIView = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 260)
+        let width = self.view.frame.width ?? 0.0
+        let frame = CGRect(x: 0, y: 0, width: width, height: 260)
         let view = UIView(frame: frame)
         return view
     }()
     
+    lazy var width = self.view.frame.width ?? 0.0
     
     lazy var tableView: UITableView = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        let frame = CGRect(x: 0, y: 400, width: width, height: width)
         let view = UITableView(frame: frame)
         view.isScrollEnabled = false
         view.backgroundColor = .clear
@@ -47,27 +50,27 @@ class PayController: UIViewController {
         return view
     }()
     
-    init(publicKey: String) {
-        self.publicKey = publicKey
-        super.init(nibName: nil, bundle: nil)
-    }
+ 
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    convenience init(_ publicKey: String) {
+//        self.publicKey = publicKey
+//        self.init()
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBlur()
-        self.navigationItem.title = "Superlike"
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        
+        self.navigationItem.title = "Pay"
+    
         header.addSubview(amountInput)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-        
-        
         tableView.isScrollEnabled = false
         tableView.separatorColor = Theme.border
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -75,30 +78,30 @@ class PayController: UIViewController {
 
 //        tableView.tableFooterView = UIView()
         
-        if isModal {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
-        }
+//        if isModal {
+//            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
+//        }
         //self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Confirm", style: .done, target: self, action: #selector(handlePay))
         
 
 //        view.addSubview(amountInput)
-        tableView.tableFooterView = footer
+//        tableView.tableFooterView = footer
     }
     
-    lazy var footer: TableFooterView = {
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100)
-        let view = TableFooterView(frame: frame, title: "Confirm")
-        view.delegate = self
-        return view
-    }()
+//    lazy var footer: TableFooterView = {
+//        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100)
+//        let view = TableFooterView(frame: frame, title: "Confirm")
+//        view.delegate = self
+//        return view
+//    }()
     
     @objc func handlePay() {
         guard let accountID = publicKey else {
-        ErrorPresenter.showError(message: "No destination keypair", on: self)
+            ErrorPresenter.showError(message: "No destination keypair", on: self.presentedViewController)
         return
     }
-        WalletService.sendPayment(token: reserveAsset, toAccountID: accountID, amount: amount) { (_) in
-            self.dismiss(animated: true, completion: nil)
+        WalletService.sendPayment(token: counterAsset, toAccountID: accountID, amount: amount) { (_) in
+//            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -106,26 +109,26 @@ class PayController: UIViewController {
         
         let blurEffect = UIBlurEffect(style: .dark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.view.frame
+        blurEffectView.frame = tableView.frame
         
-        self.view.insertSubview(blurEffectView, at: 0)
+//        self.view.insertSubview(blurEffectView, at: 0)
         
-        self.view = blurEffectView
+//        self.view = blurEffectView
         blurEffectView.contentView.addSubview(tableView)
         self.tableView.separatorEffect = UIVibrancyEffect(blurEffect: blurEffect)
 //        blurEffectView.contentView.addSubview(amountInput)
     }
     
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        view.resignFirstResponder()
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        view.resignFirstResponder()
+//    }
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -185,20 +188,20 @@ class PayController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         let done = UIAlertAction(title: "Done", style: .default, handler: nil)
         alert.addAction(done)
-        present(alert, animated: true, completion: nil)
+//        present(alert, animated: true, completion: nil)
     }
     
     
     @objc func handleCancel() {
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
     }
     
     
-    var isModal: Bool {
-        return presentingViewController != nil ||
-            navigationController?.presentingViewController?.presentedViewController === navigationController ||
-            tabBarController?.presentingViewController is UITabBarController
-    }
+//    var isModal: Bool {
+//        return presentingViewController != nil ||
+//            navigationController?.presentingViewController?.presentedViewController === navigationController ||
+//            tabBarController?.presentingViewController is UITabBarController
+//    }
     
     
     lazy var signupButton: UIButton = {
@@ -229,9 +232,9 @@ class PayController: UIViewController {
         return button
     }()
     
-    override var inputAccessoryView: UIView? {
-        return confirmButton
-    }
+//    override var inputAccessoryView: UIView? {
+//        return confirmButton
+//    }
     
     
     
@@ -252,6 +255,7 @@ extension PayController: InputNumberCellDelegate {
 extension PayController: UITextFieldDelegate {
     
 }
+
 
 extension PayController: UITableViewDataSource {
     

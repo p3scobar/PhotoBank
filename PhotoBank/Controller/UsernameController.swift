@@ -19,7 +19,7 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         inputField.text = CurrentUser.username
-        view.backgroundColor = .white
+        view.backgroundColor = Theme.background
         setupView()
         self.title = "Username"
         saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(handleSave))
@@ -77,12 +77,13 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     let inputField: UITextField = {
         let view = UITextField()
         view.layer.cornerRadius = 8
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.tint
         view.font = Theme.medium(18)
         view.autocorrectionType = .no
         view.autocapitalizationType = .none
         view.keyboardType = .twitter
         view.textAlignment = .center
+        view.textColor = .white
         view.textRect(forBounds: CGRect(x: 20, y: 0, width: 20, height: 10))
         view.placeholder = "@username"
         if view.placeholder != nil {

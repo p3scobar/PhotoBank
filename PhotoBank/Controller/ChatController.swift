@@ -85,7 +85,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
     lazy var chatView: UITableView = {
         let frame = UIScreen.main.bounds
         let view = UITableView(frame: frame, style: .plain)
-        view.backgroundColor = .white
+        view.backgroundColor = Theme.background
         view.separatorStyle = .none
         view.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         view.layoutSubviews()
@@ -139,7 +139,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.layer.cornerRadius = 20
         view.layer.masksToBounds = true
         view.contentMode = .scaleAspectFill
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.background
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -312,7 +312,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let userInfo = notification.userInfo!
         let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         if notification.name == UIResponder.keyboardDidHideNotification {
-            animateContentInset(inset: 32)
+            animateContentInset(inset: 16)
         } else {
             animateContentInset(inset: keyboardSize.height)
         }
@@ -381,7 +381,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let timestamp = formatter.string(from: date)
         let action = UITableViewRowAction(style: .normal, title: timestamp) { (action, indexPath) in
         }
-        action.backgroundColor = Theme.black
+        action.backgroundColor = .white
         
         return [action]
     }
@@ -433,7 +433,7 @@ extension ChatController: CashKeyboarDelegate {
             print("NO PUBLIC KEY FOR OTHER USER")
             return
         }
-        let assetCode = reserveAsset.assetCode ?? ""
+        let assetCode = counterAsset.assetCode ?? ""
         let status = "pending"
         guard let chat = chat else { return }
         
@@ -442,7 +442,7 @@ extension ChatController: CashKeyboarDelegate {
         
         ChatService.sendMessage(chat: chat, properties: data) { (msgID) in
             
-            WalletService.sendPayment(token: reserveAsset, toAccountID: publicKey, amount: amount, completion: { (success) in
+            WalletService.sendPayment(token: counterAsset, toAccountID: publicKey, amount: amount, completion: { (success) in
 
                 let chatId = chat.id
 //                ChatService.updateTransaction(chatID: chatId, messageID: msgID, txID: , values: <#T##[String : Any]#>)

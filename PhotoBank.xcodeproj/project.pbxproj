@@ -112,8 +112,10 @@
 		CECC03FF21165D6E00AD8390 /* InputTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC03FE21165D6E00AD8390 /* InputTextViewCell.swift */; };
 		CECC040121176C2400AD8390 /* Activity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC040021176C2300AD8390 /* Activity+CoreDataClass.swift */; };
 		CECC040321176F2500AD8390 /* ActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECC040221176F2500AD8390 /* ActivityService.swift */; };
+		CED2664624705D9400A1FFE3 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED2664524705D9400A1FFE3 /* EmptyView.swift */; };
 		CEDA042D2112AF1E00F57E15 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA042C2112AF1E00F57E15 /* PhotoCell.swift */; };
 		CEDA042F2112C02500F57E15 /* DiscoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA042E2112C02500F57E15 /* DiscoverController.swift */; };
+		CEE77E7C246B7FFE003D74BD /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE77E7B246B7FFE003D74BD /* CardView.swift */; };
 		CEEBB934210BF827007E87EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBB933210BF827007E87EE /* AppDelegate.swift */; };
 		CEEBB936210BF827007E87EE /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBB935210BF827007E87EE /* UserController.swift */; };
 		CEEBB93E210BF829007E87EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEEBB93D210BF829007E87EE /* Assets.xcassets */; };
@@ -246,8 +248,10 @@
 		CECC03FE21165D6E00AD8390 /* InputTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextViewCell.swift; sourceTree = "<group>"; };
 		CECC040021176C2300AD8390 /* Activity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CECC040221176F2500AD8390 /* ActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityService.swift; sourceTree = "<group>"; };
+		CED2664524705D9400A1FFE3 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		CEDA042C2112AF1E00F57E15 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		CEDA042E2112C02500F57E15 /* DiscoverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverController.swift; sourceTree = "<group>"; };
+		CEE77E7B246B7FFE003D74BD /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		CEEBB930210BF827007E87EE /* PhotoBank.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoBank.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEEBB933210BF827007E87EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEEBB935210BF827007E87EE /* UserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
@@ -382,6 +386,8 @@
 				CE2837FD232DA52C0080DB8B /* StoryCollectionView.swift */,
 				CE2837FF232DA5E90080DB8B /* StoryCell.swift */,
 				CE5D1FF0245B4E980094D40F /* TokenCell.swift */,
+				CEE77E7B246B7FFE003D74BD /* CardView.swift */,
+				CED2664524705D9400A1FFE3 /* EmptyView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -389,51 +395,51 @@
 		CE961EE2210D258800025D0D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				CE218CD62117BC0600AD1EF2 /* AmountController.swift */,
 				CE961EF9210D6C0900025D0D /* AccountController.swift */,
 				CE961EF7210D364400025D0D /* ActivityController.swift */,
+				CE218CD62117BC0600AD1EF2 /* AmountController.swift */,
+				CE2837F7232C49AC0080DB8B /* AVController.swift */,
 				CE218CEE2118C30C00AD1EF2 /* BlockedUsersController.swift */,
 				CE2837FB232D8F5B0080DB8B /* CameraController.swift */,
-				CE961EFF210D713600025D0D /* ComposeController.swift */,
-				CE024EAB2113883B00E51F37 /* CommentsController.swift */,
 				CEFAA6BC2321FCC900D123D7 /* ChatController.swift */,
+				CE024EAB2113883B00E51F37 /* CommentsController.swift */,
+				CE961EFF210D713600025D0D /* ComposeController.swift */,
 				CE218CE62118266000AD1EF2 /* ConfirmPaymentController.swift */,
 				CEDA042E2112C02500F57E15 /* DiscoverController.swift */,
-				CE218CEA2118C27700AD1EF2 /* EmailController.swift */,
 				CECC03FC21165AF700AD8390 /* EditProfileController.swift */,
+				CE218CEA2118C27700AD1EF2 /* EmailController.swift */,
 				CE024EBB2113A8D500E51F37 /* HomeController.swift */,
 				CE024EB72113A04C00E51F37 /* LoginController.swift */,
 				CEFAA6BA2321F98F00D123D7 /* MessagesController.swift */,
 				CE218CE02117CA1D00AD1EF2 /* MnemonicController.swift */,
+				CE514D9C232416B00073C877 /* NavigationController.swift */,
 				CEFAA6C82322156E00D123D7 /* NewChatController.swift */,
+				CE2EEEA1232B64A200658A17 /* NewPageController.swift */,
 				CE218CF22118C63400AD1EF2 /* NotificationsController.swift */,
+				CE0AB4B923272B1B00101705 /* OrderConfirmController.swift */,
+				CE0AB4B72327286900101705 /* OrderController.swift */,
 				CE218CEC2118C2DF00AD1EF2 /* PasswordController.swift */,
+				CEC4F32122FFD33200CCE1AC /* PayController.swift */,
+				CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */,
+				CE16B161211E85900047E903 /* PendingController.swift */,
 				CE024EA92113783F00E51F37 /* QRController.swift */,
+				CE75AE262133E95900A54F42 /* ReceiptController.swift */,
 				CE218CF82118EA4F00AD1EF2 /* RecoveryController.swift */,
 				CE218CF42118CB6500AD1EF2 /* ScanController.swift */,
-				CE961EDC210C517200025D0D /* StatusController.swift */,
-				CE024EBD2113A9EC00E51F37 /* SignupController.swift */,
 				CE218CE82118C24B00AD1EF2 /* SecurityController.swift */,
+				CE024EBD2113A9EC00E51F37 /* SignupController.swift */,
+				CE961EDC210C517200025D0D /* StatusController.swift */,
+				CEB47FFF21B6866600DFFB57 /* SwipeController.swift */,
 				CEEBB948210BF896007E87EE /* TabBar.swift */,
+				CE0629B02234C69E002C5AB0 /* TagsController.swift */,
 				CEEBB94A210BF8B2007E87EE /* TimelineController.swift */,
+				CE5D1FEE245B4DD90094D40F /* TokensController.swift */,
 				CEEBB935210BF827007E87EE /* UserController.swift */,
 				CE024EBF2113AA5F00E51F37 /* UsernameController.swift */,
 				CE024EB121138BE600E51F37 /* UsersController.swift */,
-				CE16B161211E85900047E903 /* PendingController.swift */,
-				CE75AE262133E95900A54F42 /* ReceiptController.swift */,
-				CEB47FFF21B6866600DFFB57 /* SwipeController.swift */,
-				CE0629B02234C69E002C5AB0 /* TagsController.swift */,
-				CEC4F32122FFD33200CCE1AC /* PayController.swift */,
+				CE2837F9232D7F740080DB8B /* VerticalController.swift */,
 				CE024EA32113768F00E51F37 /* WalletController.swift */,
 				CEFAA6B82321B49400D123D7 /* WalletLoginController.swift */,
-				CE514D9C232416B00073C877 /* NavigationController.swift */,
-				CEF37E3E2325A8B80028DFE0 /* PaymentController.swift */,
-				CE0AB4B72327286900101705 /* OrderController.swift */,
-				CE0AB4B923272B1B00101705 /* OrderConfirmController.swift */,
-				CE2EEEA1232B64A200658A17 /* NewPageController.swift */,
-				CE2837F7232C49AC0080DB8B /* AVController.swift */,
-				CE2837F9232D7F740080DB8B /* VerticalController.swift */,
-				CE5D1FEE245B4DD90094D40F /* TokensController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -679,6 +685,7 @@
 				CE961EDD210C517200025D0D /* StatusController.swift in Sources */,
 				CE5D1FF1245B4E980094D40F /* TokenCell.swift in Sources */,
 				CE514D9D232416B00073C877 /* NavigationController.swift in Sources */,
+				CEE77E7C246B7FFE003D74BD /* CardView.swift in Sources */,
 				CE961ED7210BFD6900025D0D /* NewsService.swift in Sources */,
 				CE06556E2326349600937A54 /* CashKeyboard.swift in Sources */,
 				CE961F28210EE29000025D0D /* Status+CoreDataProperties.swift in Sources */,
@@ -705,6 +712,7 @@
 				CE024EB62113A02E00E51F37 /* LoginToolbar.swift in Sources */,
 				CE961EFE210D6D2000025D0D /* Theme.swift in Sources */,
 				CE0AB4C423283A5200101705 /* Photobank.xcdatamodeld in Sources */,
+				CED2664624705D9400A1FFE3 /* EmptyView.swift in Sources */,
 				CE2837F8232C49AC0080DB8B /* AVController.swift in Sources */,
 				CE024EA42113768F00E51F37 /* WalletController.swift in Sources */,
 				CEC4F32222FFD33200CCE1AC /* PayController.swift in Sources */,

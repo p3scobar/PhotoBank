@@ -220,19 +220,33 @@ struct UserService {
 //    }
 
 
-    static func updateUser(name: String, bio: String, website: String, completion: @escaping (Bool) -> Void) {
+    static func updateBubbleUser() {
         DispatchQueue.global(qos: .background).async {
         let urlString = "\(baseUrl)/updateuser"
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
+        let id = Auth.auth().currentUser?.uid ?? ""
+            let name = CurrentUser.name
+            let bio = CurrentUser.bio
+            let link = CurrentUser.url
+            let username = CurrentUser.username
+            let userImage = CurrentUser.image
+            
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["name":name, "bio":bio, "url":website]
+            let params: [String:Any] = ["name":name,
+                                        "bio":bio,
+                                        "url":link,
+                                        "id": id,
+                                        "username":username,
+                                        "userImage":userImage]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
+            print("UID: \(id)")
+            print(response.result.value)
             if let error = response.error {
                 print(error.localizedDescription)
-                completion(false)
+//                completion(false)
             } else {
-                completion(true)
+//                completion(true)
             }
         }
         }
@@ -296,6 +310,7 @@ extension UserService {
                 completion(false)
             } else {
                 completion(true)
+                updateBubbleUser()
                 print("user data updated")
             }
         }

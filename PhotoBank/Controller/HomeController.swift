@@ -15,7 +15,7 @@ class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        view.backgroundColor = .white
+        view.backgroundColor = Theme.background
         self.navigationController?.isNavigationBarHidden = true
     }
     
@@ -40,6 +40,7 @@ class HomeController: UIViewController {
         view.font = UIFont(name: "Avenir-Black", size: 48)
         view.textColor = Theme.tint
         view.textAlignment = .center
+        view.textColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -49,7 +50,7 @@ class HomeController: UIViewController {
         let button = UIButton()
         
         button.setTitle("Already have an account? Login", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = Theme.medium(16)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -61,9 +62,9 @@ class HomeController: UIViewController {
         let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
         let button = UIButton(frame: frame)
         button.setTitle("Sign Up", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = Theme.medium(18)
-        button.backgroundColor = Theme.tint
+        button.backgroundColor = .white
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

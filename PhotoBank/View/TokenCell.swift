@@ -6,103 +6,82 @@
 //  Copyright © 2020 Sugar. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import stellarsdk
 
-class TokenCell: TokenCell {
+class TokenCell: UITableViewCell {
     
-    var imageUrl: String? {
-        didSet {
-            
-        }
-    }
     
-    var payment: Payment? {
+    var token: Token? {
         didSet {
-            guard let payment = payment else { return }
-            leftSubtitleLabel.text = (payment.isReceived) ? "Received" : "Sent"
-            if let timestamp = payment.timestamp {
-                titleLabel.text = timestamp.short()
-            }
-            
-            if let amount = payment.amount,
-                let decimal = Decimal(string: amount) {
-                if payment.isReceived {
-                    rightTitleLabel.text = decimal.rounded(2)
-                } else {
-                    rightTitleLabel.text = "-" + decimal.rounded(2)
+            guard let token = token else { return }
+            if let name = token.name {
+                titleLabel.text = name
+                if let first = name.first {
+                    iconView.text = String(first)
                 }
             }
-            let assetCode = payment.assetCode ?? "XLM"
-            guard assetCode != "" else { return }
-            rightSubtitleLabel.text = assetCode
-            profileImageView.isHidden = false
+
+            if let balance = Decimal(string: token.balance) {
+                rightTitleLabel.text = balance.rounded(4)
+            }
         }
     }
-    
-    lazy var profileImageView: UIImageView = {
-        let view = UIImageView(frame: iconView.frame)
-        view.backgroundColor = Theme.tint
-        view.layer.cornerRadius = 24
-        view.clipsToBounds = true
-        view.isHidden = true
-        return view
-    }()
-    
-    var lastPrice: Decimal = 0 {
-        didSet {
-            let balance = Decimal(string: token?.balance ?? "") ?? 0.0
-            let value = lastPrice*balance
-            rightSubtitleLabel.text = value.rounded(2) + " \(baseAsset.assetCode ?? "")"
-        }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
+        backgroundColor = Theme.tint
+        let bg = UIView()
+        bg.backgroundColor = Theme.gray
+        selectedBackgroundView = bg
     }
     
-    override var token: Token? {
-        didSet {
-            super.token = token
-            titleLabel.text = token?.name ?? ""
-            leftSubtitleLabel.text = token?.assetCode ?? ""
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var leftSubtitleLabel: UILabel = {
+    lazy var iconView: UILabel = {
         let label = UILabel()
-        label.font = Theme.medium(14)
-        label.textColor = Theme.gray
+        label.font = Theme.medium(16)
         label.numberOfLines = 1
+        label.backgroundColor = Theme.gray
+        label.textAlignment = .center
+        label.layer.cornerRadius = 24
+        label.clipsToBounds = true
+        label.textColor = .white
+        label.text = ""
         return label
     }()
     
-    lazy var rightSubtitleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Theme.medium(14)
-        label.textColor = Theme.gray
+        label.font = Theme.medium(18)
+        label.textColor = .white
+        label.numberOfLines = 1
+        label.text = "XLM"
+        return label
+    }()
+    
+    lazy var rightTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = Theme.semibold(18)
         label.numberOfLines = 1
         label.textAlignment = .right
+        label.textColor = Theme.highlight
         return label
     }()
     
-    override func setupView() {
-        addSubview(leftSubtitleLabel)
-        addSubview(rightSubtitleLabel)
+    func setupView() {
         addSubview(titleLabel)
         addSubview(rightTitleLabel)
-//        addSubview(iconView)
-//        addSubview(profileImageView)
+        addSubview(iconView)
         
-        rightTitleLabel.textColor = Theme.highlight
-        
-//        iconView.frame = CGRect(x: 16, y: 16, width: 48, height: 48)
-        titleLabel.frame = CGRect(x: 20, y: 18, width: UIScreen.main.bounds.width-40, height: 20)
-        leftSubtitleLabel.frame = CGRect(x: 20, y: 42, width: UIScreen.main.bounds.width-40, height: 20)
-        rightSubtitleLabel.frame = CGRect(x: 20, y: 42, width: UIScreen.main.bounds.width-40, height: 20)
-        rightTitleLabel.frame =  CGRect(x: 24, y: 16, width: UIScreen.main.bounds.width-40, height: 20)
+        iconView.frame = CGRect(x: 16, y: 16, width: 48, height: 48)
+        titleLabel.frame = CGRect(x: 80, y: 16, width: UIScreen.main.bounds.width-80, height: 48)
+        rightTitleLabel.frame =  CGRect(x: UIScreen.main.bounds.width/2, y: 16, width: UIScreen.main.bounds.width/2-16, height: 48)
         
     }
     
-    
-   
-    
-    
-}
 
+}

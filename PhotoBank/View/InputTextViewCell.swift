@@ -18,7 +18,7 @@ class InputTextViewCell: UITableViewCell, UITextViewDelegate {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         textView.delegate = self
-        backgroundColor = .white
+        backgroundColor = Theme.tint
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -29,9 +29,11 @@ class InputTextViewCell: UITableViewCell, UITextViewDelegate {
     lazy var textView: UITextView = {
         let view = UITextView()
         view.font = Theme.medium(18)
-        view.placeholderColor = Theme.gray
-        view.backgroundColor = .white
+//        view.placeholderColor = Theme.gray
+        view.backgroundColor = Theme.tint
+        view.textColor = .white
         view.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        view.keyboardAppearance = .dark
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -20,28 +20,21 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
     
         timelineVC = TimelineController()
         let timeline = NavigationController(rootViewController: timelineVC)
-            //UINavigationController(rootViewController: timelineVC)
         timeline.tabBarItem.image = UIImage(named: "home")
         timeline.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
         let layout = UICollectionViewFlowLayout()
         discoverVC = DiscoverController(collectionViewLayout: layout)
-            //NewPageController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        let discover = NavigationController(rootViewController: discoverVC)
         
+        let discover = NavigationController(rootViewController: discoverVC)
         discover.tabBarItem.image = UIImage(named: "search")
         discover.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
-        let walletVC = TokensController()
+        let walletVC = WalletController(style: .grouped)
         let wallet = NavigationController(rootViewController: walletVC)
         wallet.tabBarItem.image = UIImage(named: "coin")
         wallet.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
-        
-        let scan = ScanController()
-//        let scan = NavigationController(rootViewController: scanVC)
-        scan.tabBarItem.image = UIImage(named: "camera")
-        scan.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
 
         let messagesVC = MessagesController(style: .plain)
         let messages = NavigationController(rootViewController: messagesVC)
@@ -53,7 +46,12 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         account.tabBarItem.image = UIImage(named: "user")
         account.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
-        viewControllers = [timeline, discover, messages, wallet]
+        let activityVC = ActivityController(style: .grouped)
+        let activity = NavigationController(rootViewController: activityVC)
+        activity.tabBarItem.image = UIImage(named: "bell")
+        activity.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
+        
+        viewControllers = [timeline, discover, messages, activity]
         
         
         picker?.allowsEditing = true
@@ -126,6 +124,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         id != "" else {
             let vc = HomeController()
             let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
             self.tabBarController?.present(nav, animated: true, completion: nil)
             return
         }

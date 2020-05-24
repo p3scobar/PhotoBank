@@ -35,7 +35,7 @@ class UserCell: UITableViewCell {
         let frame = CGRect(x: 16, y: 12, width: 48, height: 48)
         let imageView = UIImageView(frame: frame)
         imageView.layer.cornerRadius = frame.width/2
-        imageView.backgroundColor = Theme.lightBackground
+        imageView.backgroundColor = Theme.tint
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         return imageView
@@ -47,6 +47,7 @@ class UserCell: UITableViewCell {
         let label = UILabel(frame: frame)
         label.font = Theme.semibold(18)
         label.numberOfLines = 1
+        label.textColor = .white
         return label
     }()
     
@@ -66,6 +67,7 @@ class UserCell: UITableViewCell {
     }
     
     func setupView() {
+        backgroundColor = Theme.background
         addSubview(profileImage)
         addSubview(nameLabel)
         addSubview(usernameLabel)
@@ -88,6 +90,7 @@ class UserCell: UITableViewCell {
 class UserCellSmall: UserCell {
     
     override func setupView() {
+        backgroundColor = Theme.background
         addSubview(profileImage)
         addSubview(nameLabel)
         addSubview(usernameLabel)

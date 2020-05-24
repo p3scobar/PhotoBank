@@ -32,7 +32,7 @@ class StoryCell: UICollectionViewCell {
         let frame = CGRect(x: 10, y: 10, width: self.frame.width-20, height: self.frame.height-20)
         let imageView = UIImageView(frame: frame)
         imageView.layer.cornerRadius = frame.width/2
-        imageView.backgroundColor = Theme.lightBackground
+        imageView.backgroundColor = Theme.background
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         return imageView

@@ -31,7 +31,7 @@ class StatusCell: UITableViewCell {
             if likeCount > 0 {
                 likeButton.titleLabel.text = "\(likeCount)"
             } else {
-                likeButton.titleLabel.text = "Like"
+                likeButton.titleLabel.text = ""
             }
         }
     }
@@ -40,9 +40,11 @@ class StatusCell: UITableViewCell {
         didSet {
             if like {
                 likeButton.isSelected = true
+//                likeButton.icon.image = UIImage(named: "heartFilled")
                 likeButton.icon.tintColor = Theme.red
             } else {
-                likeButton.icon.tintColor = Theme.tint
+                likeButton.icon.tintColor = .white
+//                likeButton.icon.image = UIImage(named: "heart")
             }
         }
     }
@@ -51,8 +53,9 @@ class StatusCell: UITableViewCell {
     
     var status: Status? {
         didSet {
+            profileImageView.image = nil
             statusLabel.text = status?.text
-            if let commentCount = status?.commentCount {
+            if let commentCount = status?.commentCount, commentCount > 0 {
                 commentButton.titleLabel.text = "\(commentCount)"
             }
             if let imageUrl = status?.image,
@@ -71,6 +74,7 @@ class StatusCell: UITableViewCell {
                 nameLabel.text = name
             }
             guard let id = status?.id else { return }
+            print("STATUS ID: \(id)")
             like = Like.checkIfLiked(statusID: id)
         }
     }
@@ -118,10 +122,10 @@ class StatusCell: UITableViewCell {
     
 
     lazy var profileImageView: UIImageView = {
-        let frame = CGRect(x: 12, y: 12, width: 48, height: 48)
+        let frame = CGRect(x: 18, y: 12, width: 40, height: 40)
         let view = UIImageView(frame: frame)
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 24
+        view.layer.cornerRadius = 20
         view.backgroundColor = Theme.tint
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
@@ -138,20 +142,22 @@ class StatusCell: UITableViewCell {
     }()
     
     lazy var likeButton: PhotoButton = {
-        let button = PhotoButton(imageName: "heartCircle", title: "0")
+        let button = PhotoButton(imageName: "heart", title: "")
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(handleLike), for: .touchUpInside)
         button.layer.cornerRadius = 20
+        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     lazy var commentButton: PhotoButton = {
-        let button = PhotoButton(imageName: "chat", title: "0")
+        let button = PhotoButton(imageName: "comment", title: "")
         button.isUserInteractionEnabled = true
         button.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
         button.layer.borderColor = Theme.border.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .white
         return button
     }()
     
@@ -171,7 +177,6 @@ class StatusCell: UITableViewCell {
         guard let status = status else { return }
         delegate?.handleComment(status: status)
         commentButton.isHighlighted = false
-        SoundKit.playSound(type: .button)
     }
     
     @objc func handleLike() {
@@ -182,10 +187,8 @@ class StatusCell: UITableViewCell {
             likeCount -= 1
         }
         
-        guard let key = status?.publicKey,
-        let username = status?.username else { return }
-        delegate?.handleDoubleTap(publicKey: key, username: username)
-        SoundKit.playSound(type: .select)
+        guard let status = self.status else { return }
+        delegate?.handleLike(post: status)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -201,6 +204,7 @@ class StatusCell: UITableViewCell {
     }
     
     func customization() {
+        selectionStyle = .none
 //        imageViewHeight.constant = status?.imageHeight(self.frame.width) ?? 400
 //        let bgView = UIView()
 //        bgView.backgroundColor = Theme.tint
@@ -223,14 +227,11 @@ class StatusCell: UITableViewCell {
         addSubview(adLabel)
         addSubview(nameLabel)
         addSubview(statusLabel)
-
-//        addSubview(likeButton)
-//        addSubview(commentButton)
-        
+        addSubview(likeButton)
+        addSubview(commentButton)
         addSubview(mainImageView)
         
         backgroundColor = Theme.black
-        
         
         mainImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         mainImageView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
@@ -240,29 +241,23 @@ class StatusCell: UITableViewCell {
         
         mainImageView.heightAnchor.constraint(equalToConstant: height).isActive = true
 
-        
         nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 14).isActive = true
         nameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor, constant: -2).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -60).isActive = true
         
         
-//        likeButton.leftAnchor.constraint(equalTo: profileImageView.leftAnchor).isActive = true
-//        likeButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-//        likeButton.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 14).isActive = true
-//        likeButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
-//        
-//        commentButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-//        commentButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-//        commentButton.topAnchor.constraint(equalTo: likeButton.topAnchor).isActive = true
-//        commentButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
+        likeButton.leftAnchor.constraint(equalTo: profileImageView.leftAnchor).isActive = true
+        likeButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        likeButton.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 14).isActive = true
+        likeButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
         
-//        payButton.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-//        payButton.widthAnchor.constraint(equalToConstant: width).isActive = true
-//        payButton.topAnchor.constraint(equalTo: likeButton.topAnchor).isActive = true
-//        payButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-        statusLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 20).isActive = true
+        commentButton.leftAnchor.constraint(equalTo: likeButton.rightAnchor, constant: 0).isActive = true
+        commentButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        commentButton.topAnchor.constraint(equalTo: likeButton.topAnchor).isActive = true
+        commentButton.heightAnchor.constraint(equalToConstant: 36).isActive = true
+       
+        statusLabel.topAnchor.constraint(equalTo: commentButton.bottomAnchor, constant: 10).isActive = true
         statusLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 12).isActive = true
         statusLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -12).isActive = true
         

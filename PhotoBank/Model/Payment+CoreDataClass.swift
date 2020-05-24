@@ -19,13 +19,22 @@ enum PaymentType: String {
 @objc(Payment)
 public class Payment: NSManagedObject {
     
-    static func findOrCreatePayment(id: String, data: [String:Any], in context: NSManagedObjectContext) -> Payment {
+    static func findOrCreatePayment(id: String,
+                                    assetCode: String,
+                                    issuer: String,
+                                    amount: String,
+                                    to: String,
+                                    from: String,
+                                    timestamp: Date,
+                                    isReceived: Bool,
+                                    in context: NSManagedObjectContext) -> Payment {
+        
         let request: NSFetchRequest<Payment> = Payment.fetchRequest()
-            request.predicate = NSPredicate(format: "id = %@", id)
+        request.predicate = NSPredicate(format: "id = %@", id)
         do {
             let matches = try context.fetch(request)
             if matches.count > 0 {
-                assert(matches.count == 1, "Payment.findOrCreateStatus -- Database inconsistency")
+                //assert(matches.count == 1, "Payment.findOrCreateStatus -- Database inconsistency")
                 return matches[0]
             }
         } catch {
@@ -34,13 +43,14 @@ public class Payment: NSManagedObject {
         }
         let payment = Payment(context: context)
         payment.id = id
-        payment.assetCode = data["assetCode"] as? String
-        payment.amount = data["amount"] as? String
-//        payment.issuer = data["issuer"] as? String
-        payment.from = data["from"] as? String
-        payment.to = data["to"] as? String
-        payment.timestamp = data["timestamp"] as? Date
-        payment.isReceived = CurrentUser.uid == payment.to
+        payment.assetCode = assetCode
+        payment.issuer = issuer
+        payment.amount = amount
+        payment.to = to
+        payment.from = from
+        payment.timestamp = timestamp
+        payment.isReceived = isReceived
+        PersistenceService.saveContext()
         return payment
     }
     

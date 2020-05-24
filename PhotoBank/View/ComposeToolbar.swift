@@ -19,17 +19,17 @@ class ComposeToolbar: UIToolbar {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        barTintColor = Theme.background
         isTranslucent = false
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         setItems([flexibleSpace, sendButton], animated: true)
-        tintColor = .black
     }
     
     
     lazy var sendButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: "Submit", style: UIBarButtonItem.Style.done, target: self, action: #selector(handleSend))
         button.setTitlePositionAdjustment(UIOffset(horizontal: 0, vertical: 10), for: .default)
+        button.tintColor = .white
         return button
     }()
     

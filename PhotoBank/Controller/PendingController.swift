@@ -30,12 +30,9 @@ class PendingController: UIViewController {
         print("DESTINATION: \(accountId)")
         print("USERNAME: \(username)")
         print("AMOUNT: \(amount)")
-        WalletService.sendPayment(token: reserveAsset, toAccountID: accountId, amount: amount) { (txID) in
-            if let id = txID {
-                self.presentAlert(title: "Success", message: "You sent \(amount) PBK to @\(username.lowercased())")
-            } else {
-                self.presentAlert(title: "Transaction Failed", message: "Something went wrong. Please try again.")
-            }
+        WalletService.sendPayment(token: counterAsset, toAccountID: accountId, amount: amount) { (txID) in
+            
+            self.presentAlert(title: "Success", message: "You sent \(amount) to @\(username.lowercased())")
         }
     }
     

@@ -32,7 +32,7 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         tableView.tableHeaderView = header
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: standardCell)
         tableView.tableFooterView = UIView()
-        tableView.backgroundColor = Theme.lightBackground
+        tableView.backgroundColor = Theme.background
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(pushProfile))
         header.addGestureRecognizer(tap)
@@ -80,9 +80,9 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 2
+            return 1
         case 1:
-            return 2
+            return 1
         case 2:
             return 1
         default:
@@ -94,14 +94,14 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: standardCell, for: indexPath)
         cell.textLabel?.font = Theme.medium(18)
+        cell.backgroundColor = Theme.tint
+        cell.textLabel?.textColor = .white
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
-            cell.textLabel?.text = "Settings"
-        case (0, 1):
             cell.textLabel?.text = "Invite Friends"
         case (1, 0):
-            cell.textLabel?.text = "Passphrase"
-        case (1, 1):
+//            cell.textLabel?.text = "Passphrase"
+//        case (1, 1):
             cell.textLabel?.text = "Security"
         case (2, 0):
             cell.textLabel?.text = "Sign out"
@@ -127,12 +127,10 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         tableView.deselectRow(at: indexPath, animated: true)
         switch (indexPath.section, indexPath.row) {
         case(0,0):
-            pushNotificationController()
-        case (0, 1):
             presentInviteController()
         case (1, 0):
-            presentPassphrase()
-        case (1,1):
+//            presentPassphrase()
+//        case (1,1):
             pushSecurityController()
         case (2,0):
             confirmLogout()
@@ -201,6 +199,7 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
         UserService.signout { (loggedOut) in
             let vc = HomeController()
             let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true)
             self.tabBarController?.selectedIndex = 0
             let id = CurrentUser.uid
@@ -237,11 +236,13 @@ class AccountController: UITableViewController, MFMailComposeViewControllerDeleg
     
     func presentImagePickerController() {
         if photoPermission() {
+            DispatchQueue.main.async {
             let vc = UIImagePickerController()
             vc.allowsEditing = true
             vc.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
             vc.modalPresentationStyle = .popover
             self.present(vc, animated: true, completion: nil)
+            }
         }
     }
     

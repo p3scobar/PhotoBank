@@ -22,6 +22,7 @@ class InputNumberCell: UITableViewCell, UITextFieldDelegate {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         selectionStyle = .none
+
         valueInput.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
     }
     
@@ -39,21 +40,21 @@ class InputNumberCell: UITableViewCell, UITextFieldDelegate {
     let valueInput: UITextField = {
         let label = UITextField()
         label.font = Theme.semibold(20)
-        label.textColor = .black
+        label.textColor = .white
         label.tintColor = Theme.link
         label.attributedPlaceholder = NSAttributedString(string: label.placeholder ?? "0", attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
         label.textAlignment = .right
         label.keyboardType = .decimalPad
-        label.keyboardAppearance = .default
+        label.keyboardAppearance = .dark
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     
     func setupView() {
-        backgroundColor = .white
+        backgroundColor = Theme.tint
         textLabel?.textColor = Theme.gray
-        textLabel?.font = Theme.semibold(20)
+        textLabel?.font = Theme.medium(18)
         addSubview(valueInput)
         
         valueInput.leftAnchor.constraint(equalTo: leftAnchor).isActive = true

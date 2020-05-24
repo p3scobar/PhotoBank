@@ -30,11 +30,11 @@ class SwipeController: SwipeMenuViewController {
         var options = SwipeMenuViewOptions()
         options.tabView.style                           = .segmented
         options.tabView.margin                          = 8.0
-        options.tabView.additionView.backgroundColor    = UIColor.gray
-        options.tabView.backgroundColor                 = UIColor.white
-        options.tabView.itemView.textColor              = Theme.gray
-        options.tabView.itemView.selectedTextColor      = Theme.black
-        options.contentScrollView.backgroundColor       = Theme.lightBackground
+        options.tabView.additionView.backgroundColor    = Theme.background
+        options.tabView.backgroundColor                 = Theme.background
+        options.tabView.itemView.textColor              = Theme.lightGray
+        options.tabView.itemView.selectedTextColor      = .white
+        options.contentScrollView.backgroundColor       = Theme.background
         swipeMenuView.reloadData(options: options)
     }
     

@@ -146,7 +146,7 @@ class ReceiptController: UIViewController {
     lazy var tab: UIView = {
         let view = UIView(frame: CGRect(x: self.view.center.x-24, y: 12, width: 48, height: 6))
         view.layer.cornerRadius = 3
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.background
         return view
     }()
     

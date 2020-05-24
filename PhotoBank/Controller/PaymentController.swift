@@ -54,7 +54,7 @@ class PaymentController: UITableViewController {
         super.viewDidLoad()
         tableView.tableHeaderView = header
         tableView.separatorColor = Theme.border
-        tableView.backgroundColor = Theme.lightBackground
+        tableView.backgroundColor = Theme.background
         tableView.showsVerticalScrollIndicator = false
         tableView.dataSource = self
         tableView.delegate = self

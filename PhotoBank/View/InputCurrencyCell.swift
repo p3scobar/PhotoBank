@@ -45,22 +45,22 @@ class InputCurrencyCell: UITableViewCell, UITextFieldDelegate {
     lazy var valueInput: CurrencyField = {
         let label = CurrencyField()
         label.font = Theme.medium(20)
-        label.textColor = .black
+        label.textColor = .white
         label.tintColor = Theme.link
         if label.placeholder != nil {
             label.attributedPlaceholder = NSAttributedString(string: label.placeholder!, attributes: [NSAttributedString.Key.foregroundColor:Theme.gray])
         }
         label.textAlignment = .right
         label.keyboardType = .decimalPad
-        label.keyboardAppearance = .default
         label.placeholder = "$0.00"
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.keyboardAppearance = .dark
         return label
     }()
     
     
     func setupView() {
-        backgroundColor = .white
+        backgroundColor = Theme.tint
         textLabel?.textColor = Theme.gray
         textLabel?.font = Theme.medium(20)
         addSubview(valueInput)

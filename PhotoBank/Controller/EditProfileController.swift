@@ -24,6 +24,8 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
         tableView.isScrollEnabled = true
         tableView.alwaysBounceVertical = true
         tableView.separatorColor = Theme.border
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         tableView.register(InputTextCell.self, forCellReuseIdentifier: inputCell)
         tableView.register(InputTextViewCell.self, forCellReuseIdentifier: inputTextView)
         tableView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.onDrag
@@ -41,6 +43,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
     
     @objc func handleSave() {
         let data = ["name":name,"bio":bio,"url":url]
+        
         UserService.updateUserInfo(values: data) { (success) in
             CurrentUser.name = self.name
             CurrentUser.bio = self.bio
@@ -79,7 +82,6 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
             let cell = tableView.dequeueReusableCell(withIdentifier: inputCell, for: indexPath) as! InputTextCell
             cell.delegate = self
             cell.valueInput.textAlignment = .left
-            cell.backgroundColor = .white
             cell.valueInput.text = CurrentUser.username
             cell.valueInput.isEnabled = false
             cell.selectionStyle = .none
@@ -96,7 +98,7 @@ class EditProfileController: UITableViewController, UITextFieldDelegate, InputTe
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: inputTextView, for: indexPath) as! InputTextViewCell
             cell.delegate = self
-            cell.textView.placeholder = "Write something about yourself..."
+//            cell.textView.placeholder = "Write something about yourself..."
             cell.textView.text = CurrentUser.bio
             cell.indexPath = indexPath
             return cell

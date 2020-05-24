@@ -23,6 +23,8 @@ class PasswordController: UITableViewController, InputTextCellDelegate {
         super.viewDidLoad()
         tableView.register(InputTextCell.self, forCellReuseIdentifier: inputCell)
         title = "Change Password"
+        view.backgroundColor = Theme.background
+        tableView.backgroundColor = Theme.background
         tableView.tableFooterView = UIView()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .done, target: self, action: #selector(handleSubmit))
     }

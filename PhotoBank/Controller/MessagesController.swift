@@ -33,8 +33,8 @@ class MessagesController: UITableViewController {
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
         
-        view.backgroundColor = Theme.black
-        tableView.backgroundColor = Theme.black
+        view.backgroundColor = Theme.background
+        tableView.backgroundColor = Theme.background
         tableView.tableFooterView = UIView()
         
         

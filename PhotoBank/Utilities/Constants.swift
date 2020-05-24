@@ -20,19 +20,14 @@ public struct Stellar {
 public struct HorizonServer {
     static let production = "https://horizon.stellar.org"
     static let test = "https://horizon-testnet.stellar.org"
-    /// #if dev...
     static let url = HorizonServer.test
 }
 
-/// The primary numerator currency used in the app (i.e. ARIES).
-var reserveAsset: Token = Token.PBK
-
 var superlikeAmount: Decimal = 0.1
-
-/// STELLAR LUMENS: The base currency of the app. XLM or USD
-var baseAsset = Token(assetType: AssetTypeAsString.NATIVE, assetCode: "XLM", assetIssuer: nil, balance: "")
 
 let db = Firestore.firestore()
 let dbRealtime = Database.database().reference()
 let bubbleAPIKey = "afc1c4b4f396fd140e06326b81cbcd65"
 
+let counterAsset = Token.PBK
+let baseAsset = Token.native

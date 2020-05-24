@@ -59,7 +59,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
 
 //        tableView.tableHeaderView = header
         tableView.backgroundColor = Theme.black
-        
+
         tableView.prefetchDataSource = self
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
         tableView.register(AdCell.self, forCellReuseIdentifier: adCell)
@@ -84,14 +84,14 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
 
         let plusIcon = UIImage(named: "photo")?.withRenderingMode(.alwaysTemplate)
         let plus = UIBarButtonItem(image: plusIcon, style: .done, target: self, action: #selector(presentImagePicker))
-        plus.tintColor = Theme.black
+        plus.tintColor = .white
         self.navigationItem.rightBarButtonItem = plus
         
         let userIcon = UIImage(named: "user")?.withRenderingMode(.alwaysTemplate)
 //
 //        pushAccountController
         let user = UIBarButtonItem(image: userIcon, style: .done, target: self, action: #selector(pushAccountController))
-        user.tintColor = Theme.black
+        user.tintColor = .white
         self.navigationItem.leftBarButtonItem = user
         
         spinner = UIActivityIndicatorView(style: .white)
@@ -101,13 +101,14 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         
         checkAuthentication()
         NotificationCenter.default.addObserver(self, selector: #selector(checkAuthentication), name: Notification.Name(rawValue: "login"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(newPostUploaded(notification:)), name: Notification.Name("newPost"), object: nil)
         
         tableView.refreshControl = refresh
         refresh.tintColor = Theme.lightGray
         refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
         scrollEnabled = true
         
-        
+        fetchData()
 //        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(gesture:)))
 //        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
 //        self.view.addGestureRecognizer(swipeLeft)
@@ -202,7 +203,6 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         }
         fetchData()
         NewsService.fetchLikes { (_) in }
-        NotificationCenter.default.addObserver(self, selector: #selector(newPostUploaded(notification:)), name: Notification.Name("newPost"), object: nil)
     }
     
     @objc func newPostUploaded(notification: Notification) {
@@ -216,6 +216,7 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
     func presentHomeController() {
         let vc = HomeController()
         let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
         self.tabBarController?.present(nav, animated: false, completion: nil)
     }
 
@@ -409,15 +410,14 @@ extension TimelineController: StatusCellDelegate {
     }
     
     private func handleSuperLike(pk: String, username: String) {
-        WalletService.sendPayment(token: reserveAsset, toAccountID: pk, amount: superlikeAmount) { (_) in
-            SoundKit.playSound(type: .pay)
+        WalletService.sendPayment(token: counterAsset, toAccountID: pk, amount: superlikeAmount) { (_) in
         }
     }
     
-    func presentPaymentController(_ publicKey: String, username: String) {
-        let vc = PayController(publicKey: publicKey)
-        vc.publicKey = publicKey
-        vc.username = username
+    func presentPaymentController() {
+        let vc = PayController()
+//        vc.publicKey = publicKey
+//        vc.username = username
         let nav = UINavigationController(rootViewController: vc)
         
         let transitionDelegate = SPStorkTransitioningDelegate()
@@ -445,7 +445,7 @@ extension TimelineController: StatusCellDelegate {
 extension UIViewController {
     
     func presentPaymentController(publicKey: String) {
-        let vc = PayController(publicKey: publicKey)
+        let vc = PayController()
         vc.publicKey = publicKey
         let nav = UINavigationController(rootViewController: vc)
         

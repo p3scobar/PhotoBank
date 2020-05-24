@@ -20,6 +20,8 @@ class RecoveryController: UITableViewController, InputTextCellDelegate {
         title = "Secret Phrase"
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .done, target: self, action: #selector(handleSubmit))
     }
@@ -30,8 +32,8 @@ class RecoveryController: UITableViewController, InputTextCellDelegate {
     
     @objc func handleSubmit() {
         WalletService.generateKeyPair(mnemonic: mnemonic) { (keyPair) in
-            let publicKey = keyPair.accountId
-            guard let privateSeed = keyPair.secretSeed else { return }
+            guard let publicKey = keyPair?.accountId,
+                let privateSeed = keyPair?.secretSeed else { return }
             
             print("PUBLIC KEY: \(publicKey)")
             print("PRIVATE KEY: \(privateSeed)")

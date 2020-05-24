@@ -24,11 +24,14 @@ class PassphraseController: UITableViewController {
         var instructionsLabel: UITextView = {
             let view = UITextView(frame: frame)
             view.textContainerInset = UIEdgeInsets(top: 30, left: 16, bottom: 10, right: 16)
-            view.backgroundColor = Theme.lightBackground
+            view.backgroundColor = Theme.background
             view.font = UIFont.boldSystemFont(ofSize: 18)
+            view.isEditable = false
+            view.textColor = .white
             view.text = "This is your 12 word passphrase. It is the only way to access your account. We do not store this data, therefore, if you lose your passphrase, we cannot recover your funds. Store your passphrase securely in multiple locations, and do not share it with anyone."
             return view
         }()
+        
         view.addSubview(instructionsLabel)
         return view
     }()
@@ -39,11 +42,10 @@ class PassphraseController: UITableViewController {
         tableView.tableHeaderView = header
         tableView.allowsSelection = false
         tableView.separatorColor = Theme.border
-        tableView.backgroundColor = Theme.lightBackground
-        
+        tableView.backgroundColor = Theme.red
+        view.backgroundColor = Theme.background
         self.navigationItem.title = "Secret Phrase"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
-        self.navigationController?.navigationBar.prefersLargeTitles = true
 
         if isModal {
 //            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Continue", style: .done, target: self, action: #selector(handleContinue))
@@ -56,7 +58,7 @@ class PassphraseController: UITableViewController {
         if KeychainHelper.privateSeed == "" {
             tableView.tableFooterView = footer
         } else {
-            tableView.tableFooterView = nil
+            tableView.tableFooterView = UIView()
         }
     }
 
@@ -72,6 +74,8 @@ class PassphraseController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        cell.backgroundColor = Theme.background
+        cell.textLabel?.textColor = .white
         cell.textLabel?.font = Theme.semibold(20)
         let words = mnemonic.components(separatedBy: .whitespaces)
         if words.count > 1 {
@@ -119,7 +123,7 @@ class PassphraseController: UITableViewController {
         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 120)
         let view = ButtonTableFooterView(frame: frame, title: "Continue")
         view.delegate = self
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.background
         return view
     }()
     
@@ -132,19 +136,18 @@ extension PassphraseController: ButtonTableFooterDelegate {
         footer.isLoading = true
         let passphrase = mnemonic
         WalletService.generateKeyPair(mnemonic: passphrase) { (keyPair) in
-            let publicKey = keyPair.accountId
-            guard let secretKey = keyPair.secretSeed else {
+            let publicKey = keyPair?.accountId
+            guard let secretKey = keyPair?.secretSeed else {
                 print("NO SECRET KEY")
                 return
             }
-            KeychainHelper.publicKey = publicKey
+            KeychainHelper.publicKey = publicKey ?? ""
             KeychainHelper.privateSeed = secretKey
             KeychainHelper.mnemonic = self.mnemonic
             
-            UserService.updatePublicKey(completion: { (_) in })
-            WalletService.createStellarTestAccount(accountID: publicKey, completion: { (something) in
-                self.navigationController?.popToRootViewController(animated: true)
-            })
+            WalletService.signUp {
+                
+            }
         }
     }
     

@@ -54,6 +54,8 @@ class NewMessageController: UITableViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         tableView.tableFooterView = UIView()
         navigationController?.navigationBar.prefersLargeTitles = true
         fetchUsers("")

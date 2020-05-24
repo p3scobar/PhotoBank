@@ -30,7 +30,7 @@ class PersistenceService {
     static func saveContext () {
         let context = persistentContainer.viewContext
         context.perform {
-            context.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             if context.hasChanges {
                 do {
                     try context.save()

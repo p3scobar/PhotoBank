@@ -13,20 +13,23 @@ class OrderConfirmController: UITableViewController {
     
     var numberCell = "numberCell"
     var token: Token
-    var side: TransactionType
+    var type: TransactionType
     var amount: Decimal
     var price: Decimal
+    var subtotal: Decimal
     var total: Decimal
     
     
-    init(token: Token, side: TransactionType, amount: Decimal, price: Decimal, total: Decimal) {
+    init(token: Token, type: TransactionType, amount: Decimal, price: Decimal, subtotal: Decimal) {
         self.token = token
-        self.side = side
+        self.type = type
         self.amount = amount
         self.price = price
-        self.total = total
+        self.subtotal = subtotal
+        self.total = subtotal
         super.init(style: .grouped)
     }
+
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,9 +38,12 @@ class OrderConfirmController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = side.rawValue.capitalized
+        title = token.assetCode
+            //type.rawValue.capitalized
         tableView.isScrollEnabled = true
         tableView.alwaysBounceVertical = true
+        tableView.backgroundColor = Theme.black
+        tableView.separatorColor = Theme.border
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.register(InputNumberCell.self, forCellReuseIdentifier: numberCell)
         tableView.tableFooterView = footer
@@ -65,17 +71,16 @@ class OrderConfirmController: UITableViewController {
     func setupCell(indexPath: Int, cell: InputNumberCell) {
         cell.key = indexPath
         cell.valueInput.isEnabled = false
-        let assetCode = baseAsset.assetCode ?? ""
         switch indexPath {
         case 0:
             cell.textLabel?.text = "Amount"
             cell.valueInput.text = "\(amount)"
         case 1:
             cell.textLabel?.text = "Price"
-            cell.valueInput.text = price.rounded(2) + " \(assetCode)"
+            cell.valueInput.text = price.rounded(4)
         case 2:
             cell.textLabel?.text = "Total"
-            cell.valueInput.text = total.rounded(2) + " \(assetCode)"
+            cell.valueInput.text = total.rounded(4) + " \(baseAsset.assetCode ?? "")"
         default:
             break
         }
@@ -116,48 +121,59 @@ class OrderConfirmController: UITableViewController {
     
     
     @objc func handleConfirm() {
-        if side == .buy {
+        switch type {
+        case .buy:
             handleBuy()
-        }
-        
-        if side == .sell {
+        case .sell:
             handleSell()
+        default:
+            break
         }
     }
     
     func handleBuy() {
-        guard let n: Int32 = Int32("100"),
-            let d: Int32 = Int32("\(price*100)") else { return }
+        let value = price*100
+        let result = NSDecimalNumber(decimal: value)
+//        print(Int(result)) // testing the cast to Int
+        
+        guard let n: Int32 = Int32("100") else {
+            ErrorPresenter.showError(message: "Value is incorrect", on: self)
+            return
+        }
+        let d: Int32 = Int32(truncating: result)
         let p = Price(numerator: n, denominator: d)
         let amount = total
         
-        submitOffer(buy: token, sell: baseAsset, amount: amount, price: p)
+        let buyAsset = token.toRawAsset()
+        let sellAsset = baseAsset.toRawAsset()
+        
+        submitOffer(buy: buyAsset, sell: sellAsset, amount: amount, price: p)
     }
     
     
     func handleSell() {
         guard let n: Int32 = Int32("\(price*100)"),
-            let d: Int32 = Int32("100") else { return }
+            let d: Int32 = Int32("100") else {
+                ErrorPresenter.showError(message: "Value is incorrect", on: self)
+                return
+            }
         let p = Price(numerator: n, denominator: d)
-        
-        submitOffer(buy: baseAsset, sell: token, amount: amount, price: p)
+        let buyAsset = baseAsset.toRawAsset()
+        let sellAsset = token.toRawAsset()
+        submitOffer(buy: buyAsset, sell: sellAsset, amount: amount, price: p)
     }
     
     
-    func submitOffer(buy: Token, sell: Token, amount: Decimal, price: Price) {
+    
+    func submitOffer(buy: Asset, sell: Asset, amount: Decimal, price: Price) {
         
-        let buying = buy.toRawAsset()
-        let selling = sell.toRawAsset()
-
-        OrderService.offer(buy: buying, sell: selling, amount: amount, price: price) { success in
-            DispatchQueue.main.async {
-                if success == true {
-                    self.dismiss(animated: true, completion: nil)
-                } else {
-                    ErrorPresenter.showError(message: "Order Failed", on: self)
-                }
-                self.footer.isLoading = false
+        OrderService.offer(buy: buy, sell: sell, amount: amount, price: price) { success in
+            if success == true {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                ErrorPresenter.showError(message: "Order Failed", on: self)
             }
+            self.footer.isLoading = false
         }
     }
     
@@ -167,11 +183,8 @@ class OrderConfirmController: UITableViewController {
 
 
 extension OrderConfirmController: ButtonTableFooterDelegate {
-    
     func didTapButton(_ button: UIButton?) {
         footer.isLoading = true
         handleConfirm()
     }
-
 }
-

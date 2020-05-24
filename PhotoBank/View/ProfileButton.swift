@@ -15,8 +15,8 @@ class ProfileButton: UIControl {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                icon.tintColor = Theme.tint
-                titleLabel.textColor = Theme.tint
+                icon.tintColor = Theme.lightGray
+                titleLabel.textColor = Theme.lightGray
             } else {
                 icon.tintColor = Theme.gray
                 titleLabel.textColor = Theme.gray
@@ -27,8 +27,8 @@ class ProfileButton: UIControl {
     override var isEnabled: Bool {
         didSet {
             if !isEnabled {
-                icon.tintColor = Theme.lightGray
-                titleLabel.textColor = Theme.lightGray
+                icon.tintColor = Theme.darkGray
+                titleLabel.textColor = Theme.darkGray
             } else {
                 icon.tintColor = Theme.gray
                 titleLabel.textColor = Theme.gray
@@ -39,24 +39,21 @@ class ProfileButton: UIControl {
     private var previousLabelTintColor: UIColor?
     private var previousImageTintColor: UIColor?
     
-    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.semibold(14)
         label.textAlignment = .center
-        label.textColor = Theme.gray
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    
     lazy var icon: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.tintColor = Theme.gray
+        view.tintColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     
     convenience init(imageName: String, title: String) {
         self.init()
@@ -65,15 +62,14 @@ class ProfileButton: UIControl {
         setupView()
     }
     
-    
     override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
         isHighlighted = true
         
         previousImageTintColor = Theme.gray
         previousLabelTintColor = Theme.gray
         
-        icon.tintColor = Theme.highlight
-        titleLabel.textColor = Theme.highlight
+        icon.tintColor = Theme.darkGray
+        titleLabel.textColor = Theme.darkGray
         sendActions(for: .touchDown)
         if CurrentUser.sounds == true {
             SoundKit.playSound(type: .button)

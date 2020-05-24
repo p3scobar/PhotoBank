@@ -93,7 +93,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = Theme.lightBackground
+        collectionView?.backgroundColor = Theme.background
         collectionView?.register(UserHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: header)
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         navigationItem.title = "User"
@@ -202,6 +202,7 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func presentPassphraseController() {
         let vc = PassphraseController()
         let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .overFullScreen
         self.present(nav, animated: true, completion: nil)
     }
     
@@ -279,11 +280,11 @@ extension UserController: UserHeaderDelegate {
 extension UserController {
     
     @objc func handlePhotoTap() {
-        guard let stories = stories else { return }
-        let vc = AVController(stories)
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalTransitionStyle = .crossDissolve
-        self.tabBarController?.present(nav, animated: true, completion: nil)
+//        guard let stories = stories else { return }
+//        let vc = AVController(stories)
+//        let nav = UINavigationController(rootViewController: vc)
+//        nav.modalTransitionStyle = .crossDissolve
+//        self.tabBarController?.present(nav, animated: true, completion: nil)
     }
     
 }

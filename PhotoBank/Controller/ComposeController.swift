@@ -48,18 +48,20 @@ class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINa
         let frame = UIScreen.main.bounds
         let view = UIScrollView(frame: frame)
         view.alwaysBounceVertical = true
-        view.backgroundColor = .white
+        view.backgroundColor = Theme.background
         view.contentSize = CGSize(width: frame.width, height: frame.height*1.2)
         return view
     }()
     
+    
     lazy var inputTextView: UITextView = {
         let view = UITextView(frame: CGRect(x: 0, y: 240, width: self.view.frame.width, height: 320))
-        view.placeholder = "What's happening?"
-        view.placeholderColor = .lightGray
+//        view.placeholder = "What's happening?"
         view.font = Theme.semibold(18)
         view.keyboardType = .twitter
         view.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
+        view.backgroundColor = Theme.background
+        view.textColor = .white
         return view
     }()
     
@@ -182,15 +184,32 @@ class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINa
 //    }
 
 }
-
+    
 
 extension ComposeController: ComposeDelegate {
     
     func handleSubmit() {
+
+//        let vc = PayController()
+//        vc.modalPresentationStyle = .custom
+//        vc.transitioningDelegate = self
+//
+//        self.present(vc, animated: true)
+        
+        
+        
         guard let text = inputTextView.text else { return }
         NewsService.postPhoto(text: text, image: image!)
         view.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
+    
+//    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController!, sourceViewController source: UIViewController) -> UIPresentationController? {
+////        return PayController(presentedViewController: presented, presentingViewController: presentingViewController)
+//    }
+    
+}
+
+extension ComposeController: UIViewControllerTransitioningDelegate {
     
 }

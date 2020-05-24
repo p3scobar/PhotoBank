@@ -37,7 +37,7 @@ class ChatInputView: UIView, UITextViewDelegate {
     lazy var sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send", for: .normal)
-        button.setTitleColor(Theme.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = Theme.bold(18)
         button.addTarget(self, action: #selector(handleSendTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +85,7 @@ class ChatInputView: UIView, UITextViewDelegate {
     
     lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = Theme.lightGray
+        view.backgroundColor = Theme.border
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -97,9 +97,9 @@ class ChatInputView: UIView, UITextViewDelegate {
 //        view.textView.placeholder = "Aa"
 //        view.textView.placeholderColor = Theme.gray
         view.textView.textContainerInset = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
-        view.textView.textColor = Theme.black
+        view.textView.textColor = .white
         view.textView.font = Theme.semibold(18)
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.background
         view.layer.cornerRadius = 20
         view.isScrollEnabled = false
         view.showsVerticalScrollIndicator = false
@@ -124,6 +124,7 @@ class ChatInputView: UIView, UITextViewDelegate {
     }()
     
     func setupView() {
+        backgroundColor = Theme.background
         addSubview(container)
         addSubview(inputMoney)
         addSubview(sendButton)

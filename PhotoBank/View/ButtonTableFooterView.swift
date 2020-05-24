@@ -57,12 +57,12 @@ class ButtonTableFooterView: UIView {
     
     
     lazy var button: Button = {
-        let frame = CGRect(x: 12, y: 20, width: self.frame.width-24, height: 64)
+        let frame = CGRect(x: 20, y: 20, width: self.frame.width-40, height: 64)
         let button = Button(frame: frame, title: buttonTitle)
         button.setTitle(buttonTitle, for: .normal)
         button.layer.cornerRadius = 12
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Theme.black
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
         button.layer.cornerRadius = 14
         button.addTarget(self, action: #selector(handleCancel), for: .touchDown)
         return button

@@ -21,7 +21,7 @@ class InputTextCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
-        backgroundColor = .white
+        backgroundColor = Theme.tint
         valueInput.addTarget(self, action: #selector(valueChanged), for: .editingChanged)
     }
     
@@ -42,8 +42,10 @@ class InputTextCell: UITableViewCell {
         view.font = Theme.medium(18)
         view.textAlignment = .right
         if view.placeholder != nil {
-            view.attributedPlaceholder = NSAttributedString(string: view.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+            view.attributedPlaceholder = NSAttributedString(string: view.placeholder!, attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         }
+        view.textColor = .white
+        view.keyboardAppearance = .dark
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -30,11 +30,11 @@ extension Theme {
     }
     
     public static var lightGray: UIColor {
-        return UIColor(181, 181, 186)
+        return UIColor(220, 220, 220)
     }
 
     public static var border: UIColor {
-        return UIColor(200, 200, 200)
+        return UIColor(60, 60, 60)
     }
     
     public static var gray: UIColor {
@@ -47,7 +47,7 @@ extension Theme {
     
     
     public static var highlight: UIColor {
-        return UIColor(0, 110, 207)
+        return UIColor(0, 199, 129)
     }
     
     public static var unfilled: UIColor {
@@ -55,7 +55,7 @@ extension Theme {
     }
     
     public static var tint: UIColor {
-        return UIColor(20, 20, 20)
+        return UIColor(28, 28, 32)
     }
     
     public static var black: UIColor {
@@ -66,8 +66,8 @@ extension Theme {
         return UIColor(23, 78, 161)
     }
     
-    public static var lightBackground: UIColor {
-        return UIColor(212, 212, 218)
+    public static var background: UIColor {
+        return UIColor(12, 12, 12)
     }
     
     public static var red: UIColor {
@@ -80,7 +80,7 @@ extension Theme {
     
     public static var incoming: UIColor {
 //        return UIColor(191, 191, 196)
-        return Theme.lightBackground
+        return Theme.lightGray
     }
     
     public static var outgoing: UIColor {
@@ -89,7 +89,8 @@ extension Theme {
     
     public static var link: UIColor {
 //        return UIColor(0, 158, 21)
-        return UIColor(33, 111, 219)
+        return UIColor(245, 39, 129)
+//        return UIColor(235, 35, 122)
     }
     
     public static var card: UIColor {

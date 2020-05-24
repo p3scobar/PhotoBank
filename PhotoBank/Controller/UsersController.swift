@@ -43,7 +43,7 @@ class UsersController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Theme.lightBackground
+        view.backgroundColor = Theme.background
         tableView.register(UserCellSmall.self, forCellReuseIdentifier: userCell)
         navigationController?.navigationBar.prefersLargeTitles = true
         

@@ -45,14 +45,19 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        customize()
+        fetchData()
+    }
+    
+    func customize() {
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.register(ActivityCell.self, forCellReuseIdentifier: activityCell)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         navigationItem.title = "Activity"
         navigationController?.navigationBar.prefersLargeTitles = true
         extendedLayoutIncludesOpaqueBars = true
-        fetchData()
     }
     
     @objc func fetchData() {
@@ -63,7 +68,7 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     
     override func viewDidAppear(_ animated: Bool) {
         tableView.refreshControl = refresh
-        refresh.tintColor = .black
+        refresh.tintColor = .white
         refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
     }
     
@@ -78,8 +83,8 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: activityCell, for: indexPath) as! ActivityCell
-//        cell.activity = notifications[indexPath.row]
-//        cell.delegate = self
+        cell.activity = notifications[indexPath.row]
+        cell.delegatee = self
         return cell
     }
     
@@ -121,7 +126,13 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     }
     
     
-    func handleUserTap(userId: String) {
+    
+}
+
+
+extension ActivityController: ActivityCellDelegate {
+    
+    func handleUserTap(_ userId: String) {
         let vc = UserController(userId)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -133,5 +144,3 @@ class ActivityController: UITableViewController, UISearchControllerDelegate, UIN
     }
     
 }
-
-

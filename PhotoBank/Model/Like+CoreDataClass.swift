@@ -47,6 +47,7 @@ public class Like: NSManagedObject {
             let error = error
             print(error.localizedDescription)
         }
+        print("Like Exists on Status ID: \(statusID) \(exists)")
         return exists
     }
     

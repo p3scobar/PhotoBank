@@ -136,10 +136,12 @@ extension Token {
     }
     
     public static var PBK: Token {
-        return Token(assetCode: "PBK", issuer: "GAUM73DX3ZHRPFDUCYN5AQIEJ4YYWDBH2RYEW276TWJLSCJSFLB23UWN")
+        return Token(assetCode: "PBK", issuer: "GAJS6UJ2I6TREFZVMAVNL7COQ4EJK4GUZGPNAS2J2HHVCOT7TBKHAXCI")
     }
     
-    
+    public static var USD: Token {
+        return Token(assetCode: "USD", issuer: "GAJS6UJ2I6TREFZVMAVNL7COQ4EJK4GUZGPNAS2J2HHVCOT7TBKHAXCI")
+    }
     
     
 }

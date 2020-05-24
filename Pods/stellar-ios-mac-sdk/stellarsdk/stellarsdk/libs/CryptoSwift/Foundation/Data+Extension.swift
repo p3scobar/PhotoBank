@@ -40,7 +40,7 @@ extension Data {
         return Data(bytes: Digest.sha224(bytes))
     }
 
-    internal func sha256() -> Data {
+    public func sha256() -> Data {
         return Data(bytes: Digest.sha256(bytes))
     }
 

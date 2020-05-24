@@ -38,7 +38,7 @@ class DiscoverController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView?.prefetchDataSource = self
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        collectionView?.backgroundColor = Theme.black
+        collectionView?.backgroundColor = Theme.background
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: photoCell)
         
         self.definesPresentationContext = true

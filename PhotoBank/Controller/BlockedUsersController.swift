@@ -40,7 +40,8 @@ class BlockedUsersController: UITableViewController {
         title = "Blocked Users"
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(fetchData), for: .valueChanged)
-        
+        view.backgroundColor = Theme.background
+        tableView.backgroundColor = Theme.background
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.hidesSearchBarWhenScrolling = false
         

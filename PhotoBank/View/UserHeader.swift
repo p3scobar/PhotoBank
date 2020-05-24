@@ -29,9 +29,11 @@ class UserHeader: UICollectionReusableView {
             if following {
                 followButton.titleLabel.text = "Following"
                 followButton.icon.image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)
+                followButton.isHighlighted = true
             } else {
                 followButton.titleLabel.text = "Follow"
                 followButton.icon.image = UIImage(named: "plus")?.withRenderingMode(.alwaysTemplate)
+                followButton.isHighlighted = false
             }
         }
     }
@@ -39,7 +41,7 @@ class UserHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        backgroundColor = .white
+        backgroundColor = Theme.background
         
         let urlTap = UITapGestureRecognizer(target: self, action: #selector(handleURLTap))
         urlLabel.addGestureRecognizer(urlTap)
@@ -119,7 +121,7 @@ class UserHeader: UICollectionReusableView {
         let view = UIImageView(frame: frame)
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = frame.width/2
-        view.backgroundColor = Theme.lightGray
+        view.backgroundColor = Theme.tint
         view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view
@@ -129,7 +131,7 @@ class UserHeader: UICollectionReusableView {
         let label = UILabel()
         label.font = Theme.bold(28)
         label.numberOfLines = 0
-        label.textColor = .black
+        label.textColor = .white
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -148,6 +150,7 @@ class UserHeader: UICollectionReusableView {
     lazy var followersLabel: UILabel = {
         let label = UILabel()
         label.font = Theme.semibold(20)
+        label.textColor = Theme.gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -184,6 +187,7 @@ class UserHeader: UICollectionReusableView {
         label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textColor = Theme.lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -199,7 +203,7 @@ class UserHeader: UICollectionReusableView {
     
     lazy var bottomLine: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = Theme.border
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

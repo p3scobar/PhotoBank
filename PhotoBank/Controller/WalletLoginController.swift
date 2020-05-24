@@ -18,27 +18,32 @@ class WalletLoginController: UIViewController {
         super.viewDidLoad()
         setupView()
         view.backgroundColor = .white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
+    }
+    
+    @objc func handleCancel() {
+        dismiss(animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+//        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+//        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     
     lazy var headline: UILabel = {
-        let frame = CGRect(x: 0, y: inputField.frame.minY-100, width: self.view.frame.width, height: 60)
+        let frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: 60)
         let view = UILabel(frame: frame)
         view.text = "Your passphrase"
         view.font = Theme.bold(32)
         view.textAlignment = .center
-        view.textColor = Theme.black
+        view.textColor = .white
         return view
     }()
     
@@ -53,7 +58,7 @@ class WalletLoginController: UIViewController {
     
     
     lazy var inputField: UITextField = {
-        let frame = CGRect(x: 16, y: scrollView.center.y-100, width: self.view.frame.width-32, height: 54)
+        let frame = CGRect(x: 16, y: headline.frame.maxY+40, width: self.view.frame.width-32, height: 54)
         let view = UITextField(frame: frame)
         view.font = Theme.semibold(18)
         view.textColor = .white
@@ -75,9 +80,9 @@ class WalletLoginController: UIViewController {
         let frame = CGRect(x: 16, y: inputField.frame.maxY+20, width: self.view.frame.width-32, height: 54)
         let button = UIButton(frame: frame)
         button.setTitle("Login", for: .normal)
-        button.setTitleColor(Theme.black, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = Theme.semibold(20)
-        button.backgroundColor = Theme.black
+        button.backgroundColor = .white
         button.layer.cornerRadius = 12
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
@@ -108,13 +113,13 @@ class WalletLoginController: UIViewController {
             return
         }
         
-//        WalletService.login(passphrase) { (success) in
-//            if success == true {
-//                self.dismiss(animated: true, completion: nil)
-//            } else {
-//                ErrorPresenter.showError(message: "Login failed", on: self)
-//            }
-//        }
+        WalletService.login(passphrase) { (success) in
+            if success == true {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                ErrorPresenter.showError(message: "Login failed", on: self)
+            }
+        }
     }
     
     func setupView() {
@@ -123,7 +128,12 @@ class WalletLoginController: UIViewController {
         scrollView.addSubview(inputField)
         scrollView.addSubview(loginButton)
         view.addSubview(signupButton)
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
     }
+    
+//    @objc func handleCancel() {
+//        dismiss(animated: true)
+//    }
     
 }
 

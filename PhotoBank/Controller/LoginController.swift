@@ -22,6 +22,8 @@ class LoginController: UITableViewController, InputTextCellDelegate {
         title = "Login"
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.tableFooterView = UIView()
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .done, target: self, action: #selector(handleSubmit))
     }
     

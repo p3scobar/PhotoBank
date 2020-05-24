@@ -15,8 +15,8 @@ class PhotoButton: UIControl {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                icon.tintColor = Theme.gray
-                titleLabel.textColor = Theme.gray
+                icon.tintColor = .white
+                titleLabel.textColor = .white
             }
         }
     }
@@ -24,8 +24,8 @@ class PhotoButton: UIControl {
     override var isEnabled: Bool {
         didSet {
             if !isEnabled {
-                icon.tintColor = Theme.gray
-                titleLabel.textColor = Theme.gray
+                icon.tintColor = .white
+                titleLabel.textColor = .white
             }
         }
     }
@@ -37,7 +37,7 @@ class PhotoButton: UIControl {
         let label = UILabel()
         label.font = Theme.semibold(16)
         label.textAlignment = .left
-        label.textColor = Theme.tint
+        label.textColor = .white
         label.text = "💬"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,7 +45,7 @@ class PhotoButton: UIControl {
     
     lazy var icon: UIImageView = {
         let view = UIImageView(frame: .zero)
-        view.tintColor = Theme.tint
+        view.tintColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -60,11 +60,11 @@ class PhotoButton: UIControl {
     override func touchesBegan(_: Set<UITouch>, with _: UIEvent?) {
         isHighlighted = true
         
-        previousImageTintColor = Theme.gray
-        previousLabelTintColor = Theme.gray
+        previousImageTintColor = .white
+        previousLabelTintColor = .white
         
-        icon.tintColor = Theme.tint
-        titleLabel.textColor = Theme.tint
+        icon.tintColor = Theme.gray
+        titleLabel.textColor = Theme.gray
         sendActions(for: .touchDown)
     }
     
@@ -87,16 +87,11 @@ class PhotoButton: UIControl {
     
     func setupView() {
         addSubview(icon)
-        addSubview(titleLabel)
         
-        icon.widthAnchor.constraint(equalToConstant: 26).isActive = true
-        icon.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        icon.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: 24).isActive = true
         icon.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
         icon.leftAnchor.constraint(equalTo: leftAnchor, constant: 0).isActive = true
         
-        titleLabel.leftAnchor.constraint(equalTo: icon.rightAnchor, constant: 10).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
 }

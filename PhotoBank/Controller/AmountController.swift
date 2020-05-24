@@ -25,7 +25,7 @@ class AmountController: UIViewController, UIScrollViewDelegate, UITextFieldDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Amount"
-        view.backgroundColor = .white
+        view.backgroundColor = Theme.background
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .done, target: self, action: #selector(handleSubmit))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
         setupView()
@@ -100,6 +100,7 @@ class AmountController: UIViewController, UIScrollViewDelegate, UITextFieldDeleg
         field.borderStyle = UITextField.BorderStyle.none
         field.delegate = self
         field.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+        field.textColor = .white
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
     }()
@@ -110,7 +111,7 @@ class AmountController: UIViewController, UIScrollViewDelegate, UITextFieldDeleg
         view.adjustsFontSizeToFitWidth = true
         view.font = Theme.semibold(24)
         view.textColor = Theme.lightGray
-        view.text = reserveAsset.assetCode ?? ""
+        view.text = counterAsset.assetCode ?? ""
         view.adjustsFontForContentSizeCategory = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

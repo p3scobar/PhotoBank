@@ -18,7 +18,8 @@ class SignupController: UITableViewController, InputTextCellDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = Theme.background
+        view.backgroundColor = Theme.background
         tableView.register(InputTextCell.self, forCellReuseIdentifier: inputCell)
         title = "Signup"
         navigationController?.navigationBar.prefersLargeTitles = true

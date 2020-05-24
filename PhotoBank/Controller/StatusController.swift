@@ -47,7 +47,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
         tableView.keyboardDismissMode = .interactive
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.allowsSelection = false
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = Theme.background
         tableView.register(StatusCell.self, forCellReuseIdentifier: statusCell)
         tableView.register(CommentCell.self, forCellReuseIdentifier: commentCell)
         tableView.tableFooterView = UIView()
@@ -111,15 +111,13 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
 
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+//        if section == 0 {
             return 1
-        } else {
-            return comments.count
-        }
+//        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -150,22 +148,22 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    lazy var menu: ChatInputView = {
-        let view = ChatInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 60))
-        view.chatDelegate = self
-        return view
-    }()
+//    lazy var menu: ChatInputView = {
+//        let view = ChatInputView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 60))
+//        view.chatDelegate = self
+//        return view
+//    }()
     
-    override var inputAccessoryView: UIView! {
-        get {
-            return menu
-        }
-    }
+//    override var inputAccessoryView: UIView! {
+//        get {
+//            return menu
+//        }
+//    }
     
     
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
+//    override var canBecomeFirstResponder: Bool {
+//        return true
+//    }
     
     
     static var AllowUserInteraction: UIView.KeyframeAnimationOptions {
@@ -272,23 +270,23 @@ extension StatusController: StatusCellDelegate {
 
 
 
-extension StatusController: ChatMenuDelegate {
-    
-    func handleSend(_ text: String) {
-        guard let status = status else { return }
-        menu.inputTextField.textView.text = ""
-        menu.inputTextField.textView.endEditing(true)
-        view.endEditing(true)
-        NewsService.postComment(status: status, text: text) { (comment) in
-            guard let comment = comment else { return }
-            self.comments.insert(comment, at: 0)
-//            if self.tableView.numberOfRows(inSection: 1) > 0 {
-//                let path = IndexPath(item: 0, section: 1)
-//            }
-        }
-    }
-    
-}
+//extension StatusController: ChatMenuDelegate {
+//
+//    func handleSend(_ text: String) {
+//        guard let status = status else { return }
+////        menu.inputTextField.textView.text = ""
+////        menu.inputTextField.textView.endEditing(true)
+//        view.endEditing(true)
+//        NewsService.postComment(status: status, text: text) { (comment) in
+//            guard let comment = comment else { return }
+//            self.comments.insert(comment, at: 0)
+////            if self.tableView.numberOfRows(inSection: 1) > 0 {
+////                let path = IndexPath(item: 0, section: 1)
+////            }
+//        }
+//    }
+//
+//}
 
 
 extension StatusController: CommentCellDelegate {
