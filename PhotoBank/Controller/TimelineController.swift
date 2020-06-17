@@ -106,7 +106,6 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         tableView.refreshControl = refresh
         refresh.tintColor = Theme.lightGray
         refresh.addTarget(self, action: #selector(fetchData), for: .valueChanged)
-        scrollEnabled = true
         
         fetchData()
 //        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(gesture:)))
@@ -115,7 +114,10 @@ class TimelineController: UITableViewController, UISearchControllerDelegate, UIN
         
     }
     
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scrollEnabled = true
+    }
     
     @objc func handleSwipe(gesture: UIGestureRecognizer) {
         
@@ -414,52 +416,7 @@ extension TimelineController: StatusCellDelegate {
         }
     }
     
-    func presentPaymentController() {
-        let vc = PayController()
-//        vc.publicKey = publicKey
-//        vc.username = username
-        let nav = UINavigationController(rootViewController: vc)
-        
-        let transitionDelegate = SPStorkTransitioningDelegate()
-        nav.transitioningDelegate = transitionDelegate
-        nav.modalPresentationCapturesStatusBarAppearance = true
-        nav.modalPresentationStyle = .custom
-        nav.modalTransitionStyle = .crossDissolve
-        presentAsStork(nav, height: UIScreen.main.bounds.height*0.8)
-//        self.present(nav, animated: true, completion: nil)
-        
-    }
-    
-    func presentReceiptController() {
-        definesPresentationContext = true
-        let vc = ReceiptController(payment: nil)
-//        vc.payment = payment
-        vc.modalTransitionStyle = .crossDissolve
-        vc.modalPresentationStyle = .overCurrentContext
-        self.tabBarController?.present(vc, animated: true, completion: nil)
-    }
-    
-    
-}
-
-extension UIViewController {
-    
-    func presentPaymentController(publicKey: String) {
-        let vc = PayController()
-        vc.publicKey = publicKey
-        let nav = UINavigationController(rootViewController: vc)
-        
-        let transitionDelegate = SPStorkTransitioningDelegate()
-        nav.transitioningDelegate = transitionDelegate
-        nav.modalPresentationCapturesStatusBarAppearance = true
-        nav.modalPresentationStyle = .custom
-        nav.modalTransitionStyle = .crossDissolve
-        presentAsStork(nav, height: UIScreen.main.bounds.height*0.8)
-        
-    }
-    
-    
-    
+   
     
 }
 

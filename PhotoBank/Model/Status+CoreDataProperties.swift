@@ -17,7 +17,7 @@ extension Status {
     }
 
     @NSManaged public var id: String?
-    @NSManaged public var userId: String?
+    @NSManaged public var uid: String?
     @NSManaged public var text: String?
     @NSManaged public var image: String?
     @NSManaged public var thumbnail: String?

@@ -56,12 +56,12 @@ class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     lazy var inputTextView: UITextView = {
         let view = UITextView(frame: CGRect(x: 0, y: 240, width: self.view.frame.width, height: 320))
-//        view.placeholder = "What's happening?"
         view.font = Theme.semibold(18)
-        view.keyboardType = .twitter
         view.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
         view.backgroundColor = Theme.background
         view.textColor = .white
+        view.keyboardAppearance = .dark
+        view.keyboardType = .twitter
         return view
     }()
     
@@ -169,20 +169,6 @@ class ComposeController: UIViewController, UIImagePickerControllerDelegate, UINa
 //    }
     
     
-//    func handleSend() {
-//        let publicKey = ""
-//        let vc = PayController(publicKey: publicKey)
-//        vc.publicKey = publicKey
-//        let nav = UINavigationController(rootViewController: vc)
-//
-//        let transitionDelegate = SPStorkTransitioningDelegate()
-//        nav.transitioningDelegate = transitionDelegate
-//        nav.modalPresentationCapturesStatusBarAppearance = true
-//        nav.modalPresentationStyle = .custom
-//        nav.modalTransitionStyle = .crossDissolve
-//        presentAsStork(nav, height: UIScreen.main.bounds.height*0.8)
-//    }
-
 }
     
 
@@ -190,18 +176,22 @@ extension ComposeController: ComposeDelegate {
     
     func handleSubmit() {
 
-//        let vc = PayController()
-//        vc.modalPresentationStyle = .custom
-//        vc.transitioningDelegate = self
-//
-//        self.present(vc, animated: true)
+        let vc = PayController()
+        vc.publicKey = feeAddress
+        let transitionDelegate = SPStorkTransitioningDelegate()
+        transitionDelegate.customHeight = self.view.frame.height*0.5
+        vc.transitioningDelegate = transitionDelegate
+        vc.modalPresentationStyle = .custom
+        vc.modalPresentationCapturesStatusBarAppearance = true
+        self.present(vc, animated: true, completion: {
+            print("submit payment")
+        })
         
         
-        
-        guard let text = inputTextView.text else { return }
-        NewsService.postPhoto(text: text, image: image!)
-        view.endEditing(true)
-        dismiss(animated: true, completion: nil)
+//        guard let text = inputTextView.text else { return }
+//        NewsService.postPhoto(text: text, image: image!)
+//        view.endEditing(true)
+//        dismiss(animated: true, completion: nil)
     }
     
 //    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController!, sourceViewController source: UIViewController) -> UIPresentationController? {

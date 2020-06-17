@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import stellarsdk
 
-class PayController: UIViewController {
+class PayController: UITableViewController {
     
     var publicKey: String?
     var username: String?
@@ -41,67 +41,33 @@ class PayController: UIViewController {
     
     lazy var width = self.view.frame.width ?? 0.0
     
-    lazy var tableView: UITableView = {
-        let frame = CGRect(x: 0, y: 400, width: width, height: width)
-        let view = UITableView(frame: frame)
-        view.isScrollEnabled = false
-        view.backgroundColor = .clear
-        view.tableFooterView = UIView()
-        return view
-    }()
     
  
     
-//    convenience init(_ publicKey: String) {
-//        self.publicKey = publicKey
-//        self.init()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBlur()
         self.navigationItem.title = "Pay"
-    
+        tableView.backgroundColor = Theme.background
         header.addSubview(amountInput)
-        tableView.delegate = self
-        tableView.dataSource = self
         tableView.allowsSelection = false
         tableView.isScrollEnabled = false
         tableView.separatorColor = Theme.border
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tableView.register(InputCurrencyCell.self, forCellReuseIdentifier: currencyCell)
 
-//        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = submitButton
         
-//        if isModal {
-//            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(handleCancel))
-//        }
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Confirm", style: .done, target: self, action: #selector(handlePay))
-        
-
-//        view.addSubview(amountInput)
-//        tableView.tableFooterView = footer
     }
     
-//    lazy var footer: TableFooterView = {
-//        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100)
-//        let view = TableFooterView(frame: frame, title: "Confirm")
-//        view.delegate = self
-//        return view
-//    }()
-    
-    @objc func handlePay() {
+    @objc func handleSubmit() {
+        submitButton.isLoading = true
+//        dismiss(animated: true, completion: nil)
         guard let accountID = publicKey else {
             ErrorPresenter.showError(message: "No destination keypair", on: self.presentedViewController)
         return
     }
         WalletService.sendPayment(token: counterAsset, toAccountID: accountID, amount: amount) { (_) in
-//            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -120,27 +86,22 @@ class PayController: UIViewController {
     }
     
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        view.resignFirstResponder()
-//    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        submitButton.isLoading = false
+    }
     
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
     }
 
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: currencyCell, for: indexPath) as! InputCurrencyCell
         cell.backgroundColor = Theme.black
@@ -157,12 +118,15 @@ class PayController: UIViewController {
         cell.backgroundColor = .clear
         switch indexPath.row {
         case 0:
-            cell.textLabel?.text = "User"
-            cell.valueInput.text = "$\(username)"
+            cell.textLabel?.text = "Pay"
+            cell.textLabel?.textColor = .white
+            cell.textLabel?.font = Theme.semibold(22)
             cell.key = indexPath.row
+            cell.valueInput.text = ""
         case 1:
-            cell.textLabel?.text = "XLM"
+            cell.textLabel?.text = "PBK"
             cell.value = 1.000
+            cell.valueInput.text = "1.000"
             cell.key = indexPath.row
         default:
             break
@@ -172,77 +136,25 @@ class PayController: UIViewController {
     
     @objc func textFieldDidChange(key: Int, value: Decimal) {
         amount = value
-        print("Key: \(key)")
-        print("Value updated: \(value)")
         
     }
     
 
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
     
     
-    func presentAlertController(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        let done = UIAlertAction(title: "Done", style: .default, handler: nil)
-        alert.addAction(done)
-//        present(alert, animated: true, completion: nil)
-    }
-    
-    
-    @objc func handleCancel() {
-//        dismiss(animated: true, completion: nil)
-    }
-    
-    
-//    var isModal: Bool {
-//        return presentingViewController != nil ||
-//            navigationController?.presentingViewController?.presentedViewController === navigationController ||
-//            tabBarController?.presentingViewController is UITabBarController
-//    }
-    
-    
-    lazy var signupButton: UIButton = {
-        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 64)
-        let button = UIButton(frame: frame)
-        button.setTitle("Confirm Order", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Theme.semibold(20)
-        button.backgroundColor = Theme.black
-        button.layer.cornerRadius = 18
-        button.addTarget(self, action: #selector(handleConfirm), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    lazy var submitButton: ButtonTableFooterView = {
+         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80)
+         let view = ButtonTableFooterView(frame: frame, title: "Pay Now")
+         view.delegate = self
+         return view
+     }()
     
     
     
-    lazy var confirmButton: UIButton = {
-        let frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 120)
-        let button = UIButton(frame: frame)
-        button.setTitle("", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Theme.semibold(20)
-        button.backgroundColor = Theme.tint
-        button.layer.cornerRadius = 18
-        button.addTarget(self, action: #selector(handleConfirm), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-//    override var inputAccessoryView: UIView? {
-//        return confirmButton
-//    }
-    
-    
-    
-    @objc func handleConfirm() {
 
-    }
-    
-    
 }
 
 
@@ -257,20 +169,11 @@ extension PayController: UITextFieldDelegate {
 }
 
 
-extension PayController: UITableViewDataSource {
-    
-}
 
-
-extension PayController: UITableViewDelegate {
-    
-}
-
-
-extension PayController: TableFooterDelegate {
+extension PayController: ButtonTableFooterDelegate {
    
-    func didTapButton() {
-        handlePay()
+    func didTapButton(_ button: UIButton?) {
+        handleSubmit()
     }
     
     

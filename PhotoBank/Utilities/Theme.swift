@@ -80,11 +80,11 @@ extension Theme {
     
     public static var incoming: UIColor {
 //        return UIColor(191, 191, 196)
-        return Theme.lightGray
+        return Theme.background
     }
     
     public static var outgoing: UIColor {
-        return UIColor(60, 64, 67)
+        return UIColor(50, 54, 57)
     }
     
     public static var link: UIColor {

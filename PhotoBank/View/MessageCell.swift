@@ -53,7 +53,6 @@ class MessageCell: UITableViewCell {
         let view = UIView(frame: frame)
         view.layer.cornerRadius = 20
         view.isUserInteractionEnabled = true
-//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -64,9 +63,7 @@ class MessageCell: UITableViewCell {
         view.numberOfLines = 0
         view.lineBreakMode = .byWordWrapping
         view.textAlignment = .left
-        
         view.textColor = .white
-//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -77,7 +74,6 @@ class MessageCell: UITableViewCell {
         view.textAlignment = .left
         view.textColor = Theme.gray
         view.isHidden = true
-//        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -120,8 +116,6 @@ class MessageCell: UITableViewCell {
     func setupCell() {
         guard let msg = message else { return }
         if msg.incoming {
-//            contentRight?.isActive = false
-//            contentLeft?.isActive = true
             messageLabel.textAlignment = .left
             if isGroupMessage {
                 usernameLabel.isHidden = false
@@ -129,12 +123,9 @@ class MessageCell: UITableViewCell {
                 usernameLabel.isHidden = true
             }
         } else {
-//            contentRight?.isActive = true
-//            contentLeft?.isActive = false
             messageLabel.textAlignment = .left
             usernameLabel.isHidden = true
         }
-//        contentWidth?.isActive = true
         calculateFrame()
         setupColors(msg)
     }
@@ -143,15 +134,14 @@ class MessageCell: UITableViewCell {
         switch msg.type {
             case .Text:
                 if msg.incoming {
-                    messageLabel.textColor = .black
                     bubbleView.backgroundColor = Theme.incoming
+                    bubbleView.layer.borderColor = Theme.border.cgColor
+                    bubbleView.layer.borderWidth = 1.0
                 } else {
-                    messageLabel.textColor = .white
                     bubbleView.backgroundColor = Theme.outgoing
             }
             case .Money:
                 bubbleView.backgroundColor = Theme.black
-                
             break
         }
     }

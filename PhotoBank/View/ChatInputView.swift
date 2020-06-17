@@ -101,38 +101,25 @@ class ChatInputView: UIView, UITextViewDelegate {
         view.textView.font = Theme.semibold(18)
         view.backgroundColor = Theme.background
         view.layer.cornerRadius = 20
+        view.layer.borderWidth = 1
+        view.layer.borderColor = Theme.border.cgColor
         view.isScrollEnabled = false
         view.showsVerticalScrollIndicator = false
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.textView.keyboardAppearance = .dark
         return view
     }()
     
-    
-//    lazy var container: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = .white
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
-
-    lazy var container: UIVisualEffectView = {
-        let effect = UIBlurEffect(style: .regular)
-        let view = UIVisualEffectView(frame: self.frame)
-        view.frame.size.height += 100
-        view.effect = effect
-        return view
-    }()
     
     func setupView() {
         backgroundColor = Theme.background
-        addSubview(container)
         addSubview(inputMoney)
         addSubview(sendButton)
         addSubview(inputTextField)
         
         inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor, constant: 0).isActive = true
         inputTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 12).isActive = true
-        inputTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        inputTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
         
         
         sendButton.bottomAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: -4).isActive = true

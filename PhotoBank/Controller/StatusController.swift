@@ -174,7 +174,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     
     
     func presentUserController() {
-        guard let id = status?.userId else { return }
+        guard let id = status?.uid else { return }
         let vc = UserController(id)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -191,7 +191,7 @@ class StatusController: UITableViewController, UISearchControllerDelegate, UINav
     }
     
     @objc func handleMore() {
-        if status?.userId == CurrentUser.uid {
+        if status?.uid == CurrentUser.uid {
             presentDeleteMenu()
         } else {
             presentPublicMenu()

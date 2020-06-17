@@ -50,9 +50,11 @@ class UserController: UICollectionViewController, UICollectionViewDelegateFlowLa
         UserService.getUser(id) { (user) in
             self.user = user
         }
-        UserService.following(userId: id) { (following, stories) in
+        UserService.following(userId: id) { (following) in
             self.following = following
-            self.stories = stories
+            print("UID: \(CurrentUser.uid)")
+            print("FollowID: \(id)")
+            print("User Controller:: Following: \(following)")
         }
     }
     

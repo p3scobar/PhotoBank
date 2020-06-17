@@ -381,7 +381,7 @@ class ChatController: UIViewController, UITableViewDataSource, UITableViewDelega
         let timestamp = formatter.string(from: date)
         let action = UITableViewRowAction(style: .normal, title: timestamp) { (action, indexPath) in
         }
-        action.backgroundColor = .white
+        action.backgroundColor = Theme.background
         
         return [action]
     }

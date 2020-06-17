@@ -51,7 +51,7 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         activity.tabBarItem.image = UIImage(named: "bell")
         activity.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -6, right: 0)
         
-        viewControllers = [timeline, discover, messages, activity]
+        viewControllers = [timeline, discover, wallet, messages, activity]
         
         
         picker?.allowsEditing = true
@@ -139,7 +139,10 @@ class TabBar: UITabBarController, UIImagePickerControllerDelegate, UINavigationC
         }
     }
     
+   
+    
     
 }
+
 
 

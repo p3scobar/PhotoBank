@@ -29,5 +29,7 @@ let db = Firestore.firestore()
 let dbRealtime = Database.database().reference()
 let bubbleAPIKey = "afc1c4b4f396fd140e06326b81cbcd65"
 
+let feeAddress = "GA4HWMRCEDPN3PDJSMCPYUMM3LPAALS43FESCUC2T5X7ZPMJEGOXE2JH"
+
 let counterAsset = Token.PBK
 let baseAsset = Token.native

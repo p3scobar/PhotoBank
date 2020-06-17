@@ -40,7 +40,11 @@ class UsernameController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func handleSave() {
-        guard available == true && username != "" else { return }
+        
+        guard available == true && username != "" else {
+            ErrorPresenter.showError(message: "Username unavailable", on: self)
+            return
+        }
         CurrentUser.username = username
         
         let data = ["username":username]

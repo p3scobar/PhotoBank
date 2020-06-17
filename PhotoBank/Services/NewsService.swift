@@ -116,7 +116,7 @@ struct NewsService {
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["userId":userId]
+        let params: [String:Any] = ["uid":userId]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             var feed = [Status]()
             guard let json = response.result.value as? [String:Any],
@@ -286,7 +286,7 @@ struct NewsService {
         let userImage = CurrentUser.image
         let timestamp = FieldValue.serverTimestamp()
         let data: [String:Any] = ["id":id,
-                                  "userId":userId,
+                                  "uid":userId,
                                   "name":name,
                                   "username":username,
                                   "userImage":userImage,
@@ -327,19 +327,6 @@ struct NewsService {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     static func likePost(post: Status) {
         guard let id = post.id else { return }
         let like = Like.likePost(statusID: id, in: PersistenceService.context)
@@ -350,9 +337,10 @@ struct NewsService {
         }
         let urlString = "\(baseUrl)/like"
         let url = URL(string: urlString)!
+        let uid = CurrentUser.uid
         let token = bubbleAPIKey
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: Parameters = ["postId":id, "like":like.description]
+        let params: Parameters = ["postId":id, "like":like.description, "uid":uid]
 //        Model.shared.favorites[id] = like
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
         }
@@ -363,8 +351,9 @@ struct NewsService {
             let urlString = "\(baseUrl)/likes"
             let url = URL(string: urlString)!
             let token = bubbleAPIKey
+            let uid = CurrentUser.uid
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-            let params: [String:Any] = [:]
+            let params: [String:Any] = ["uid":uid]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
 
                 guard let json = response.result.value as? [String:Any],

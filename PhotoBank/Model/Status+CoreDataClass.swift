@@ -26,7 +26,7 @@ public class Status: NSManagedObject {
                 photo.text = data["text"] as? String
                 photo.image = data["image"] as? String
                 photo.thumbnail = data["thumbnail"] as? String
-                photo.userId = data["userId"] as? String
+                photo.uid = data["uid"] as? String
                 photo.name = data["name"] as? String
                 photo.username = data["username"] as? String
                 photo.userImage = data["userImage"] as? String
@@ -45,7 +45,7 @@ public class Status: NSManagedObject {
         status.thumbnail = data["thumbnail"] as? String
         status.height = data["height"] as? Double ?? 800
         status.width = data["width"] as? Double ?? 600
-        status.userId = data["userId"] as? String
+        status.uid = data["uid"] as? String
         status.name = data["name"] as? String
         status.username = data["username"] as? String
         status.userImage = data["userImage"] as? String

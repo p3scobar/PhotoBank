@@ -52,7 +52,7 @@ class InputCurrencyCell: UITableViewCell, UITextFieldDelegate {
         }
         label.textAlignment = .right
         label.keyboardType = .decimalPad
-        label.placeholder = "$0.00"
+        label.placeholder = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.keyboardAppearance = .dark
         return label

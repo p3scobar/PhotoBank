@@ -212,7 +212,7 @@ class StatusCell: UITableViewCell {
     }
     
     @objc func handleUserTap() {
-        guard let id = status?.userId else { return }
+        guard let id = status?.uid else { return }
         delegate?.handleUserTap(id)
     }
     

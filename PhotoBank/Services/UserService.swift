@@ -23,11 +23,12 @@ struct UserService {
             let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
             let params: Parameters = ["uid":uid,
                                       "follow": follow.description,
-                                      "userId":userId]
+                                      "followId":userId]
             Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
                 guard let json = response.result.value as? [String:Any],
                     let resp = json["response"] as? [String:Any] else { return }
                 let following = resp["following"] as? Bool ?? false
+                print(resp)
                 completion(following)
             }
         }
@@ -126,14 +127,6 @@ struct UserService {
         let headers: HTTPHeaders = [:]
         let params: [String:Any] = ["email":email, "password":password]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
-            CurrentUser.uid = ""
-            CurrentUser.name = ""
-            CurrentUser.username = ""
-            CurrentUser.image = ""
-            CurrentUser.bio = ""
-            KeychainHelper.publicKey = ""
-            KeychainHelper.privateSeed = ""
-            Payment.deleteAll()
 //            completion(true)
         }
     }
@@ -465,30 +458,29 @@ extension UserService {
     
     
     
-    static func following(userId: String, completion: @escaping (Bool, [Story]) -> Void) {
+    static func following(userId: String, completion: @escaping (Bool) -> Void) {
         let urlString = "\(baseUrl)/user"
         let url = URL(string: urlString)!
         let token = bubbleAPIKey
         let uid = CurrentUser.uid
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        let params: [String:Any] = ["userId":userId, "uid":uid]
+        let params: [String:Any] = ["followId":userId, "uid":uid]
         Alamofire.request(url, method: .post, parameters: params, encoding: URLEncoding.default, headers: headers).responseJSON { (response) in
             print(response)
             guard let json = response.result.value as? [String:Any],
-                let resp = json["response"] as? [String:Any],
-                let result = resp["user"] as? [String:Any] else { return }
+                let resp = json["response"] as? [String:Any] else { return }
             
             let following: Bool = resp["following"] as? Bool ?? false
             
-            var stories: [Story] = []
-            guard let storiesJSON = resp["stories"] as? [[String:Any]] else { return }
+//            var stories: [Story] = []
+//            guard let storiesJSON = resp["stories"] as? [[String:Any]] else { return }
             
-            storiesJSON.forEach({ (story) in
-                let id = story["_id"] as? String ?? ""
-                let story = Story.findOrCreateStory(id: id, data: story, in: PersistenceService.context)
-                stories.append(story)
-            })
-            completion(following, stories)
+//            storiesJSON.forEach({ (story) in
+//                let id = story["_id"] as? String ?? ""
+//                let story = Story.findOrCreateStory(id: id, data: story, in: PersistenceService.context)
+//                stories.append(story)
+//            })
+            completion(following)
         }
     }
     
